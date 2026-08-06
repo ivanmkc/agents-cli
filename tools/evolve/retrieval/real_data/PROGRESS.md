@@ -137,14 +137,24 @@ generators, then proceed to TODO 3.
 Committed to `tools/evolve/retrieval/real_data/validation/` +
 `real_eval_manifest.validated.json` (63 consensus-valid tasks).
 
-### TODO 2b (NEW): Fix the miner per validation findings
+### TODO 2b: Fix the miner per validation findings — MINER FIXED, rebuild pending
 
-`log_mining.py` improvements that would recover much of the invalid 41%:
-- Drop read-after-own-write episodes (`verification-read`, 42 rows)
-- Segment episodes on assistant-message boundaries so queries aren't
-  mid-sentence fragments (`fragmented-episode`, 44 rows)
-Then re-mine, re-build, re-validate (the validator inputs/scripts are
-preserved under `validation/`).
+`log_mining.py` fixes landed (TDD, 6 new tests, 56 total passing):
+- **verification-read**: retrieval calls that only revisit files the agent
+  itself wrote earlier in the stream are skipped (tracked via action-tool
+  file paths; rel/abs path matching; shell `cat`-of-own-write too)
+- **fragmented-episode**: streamed assistant-message chunks are joined per
+  utterance before use as episode context (root cause: Gemini transcripts
+  emit one utterance as many `message` events; the old miner kept only the
+  last chunk)
+
+Re-mining the baseline run with the fixed miner: 236 → 209 episodes,
+fragment-looking contexts 27 → 0, **SDK hunts unchanged (24)**.
+`episodes.jsonl.gz` / the 175-row manifest are v1 provenance for the
+committed validation — do NOT regenerate them in place. The TODO 3
+comparison must mine BOTH runs fresh with the fixed miner.
+Still pending (optional): rebuild eval set from v2 episodes + re-validate
+(validator inputs/scripts preserved under `validation/`).
 
 ### TODO 3: Mine new transcripts and compare retrieval behavior
 

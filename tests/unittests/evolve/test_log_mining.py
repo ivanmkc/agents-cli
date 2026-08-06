@@ -159,3 +159,74 @@ def test_min_steps_filter():
     eps = segment_episodes(events, min_steps=2)
     assert len(eps) == 1
     assert eps[0]["steps"] == 3
+
+
+def test_streamed_message_chunks_join_into_episode_context():
+    # Gemini streams one utterance as several message events; the episode
+    # context must be the whole utterance, not the final fragment.
+    events = (
+        _msg("I will check the unit tests by listing the", 1.0)
+        + _msg(" files in the `tests/unit` directory.", 1.1)
+        + _ev("list_directory", {"path": "tests/unit"}, 2.0)
+        + _ev("read_file", {"path": "tests/unit/test_agent.py"}, 3.0)
+    )
+    eps = segment_episodes(events, min_steps=2)
+    assert len(eps) == 1
+    assert eps[0]["context"] == (
+        "I will check the unit tests by listing the"
+        " files in the `tests/unit` directory."
+    )
+
+
+def test_context_survives_intervening_tool_call():
+    # A complete utterance stays available as context even when a tool
+    # call happens between it and the episode start.
+    events = (
+        _msg("I will inspect the failing test setup.", 1.0)
+        + _ev("Bash", {"command": "pip install foo"}, 2.0)
+        + _ev("Grep", {"pattern": "fixture"}, 3.0)
+        + _ev("Read", {"file_path": "tests/conftest.py"}, 4.0)
+    )
+    eps = segment_episodes(events, min_steps=2)
+    assert len(eps) == 1
+    assert eps[0]["context"] == "I will inspect the failing test setup."
+
+
+def test_reads_of_files_the_agent_wrote_are_not_retrieval():
+    # Re-reading a file the agent itself just wrote is verification,
+    # not search; such calls must not form episodes.
+    events = (
+        _ev("Write", {"file_path": "app/agent.py", "content": "x = 1"}, 1.0)
+        + _ev("Read", {"file_path": "app/agent.py"}, 2.0)
+        + _ev("Read", {"file_path": "app/agent.py"}, 3.0)
+    )
+    assert segment_episodes(events, min_steps=1) == []
+
+
+def test_verification_reads_excluded_from_mixed_episode():
+    events = (
+        _ev("Write", {"file_path": "app/agent.py", "content": "x = 1"}, 1.0)
+        + _ev("Read", {"file_path": "app/agent.py"}, 2.0)  # verification
+        + _ev("Read", {"file_path": "app/server.py"}, 3.0)  # genuine
+        + _ev("Grep", {"pattern": "root_agent"}, 4.0)  # genuine
+    )
+    eps = segment_episodes(events, min_steps=1)
+    assert len(eps) == 1
+    assert eps[0]["steps"] == 2
+    assert all("agent.py" not in summary for _, summary in eps[0]["calls"])
+
+
+def test_verification_read_matches_relative_vs_absolute_paths():
+    events = (
+        _ev("write_file", {"path": "/work/app/agent.py", "content": "x"}, 1.0)
+        + _ev("read_file", {"path": "app/agent.py"}, 2.0)
+    )
+    assert segment_episodes(events, min_steps=1) == []
+
+
+def test_shell_read_of_own_write_is_verification():
+    events = (
+        _ev("Write", {"file_path": "app/agent.py", "content": "x = 1"}, 1.0)
+        + _ev("Bash", {"command": "cat app/agent.py"}, 2.0)
+    )
+    assert segment_episodes(events, min_steps=1) == []

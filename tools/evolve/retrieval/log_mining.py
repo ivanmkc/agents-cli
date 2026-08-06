@@ -145,6 +145,44 @@ def _size(value) -> int:
         return len(str(value))
 
 
+_FILE_INPUT_KEYS = {
+    "file_path", "path", "absolute_path", "absolutepath",
+    "target_file", "targetfile", "filename",
+}
+
+
+def _input_paths(tool_input) -> list[str]:
+    """File paths named in a tool_use input, if any."""
+    if not isinstance(tool_input, dict):
+        return []
+    return [
+        str(v).strip()
+        for k, v in tool_input.items()
+        if k.lower() in _FILE_INPUT_KEYS and isinstance(v, str) and v.strip()
+    ]
+
+
+def _same_file(a: str, b: str) -> bool:
+    """True when two paths plausibly name the same file (rel vs abs)."""
+    return a == b or a.endswith("/" + b) or b.endswith("/" + a)
+
+
+def _is_verification_read(tool_name: str, tool_input, written: set[str]) -> bool:
+    """A retrieval call that only revisits files the agent itself wrote."""
+    if not written:
+        return False
+    if tool_name in _SHELL_TOOLS:
+        command = str(
+            tool_input.get("command") or tool_input.get("cmd") or ""
+            if isinstance(tool_input, dict) else tool_input or ""
+        )
+        return any(w in command for w in written)
+    paths = _input_paths(tool_input)
+    return bool(paths) and all(
+        any(_same_file(p, w) for w in written) for p in paths
+    )
+
+
 def _input_summary(tool_name: str, tool_input) -> str:
     if isinstance(tool_input, dict):
         for key in ("command", "cmd", "file_path", "path", "pattern",
@@ -162,10 +200,18 @@ def segment_episodes(events: list[dict], min_steps: int = 1) -> list[dict]:
     narrate mid-search); an action call ends it; neutral tools are
     ignored. Episodes with fewer than ``min_steps`` retrieval calls are
     dropped (a single routine read before an edit isn't a search).
+
+    Streamed assistant messages arrive as several ``message`` events per
+    utterance; consecutive chunks are joined before use as context.
+    Retrieval calls that only revisit files the agent itself wrote
+    earlier in the stream are verification reads, not search, and are
+    skipped.
     """
     episodes: list[dict] = []
     current: dict | None = None
     last_message = ""
+    pending_chunks: list[str] = []
+    written: set[str] = set()
 
     # Pair tool_results back onto their tool_use by call id.
     outputs: dict[str, int] = {}
@@ -195,7 +241,7 @@ def segment_episodes(events: list[dict], min_steps: int = 1) -> list[dict]:
         if etype == "message":
             content = ev.get("content")
             if isinstance(content, str) and content.strip():
-                last_message = content
+                pending_chunks.append(content)
             continue
         if etype != "tool_use":
             continue
@@ -204,10 +250,16 @@ def segment_episodes(events: list[dict], min_steps: int = 1) -> list[dict]:
         kind = classify_tool_call(tool, tool_input)
         if kind == "neutral":
             continue
+        if pending_chunks:
+            last_message = "".join(pending_chunks)
+            pending_chunks.clear()
         if kind == "action":
+            written.update(_input_paths(tool_input))
             close(ended_by=tool)
             continue
         # retrieval
+        if _is_verification_read(tool, tool_input, written):
+            continue
         ts = _ts(ev.get("timestamp"))
         cid = str(ev.get("tool_call_id") or "")
         out_chars = outputs.get(cid, 0)
