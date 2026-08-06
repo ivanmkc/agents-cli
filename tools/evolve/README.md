@@ -31,17 +31,50 @@ the tool inherits the win. No end-user compute required.
 
 Per task, the LocalEvaluator scores the returned chunks:
 
-- **recall** (weight 0.5) — fraction of ground-truth spans overlapped by
-  at least one chunk.
-- **precision** (weight 0.3) — fraction of returned *tokens* that fall
-  inside ground-truth spans. This is the anti-bloat term: grep-style
-  whole-file returns are crushed here (verified in the test suite).
-- **mrr** (weight 0.2) — reciprocal rank of the first relevant chunk;
-  rewards putting the answer first so agents don't spend extra turns.
+- **recall** (weight 0.35) — coverage-weighted: each ground-truth span
+  scores `covered_lines / span_lines` (union over all verified chunks).
+  A 1-line pointer at a 20-line function earns 0.05, not 1.0 — this
+  defeats the "degenerate 1-line tool" exploit found in the red-team
+  audit.
+- **precision** (weight 0.35) — fraction of returned *tokens* that fall
+  inside ground-truth spans. Grep-style whole-file returns are crushed
+  here (verified in the test suite).
+- **mrr** (weight 0.15) — reciprocal rank of the first chunk that covers
+  >= 50% of some ground-truth span on its own; rewards putting a
+  *usable* answer first.
+- **economy** (weight 0.15) — `min(1, 384/total_tokens)`: an absolute
+  token-cost penalty that stops "return everything" strategies from
+  hiding behind high recall.
 
-`combined_score` is the mean over all tasks (0..1, higher is better).
-`avg_tokens_returned`, `failures`, and per-metric means are reported
-alongside for MAP-elites style archives and human inspection.
+`combined_score` is the weighted mean over all tasks (0..1, higher is
+better). `avg_tokens_returned`, `failures`, and per-metric means are
+reported alongside for MAP-elites style archives and human inspection.
+
+### Anti-reward-hacking measures
+
+Each countermeasure defeats a specific exploit demonstrated by the
+red-team audit (28-agent adversarial sweep, 22 confirmed findings):
+
+| Exploit | Countermeasure |
+|---------|---------------|
+| **Answer-key leak**: candidate reads `<repo>.tasks.json` → perfect 1.0 | Answer key never written to disk; `_ensure_benchmark()` deletes any stale key; subprocess runs with empty cwd + minimal env |
+| **Content fabrication**: claim huge spans with empty/fake content → free recall | Chunks verified against disk; mismatching content earns 0 relevance but still pays token cost |
+| **Degenerate 1-line tool**: return one best-matching line per file → 0.88 recall | Coverage-weighted recall: `covered_lines/span_lines` per span, not binary overlap |
+
+All exploits are codified as regression tests in `test_reward_hacking.py`.
+
+### Evolution results
+
+A 3-generation × 4-mutant evolution run produced an AST-based winner:
+
+| Metric | Seed | Default (grep) | Winner | Winner lift vs default |
+|--------|------|-----------------|--------|----------------------|
+| combined_score | 0.74 | 0.44 | **1.0** | +125.3% |
+| recall | 0.85 | 0.89 | **1.0** | +11.2% |
+| precision | 0.47 | 0.01 | **1.0** | +98.7% |
+| mrr | 0.85 | 0.78 | **1.0** | +22.2% |
+| economy | 0.71 | 0.08 | **1.0** | — |
+| avg tokens/call | 735.9 | 10,262.4 | **81.9** | -99.2% |
 
 ## Running
 
@@ -95,10 +128,14 @@ evaluations, so scores are comparable between generations. Set
 - The frozen wrapper re-validates whatever the evolved block returns
   (schema, repo-relative paths, result cap, token budget), so a mutant
   cannot "win" by violating the interface.
-- Candidates run as subprocesses with hard timeouts — pathological
-  mutations cost one task's score, not the run.
-- The task manifest lives outside the searchable tree, so reading the
-  answer key is impossible by construction.
+- Candidates run as subprocesses in a sandboxed environment (empty cwd,
+  minimal env vars) with hard timeouts — pathological mutations cost one
+  task's score, not the run.
+- The task manifest only lives in process memory during evaluation; no
+  `*.tasks.json` ever touches disk (red-team audit demonstrated a
+  candidate reading a manifest file to score a perfect 1.0).
+- Chunk content is verified against the actual file on disk — fabricated
+  or mismatched content earns zero relevance but still pays token cost.
 
 ## Tests
 
@@ -106,7 +143,12 @@ evaluations, so scores are comparable between generations. Set
 uv run pytest tests/unittests/evolve/
 ```
 
-Covers: generator determinism and span accuracy, the search tool's
-frozen contract (schema, budgets, CLI), and the evaluator's fitness
-ordering — baseline > whole-file grep, and crash/hang candidates
-score zero.
+34 tests covering:
+- Generator determinism and span accuracy (5 tests)
+- Search tool frozen contract — schema, budgets, CLI (5 tests)
+- Evaluator fitness ordering — baseline > grep, crash/hang = zero (5 tests)
+- Evaluate entrypoint — metrics, determinism, stage-1 subset (3 tests)
+- AlphaEvolve adapter — official contract compliance (4 tests)
+- Lift measurement — default proxy, math, caching (3 tests)
+- Agent-in-the-loop — answer extraction, correctness, stratification (4 tests)
+- **Reward-hacking regressions** — degenerate tool, fabrication, key leak, key reader, stratification (5 tests)
