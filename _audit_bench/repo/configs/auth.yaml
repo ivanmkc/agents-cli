@@ -1,0 +1,6 @@
+# Runtime configuration for the auth package
+auth:
+  auth_retry_limit: 125
+  auth_timeout_seconds: 169
+  auth_max_connections: 13
+  auth_cache_ttl: 248

@@ -1,0 +1,6 @@
+# Runtime configuration for the pipeline package
+pipeline:
+  pipeline_retry_limit: 238
+  pipeline_timeout_seconds: 187
+  pipeline_max_connections: 290
+  pipeline_cache_ttl: 71

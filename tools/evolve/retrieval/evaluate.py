@@ -25,11 +25,13 @@ import tempfile
 from pathlib import Path
 
 try:
-    from evolve.retrieval.evaluator import LocalEvaluator
+    from evolve.retrieval import baselines
+    from evolve.retrieval.evaluator import LocalEvaluator, compute_lift
     from evolve.retrieval.monorepo import generate_monorepo
 except ImportError:  # invoked standalone by an evolution runner
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
-    from evolve.retrieval.evaluator import LocalEvaluator
+    from evolve.retrieval import baselines
+    from evolve.retrieval.evaluator import LocalEvaluator, compute_lift
     from evolve.retrieval.monorepo import generate_monorepo
 
 DEFAULT_SEED = 0
@@ -101,6 +103,41 @@ def evaluate(
     return evaluate_stage2(program_path, workdir, seed, scale)
 
 
+def evaluate_default(
+    workdir: Path | str | None = None,
+    seed: int = DEFAULT_SEED,
+    scale: int = DEFAULT_SCALE,
+) -> dict:
+    """Metrics for the default-behavior proxy (grep + whole files).
+
+    Computed once per workdir and cached — the default never changes,
+    so every candidate in a run is compared against identical numbers.
+    """
+    workdir = Path(workdir) if workdir else _default_workdir(seed, scale)
+    cache = workdir / "default_metrics.json"
+    if cache.exists():
+        return json.loads(cache.read_text())
+    metrics = _run(baselines.DEFAULT_GREP_PATH, workdir, seed, scale, None)
+    cache.write_text(json.dumps(metrics, indent=2) + "\n")
+    return metrics
+
+
+def evaluate_lift(
+    program_path: str,
+    workdir: Path | str | None = None,
+    seed: int = DEFAULT_SEED,
+    scale: int = DEFAULT_SCALE,
+) -> dict:
+    """Score a candidate and report its lift over the default proxy."""
+    candidate = evaluate(program_path, workdir, seed, scale)
+    default = evaluate_default(workdir, seed, scale)
+    return {
+        "candidate": candidate,
+        "default": default,
+        "lift": compute_lift(candidate, default),
+    }
+
+
 if __name__ == "__main__":
     import argparse
 
@@ -109,6 +146,12 @@ if __name__ == "__main__":
     parser.add_argument("--workdir", type=Path, default=None)
     parser.add_argument("--seed", type=int, default=DEFAULT_SEED)
     parser.add_argument("--scale", type=int, default=DEFAULT_SCALE)
+    parser.add_argument(
+        "--lift",
+        action="store_true",
+        help="also score the default-behavior proxy and report lift",
+    )
     args = parser.parse_args()
-    print(json.dumps(evaluate(args.program, args.workdir, args.seed,
-                              args.scale), indent=2))
+    fn = evaluate_lift if args.lift else evaluate
+    print(json.dumps(fn(args.program, args.workdir, args.seed, args.scale),
+                     indent=2))

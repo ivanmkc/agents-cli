@@ -1,0 +1,6 @@
+# Runtime configuration for the search package
+search:
+  search_retry_limit: 145
+  search_timeout_seconds: 169
+  search_max_connections: 88
+  search_cache_ttl: 122

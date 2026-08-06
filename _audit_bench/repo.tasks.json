@@ -1,0 +1,1770 @@
+{
+  "seed": 0,
+  "scale": 3,
+  "tasks": [
+    {
+      "id": "definition:AuthClient10",
+      "kind": "definition",
+      "symbol": "AuthClient10",
+      "query": "Where is the class AuthClient10 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/auth/module_5.py",
+          "start_line": 3,
+          "end_line": 20
+        }
+      ]
+    },
+    {
+      "id": "usage:AuthClient10",
+      "kind": "usage",
+      "symbol": "AuthClient10",
+      "query": "Find all downstream code that uses AuthClient10",
+      "expected_spans": [
+        {
+          "file": "services/svc_2/main.py",
+          "start_line": 24,
+          "end_line": 25
+        },
+        {
+          "file": "services/svc_7/main.py",
+          "start_line": 27,
+          "end_line": 28
+        },
+        {
+          "file": "services/svc_11/main.py",
+          "start_line": 30,
+          "end_line": 31
+        }
+      ]
+    },
+    {
+      "id": "definition:AuthClient2",
+      "kind": "definition",
+      "symbol": "AuthClient2",
+      "query": "Where is the class AuthClient2 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/auth/module_1.py",
+          "start_line": 3,
+          "end_line": 20
+        }
+      ]
+    },
+    {
+      "id": "definition:AuthMiddleware0",
+      "kind": "definition",
+      "symbol": "AuthMiddleware0",
+      "query": "Where is the class AuthMiddleware0 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/auth/module_0.py",
+          "start_line": 3,
+          "end_line": 20
+        }
+      ]
+    },
+    {
+      "id": "definition:AuthMiddleware8",
+      "kind": "definition",
+      "symbol": "AuthMiddleware8",
+      "query": "Where is the class AuthMiddleware8 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/auth/module_4.py",
+          "start_line": 3,
+          "end_line": 20
+        }
+      ]
+    },
+    {
+      "id": "definition:AuthResolver4",
+      "kind": "definition",
+      "symbol": "AuthResolver4",
+      "query": "Where is the class AuthResolver4 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/auth/module_2.py",
+          "start_line": 3,
+          "end_line": 20
+        }
+      ]
+    },
+    {
+      "id": "usage:AuthResolver4",
+      "kind": "usage",
+      "symbol": "AuthResolver4",
+      "query": "Find all downstream code that uses AuthResolver4",
+      "expected_spans": [
+        {
+          "file": "services/svc_6/main.py",
+          "start_line": 21,
+          "end_line": 22
+        },
+        {
+          "file": "services/svc_8/main.py",
+          "start_line": 16,
+          "end_line": 17
+        },
+        {
+          "file": "services/svc_11/main.py",
+          "start_line": 22,
+          "end_line": 23
+        }
+      ]
+    },
+    {
+      "id": "definition:AuthScheduler6",
+      "kind": "definition",
+      "symbol": "AuthScheduler6",
+      "query": "Where is the class AuthScheduler6 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/auth/module_3.py",
+          "start_line": 3,
+          "end_line": 20
+        }
+      ]
+    },
+    {
+      "id": "definition:BillingClient10",
+      "kind": "definition",
+      "symbol": "BillingClient10",
+      "query": "Where is the class BillingClient10 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/billing/module_5.py",
+          "start_line": 3,
+          "end_line": 20
+        }
+      ]
+    },
+    {
+      "id": "usage:BillingClient10",
+      "kind": "usage",
+      "symbol": "BillingClient10",
+      "query": "Find all downstream code that uses BillingClient10",
+      "expected_spans": [
+        {
+          "file": "services/svc_5/main.py",
+          "start_line": 20,
+          "end_line": 21
+        },
+        {
+          "file": "services/svc_8/main.py",
+          "start_line": 18,
+          "end_line": 19
+        },
+        {
+          "file": "services/svc_9/main.py",
+          "start_line": 20,
+          "end_line": 21
+        }
+      ]
+    },
+    {
+      "id": "definition:BillingClient2",
+      "kind": "definition",
+      "symbol": "BillingClient2",
+      "query": "Where is the class BillingClient2 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/billing/module_1.py",
+          "start_line": 3,
+          "end_line": 20
+        }
+      ]
+    },
+    {
+      "id": "definition:BillingMiddleware0",
+      "kind": "definition",
+      "symbol": "BillingMiddleware0",
+      "query": "Where is the class BillingMiddleware0 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/billing/module_0.py",
+          "start_line": 3,
+          "end_line": 20
+        }
+      ]
+    },
+    {
+      "id": "definition:BillingMiddleware8",
+      "kind": "definition",
+      "symbol": "BillingMiddleware8",
+      "query": "Where is the class BillingMiddleware8 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/billing/module_4.py",
+          "start_line": 3,
+          "end_line": 20
+        }
+      ]
+    },
+    {
+      "id": "definition:BillingResolver4",
+      "kind": "definition",
+      "symbol": "BillingResolver4",
+      "query": "Where is the class BillingResolver4 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/billing/module_2.py",
+          "start_line": 3,
+          "end_line": 20
+        }
+      ]
+    },
+    {
+      "id": "definition:BillingScheduler6",
+      "kind": "definition",
+      "symbol": "BillingScheduler6",
+      "query": "Where is the class BillingScheduler6 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/billing/module_3.py",
+          "start_line": 3,
+          "end_line": 20
+        }
+      ]
+    },
+    {
+      "id": "usage:BillingScheduler6",
+      "kind": "usage",
+      "symbol": "BillingScheduler6",
+      "query": "Find all downstream code that uses BillingScheduler6",
+      "expected_spans": [
+        {
+          "file": "services/svc_3/main.py",
+          "start_line": 13,
+          "end_line": 14
+        },
+        {
+          "file": "services/svc_4/main.py",
+          "start_line": 14,
+          "end_line": 15
+        },
+        {
+          "file": "services/svc_5/main.py",
+          "start_line": 22,
+          "end_line": 23
+        },
+        {
+          "file": "services/svc_6/main.py",
+          "start_line": 26,
+          "end_line": 27
+        },
+        {
+          "file": "services/svc_10/main.py",
+          "start_line": 18,
+          "end_line": 19
+        }
+      ]
+    },
+    {
+      "id": "definition:NotifyClient10",
+      "kind": "definition",
+      "symbol": "NotifyClient10",
+      "query": "Where is the class NotifyClient10 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/notify/module_5.py",
+          "start_line": 3,
+          "end_line": 20
+        }
+      ]
+    },
+    {
+      "id": "definition:NotifyClient2",
+      "kind": "definition",
+      "symbol": "NotifyClient2",
+      "query": "Where is the class NotifyClient2 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/notify/module_1.py",
+          "start_line": 3,
+          "end_line": 20
+        }
+      ]
+    },
+    {
+      "id": "definition:NotifyMiddleware0",
+      "kind": "definition",
+      "symbol": "NotifyMiddleware0",
+      "query": "Where is the class NotifyMiddleware0 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/notify/module_0.py",
+          "start_line": 3,
+          "end_line": 20
+        }
+      ]
+    },
+    {
+      "id": "definition:NotifyMiddleware8",
+      "kind": "definition",
+      "symbol": "NotifyMiddleware8",
+      "query": "Where is the class NotifyMiddleware8 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/notify/module_4.py",
+          "start_line": 3,
+          "end_line": 20
+        }
+      ]
+    },
+    {
+      "id": "definition:NotifyResolver4",
+      "kind": "definition",
+      "symbol": "NotifyResolver4",
+      "query": "Where is the class NotifyResolver4 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/notify/module_2.py",
+          "start_line": 3,
+          "end_line": 20
+        }
+      ]
+    },
+    {
+      "id": "definition:NotifyScheduler6",
+      "kind": "definition",
+      "symbol": "NotifyScheduler6",
+      "query": "Where is the class NotifyScheduler6 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/notify/module_3.py",
+          "start_line": 3,
+          "end_line": 20
+        }
+      ]
+    },
+    {
+      "id": "usage:NotifyScheduler6",
+      "kind": "usage",
+      "symbol": "NotifyScheduler6",
+      "query": "Find all downstream code that uses NotifyScheduler6",
+      "expected_spans": [
+        {
+          "file": "services/svc_5/main.py",
+          "start_line": 24,
+          "end_line": 25
+        },
+        {
+          "file": "services/svc_9/main.py",
+          "start_line": 22,
+          "end_line": 23
+        },
+        {
+          "file": "services/svc_11/main.py",
+          "start_line": 26,
+          "end_line": 27
+        }
+      ]
+    },
+    {
+      "id": "definition:PipelineClient10",
+      "kind": "definition",
+      "symbol": "PipelineClient10",
+      "query": "Where is the class PipelineClient10 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/pipeline/module_5.py",
+          "start_line": 3,
+          "end_line": 20
+        }
+      ]
+    },
+    {
+      "id": "usage:PipelineClient10",
+      "kind": "usage",
+      "symbol": "PipelineClient10",
+      "query": "Find all downstream code that uses PipelineClient10",
+      "expected_spans": [
+        {
+          "file": "services/svc_1/main.py",
+          "start_line": 12,
+          "end_line": 13
+        },
+        {
+          "file": "services/svc_5/main.py",
+          "start_line": 14,
+          "end_line": 15
+        },
+        {
+          "file": "services/svc_6/main.py",
+          "start_line": 16,
+          "end_line": 17
+        },
+        {
+          "file": "services/svc_7/main.py",
+          "start_line": 19,
+          "end_line": 20
+        },
+        {
+          "file": "services/svc_9/main.py",
+          "start_line": 15,
+          "end_line": 16
+        },
+        {
+          "file": "services/svc_10/main.py",
+          "start_line": 13,
+          "end_line": 14
+        },
+        {
+          "file": "services/svc_11/main.py",
+          "start_line": 17,
+          "end_line": 18
+        }
+      ]
+    },
+    {
+      "id": "definition:PipelineClient2",
+      "kind": "definition",
+      "symbol": "PipelineClient2",
+      "query": "Where is the class PipelineClient2 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/pipeline/module_1.py",
+          "start_line": 3,
+          "end_line": 20
+        }
+      ]
+    },
+    {
+      "id": "definition:PipelineMiddleware0",
+      "kind": "definition",
+      "symbol": "PipelineMiddleware0",
+      "query": "Where is the class PipelineMiddleware0 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/pipeline/module_0.py",
+          "start_line": 3,
+          "end_line": 20
+        }
+      ]
+    },
+    {
+      "id": "usage:PipelineMiddleware0",
+      "kind": "usage",
+      "symbol": "PipelineMiddleware0",
+      "query": "Find all downstream code that uses PipelineMiddleware0",
+      "expected_spans": [
+        {
+          "file": "services/svc_1/main.py",
+          "start_line": 16,
+          "end_line": 17
+        },
+        {
+          "file": "services/svc_2/main.py",
+          "start_line": 19,
+          "end_line": 20
+        },
+        {
+          "file": "services/svc_5/main.py",
+          "start_line": 16,
+          "end_line": 17
+        },
+        {
+          "file": "services/svc_11/main.py",
+          "start_line": 20,
+          "end_line": 21
+        }
+      ]
+    },
+    {
+      "id": "definition:PipelineMiddleware8",
+      "kind": "definition",
+      "symbol": "PipelineMiddleware8",
+      "query": "Where is the class PipelineMiddleware8 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/pipeline/module_4.py",
+          "start_line": 3,
+          "end_line": 20
+        }
+      ]
+    },
+    {
+      "id": "definition:PipelineResolver4",
+      "kind": "definition",
+      "symbol": "PipelineResolver4",
+      "query": "Where is the class PipelineResolver4 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/pipeline/module_2.py",
+          "start_line": 3,
+          "end_line": 20
+        }
+      ]
+    },
+    {
+      "id": "definition:PipelineScheduler6",
+      "kind": "definition",
+      "symbol": "PipelineScheduler6",
+      "query": "Where is the class PipelineScheduler6 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/pipeline/module_3.py",
+          "start_line": 3,
+          "end_line": 20
+        }
+      ]
+    },
+    {
+      "id": "definition:SearchClient10",
+      "kind": "definition",
+      "symbol": "SearchClient10",
+      "query": "Where is the class SearchClient10 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/search/module_5.py",
+          "start_line": 3,
+          "end_line": 20
+        }
+      ]
+    },
+    {
+      "id": "definition:SearchClient2",
+      "kind": "definition",
+      "symbol": "SearchClient2",
+      "query": "Where is the class SearchClient2 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/search/module_1.py",
+          "start_line": 3,
+          "end_line": 20
+        }
+      ]
+    },
+    {
+      "id": "definition:SearchMiddleware0",
+      "kind": "definition",
+      "symbol": "SearchMiddleware0",
+      "query": "Where is the class SearchMiddleware0 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/search/module_0.py",
+          "start_line": 3,
+          "end_line": 20
+        }
+      ]
+    },
+    {
+      "id": "definition:SearchMiddleware8",
+      "kind": "definition",
+      "symbol": "SearchMiddleware8",
+      "query": "Where is the class SearchMiddleware8 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/search/module_4.py",
+          "start_line": 3,
+          "end_line": 20
+        }
+      ]
+    },
+    {
+      "id": "usage:SearchMiddleware8",
+      "kind": "usage",
+      "symbol": "SearchMiddleware8",
+      "query": "Find all downstream code that uses SearchMiddleware8",
+      "expected_spans": [
+        {
+          "file": "services/svc_1/main.py",
+          "start_line": 14,
+          "end_line": 15
+        },
+        {
+          "file": "services/svc_2/main.py",
+          "start_line": 16,
+          "end_line": 17
+        },
+        {
+          "file": "services/svc_3/main.py",
+          "start_line": 11,
+          "end_line": 12
+        },
+        {
+          "file": "services/svc_4/main.py",
+          "start_line": 12,
+          "end_line": 13
+        }
+      ]
+    },
+    {
+      "id": "definition:SearchResolver4",
+      "kind": "definition",
+      "symbol": "SearchResolver4",
+      "query": "Where is the class SearchResolver4 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/search/module_2.py",
+          "start_line": 3,
+          "end_line": 20
+        }
+      ]
+    },
+    {
+      "id": "definition:SearchScheduler6",
+      "kind": "definition",
+      "symbol": "SearchScheduler6",
+      "query": "Where is the class SearchScheduler6 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/search/module_3.py",
+          "start_line": 3,
+          "end_line": 20
+        }
+      ]
+    },
+    {
+      "id": "definition:StorageClient10",
+      "kind": "definition",
+      "symbol": "StorageClient10",
+      "query": "Where is the class StorageClient10 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/storage/module_5.py",
+          "start_line": 3,
+          "end_line": 20
+        }
+      ]
+    },
+    {
+      "id": "definition:StorageClient2",
+      "kind": "definition",
+      "symbol": "StorageClient2",
+      "query": "Where is the class StorageClient2 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/storage/module_1.py",
+          "start_line": 3,
+          "end_line": 20
+        }
+      ]
+    },
+    {
+      "id": "definition:StorageMiddleware0",
+      "kind": "definition",
+      "symbol": "StorageMiddleware0",
+      "query": "Where is the class StorageMiddleware0 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/storage/module_0.py",
+          "start_line": 3,
+          "end_line": 20
+        }
+      ]
+    },
+    {
+      "id": "usage:StorageMiddleware0",
+      "kind": "usage",
+      "symbol": "StorageMiddleware0",
+      "query": "Find all downstream code that uses StorageMiddleware0",
+      "expected_spans": [
+        {
+          "file": "services/svc_2/main.py",
+          "start_line": 22,
+          "end_line": 23
+        },
+        {
+          "file": "services/svc_9/main.py",
+          "start_line": 26,
+          "end_line": 27
+        }
+      ]
+    },
+    {
+      "id": "definition:StorageMiddleware8",
+      "kind": "definition",
+      "symbol": "StorageMiddleware8",
+      "query": "Where is the class StorageMiddleware8 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/storage/module_4.py",
+          "start_line": 3,
+          "end_line": 20
+        }
+      ]
+    },
+    {
+      "id": "usage:StorageMiddleware8",
+      "kind": "usage",
+      "symbol": "StorageMiddleware8",
+      "query": "Find all downstream code that uses StorageMiddleware8",
+      "expected_spans": [
+        {
+          "file": "services/svc_5/main.py",
+          "start_line": 18,
+          "end_line": 19
+        },
+        {
+          "file": "services/svc_6/main.py",
+          "start_line": 24,
+          "end_line": 25
+        },
+        {
+          "file": "services/svc_9/main.py",
+          "start_line": 18,
+          "end_line": 19
+        },
+        {
+          "file": "services/svc_10/main.py",
+          "start_line": 16,
+          "end_line": 17
+        },
+        {
+          "file": "services/svc_11/main.py",
+          "start_line": 24,
+          "end_line": 25
+        }
+      ]
+    },
+    {
+      "id": "definition:StorageResolver4",
+      "kind": "definition",
+      "symbol": "StorageResolver4",
+      "query": "Where is the class StorageResolver4 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/storage/module_2.py",
+          "start_line": 3,
+          "end_line": 20
+        }
+      ]
+    },
+    {
+      "id": "definition:StorageScheduler6",
+      "kind": "definition",
+      "symbol": "StorageScheduler6",
+      "query": "Where is the class StorageScheduler6 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/storage/module_3.py",
+          "start_line": 3,
+          "end_line": 20
+        }
+      ]
+    },
+    {
+      "id": "definition:auth_audit_access_7",
+      "kind": "definition",
+      "symbol": "auth_audit_access_7",
+      "query": "Where is the function auth_audit_access_7 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/auth/module_3.py",
+          "start_line": 143,
+          "end_line": 150
+        }
+      ]
+    },
+    {
+      "id": "definition:auth_emit_metrics_11",
+      "kind": "definition",
+      "symbol": "auth_emit_metrics_11",
+      "query": "Where is the function auth_emit_metrics_11 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/auth/module_5.py",
+          "start_line": 143,
+          "end_line": 150
+        }
+      ]
+    },
+    {
+      "id": "definition:auth_emit_metrics_3",
+      "kind": "definition",
+      "symbol": "auth_emit_metrics_3",
+      "query": "Where is the function auth_emit_metrics_3 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/auth/module_1.py",
+          "start_line": 143,
+          "end_line": 150
+        }
+      ]
+    },
+    {
+      "id": "usage:auth_emit_metrics_3",
+      "kind": "usage",
+      "symbol": "auth_emit_metrics_3",
+      "query": "Find all downstream code that uses auth_emit_metrics_3",
+      "expected_spans": [
+        {
+          "file": "services/svc_6/main.py",
+          "start_line": 20,
+          "end_line": 20
+        },
+        {
+          "file": "services/svc_7/main.py",
+          "start_line": 23,
+          "end_line": 23
+        }
+      ]
+    },
+    {
+      "id": "definition:auth_flush_cache_1",
+      "kind": "definition",
+      "symbol": "auth_flush_cache_1",
+      "query": "Where is the function auth_flush_cache_1 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/auth/module_0.py",
+          "start_line": 143,
+          "end_line": 150
+        }
+      ]
+    },
+    {
+      "id": "definition:auth_flush_cache_9",
+      "kind": "definition",
+      "symbol": "auth_flush_cache_9",
+      "query": "Where is the function auth_flush_cache_9 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/auth/module_4.py",
+          "start_line": 143,
+          "end_line": 150
+        }
+      ]
+    },
+    {
+      "id": "usage:auth_flush_cache_9",
+      "kind": "usage",
+      "symbol": "auth_flush_cache_9",
+      "query": "Find all downstream code that uses auth_flush_cache_9",
+      "expected_spans": [
+        {
+          "file": "services/svc_2/main.py",
+          "start_line": 21,
+          "end_line": 21
+        },
+        {
+          "file": "services/svc_4/main.py",
+          "start_line": 16,
+          "end_line": 16
+        },
+        {
+          "file": "services/svc_7/main.py",
+          "start_line": 25,
+          "end_line": 25
+        },
+        {
+          "file": "services/svc_8/main.py",
+          "start_line": 20,
+          "end_line": 20
+        }
+      ]
+    },
+    {
+      "id": "definition:auth_prune_stale_5",
+      "kind": "definition",
+      "symbol": "auth_prune_stale_5",
+      "query": "Where is the function auth_prune_stale_5 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/auth/module_2.py",
+          "start_line": 143,
+          "end_line": 150
+        }
+      ]
+    },
+    {
+      "id": "usage:auth_prune_stale_5",
+      "kind": "usage",
+      "symbol": "auth_prune_stale_5",
+      "query": "Find all downstream code that uses auth_prune_stale_5",
+      "expected_spans": [
+        {
+          "file": "services/svc_0/main.py",
+          "start_line": 14,
+          "end_line": 14
+        },
+        {
+          "file": "services/svc_2/main.py",
+          "start_line": 15,
+          "end_line": 15
+        },
+        {
+          "file": "services/svc_3/main.py",
+          "start_line": 10,
+          "end_line": 10
+        },
+        {
+          "file": "services/svc_4/main.py",
+          "start_line": 11,
+          "end_line": 11
+        },
+        {
+          "file": "services/svc_7/main.py",
+          "start_line": 22,
+          "end_line": 22
+        }
+      ]
+    },
+    {
+      "id": "definition:billing_audit_access_7",
+      "kind": "definition",
+      "symbol": "billing_audit_access_7",
+      "query": "Where is the function billing_audit_access_7 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/billing/module_3.py",
+          "start_line": 143,
+          "end_line": 150
+        }
+      ]
+    },
+    {
+      "id": "usage:billing_audit_access_7",
+      "kind": "usage",
+      "symbol": "billing_audit_access_7",
+      "query": "Find all downstream code that uses billing_audit_access_7",
+      "expected_spans": [
+        {
+          "file": "services/svc_6/main.py",
+          "start_line": 18,
+          "end_line": 18
+        },
+        {
+          "file": "services/svc_7/main.py",
+          "start_line": 21,
+          "end_line": 21
+        },
+        {
+          "file": "services/svc_8/main.py",
+          "start_line": 14,
+          "end_line": 14
+        },
+        {
+          "file": "services/svc_10/main.py",
+          "start_line": 15,
+          "end_line": 15
+        },
+        {
+          "file": "services/svc_11/main.py",
+          "start_line": 19,
+          "end_line": 19
+        }
+      ]
+    },
+    {
+      "id": "definition:billing_emit_metrics_11",
+      "kind": "definition",
+      "symbol": "billing_emit_metrics_11",
+      "query": "Where is the function billing_emit_metrics_11 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/billing/module_5.py",
+          "start_line": 143,
+          "end_line": 150
+        }
+      ]
+    },
+    {
+      "id": "definition:billing_emit_metrics_3",
+      "kind": "definition",
+      "symbol": "billing_emit_metrics_3",
+      "query": "Where is the function billing_emit_metrics_3 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/billing/module_1.py",
+          "start_line": 143,
+          "end_line": 150
+        }
+      ]
+    },
+    {
+      "id": "usage:billing_emit_metrics_3",
+      "kind": "usage",
+      "symbol": "billing_emit_metrics_3",
+      "query": "Find all downstream code that uses billing_emit_metrics_3",
+      "expected_spans": [
+        {
+          "file": "services/svc_6/main.py",
+          "start_line": 28,
+          "end_line": 28
+        },
+        {
+          "file": "services/svc_7/main.py",
+          "start_line": 26,
+          "end_line": 26
+        },
+        {
+          "file": "services/svc_8/main.py",
+          "start_line": 21,
+          "end_line": 21
+        },
+        {
+          "file": "services/svc_11/main.py",
+          "start_line": 28,
+          "end_line": 28
+        }
+      ]
+    },
+    {
+      "id": "definition:billing_flush_cache_1",
+      "kind": "definition",
+      "symbol": "billing_flush_cache_1",
+      "query": "Where is the function billing_flush_cache_1 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/billing/module_0.py",
+          "start_line": 143,
+          "end_line": 150
+        }
+      ]
+    },
+    {
+      "id": "usage:billing_flush_cache_1",
+      "kind": "usage",
+      "symbol": "billing_flush_cache_1",
+      "query": "Find all downstream code that uses billing_flush_cache_1",
+      "expected_spans": [
+        {
+          "file": "services/svc_0/main.py",
+          "start_line": 13,
+          "end_line": 13
+        },
+        {
+          "file": "services/svc_7/main.py",
+          "start_line": 18,
+          "end_line": 18
+        }
+      ]
+    },
+    {
+      "id": "definition:billing_flush_cache_9",
+      "kind": "definition",
+      "symbol": "billing_flush_cache_9",
+      "query": "Where is the function billing_flush_cache_9 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/billing/module_4.py",
+          "start_line": 143,
+          "end_line": 150
+        }
+      ]
+    },
+    {
+      "id": "usage:billing_flush_cache_9",
+      "kind": "usage",
+      "symbol": "billing_flush_cache_9",
+      "query": "Find all downstream code that uses billing_flush_cache_9",
+      "expected_spans": [
+        {
+          "file": "services/svc_0/main.py",
+          "start_line": 19,
+          "end_line": 19
+        },
+        {
+          "file": "services/svc_1/main.py",
+          "start_line": 20,
+          "end_line": 20
+        },
+        {
+          "file": "services/svc_5/main.py",
+          "start_line": 27,
+          "end_line": 27
+        },
+        {
+          "file": "services/svc_7/main.py",
+          "start_line": 31,
+          "end_line": 31
+        },
+        {
+          "file": "services/svc_8/main.py",
+          "start_line": 23,
+          "end_line": 23
+        }
+      ]
+    },
+    {
+      "id": "definition:billing_prune_stale_5",
+      "kind": "definition",
+      "symbol": "billing_prune_stale_5",
+      "query": "Where is the function billing_prune_stale_5 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/billing/module_2.py",
+          "start_line": 143,
+          "end_line": 150
+        }
+      ]
+    },
+    {
+      "id": "definition:notify_audit_access_7",
+      "kind": "definition",
+      "symbol": "notify_audit_access_7",
+      "query": "Where is the function notify_audit_access_7 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/notify/module_3.py",
+          "start_line": 143,
+          "end_line": 150
+        }
+      ]
+    },
+    {
+      "id": "usage:notify_audit_access_7",
+      "kind": "usage",
+      "symbol": "notify_audit_access_7",
+      "query": "Find all downstream code that uses notify_audit_access_7",
+      "expected_spans": [
+        {
+          "file": "services/svc_2/main.py",
+          "start_line": 18,
+          "end_line": 18
+        },
+        {
+          "file": "services/svc_6/main.py",
+          "start_line": 19,
+          "end_line": 19
+        },
+        {
+          "file": "services/svc_8/main.py",
+          "start_line": 15,
+          "end_line": 15
+        }
+      ]
+    },
+    {
+      "id": "definition:notify_emit_metrics_11",
+      "kind": "definition",
+      "symbol": "notify_emit_metrics_11",
+      "query": "Where is the function notify_emit_metrics_11 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/notify/module_5.py",
+          "start_line": 143,
+          "end_line": 150
+        }
+      ]
+    },
+    {
+      "id": "usage:notify_emit_metrics_11",
+      "kind": "usage",
+      "symbol": "notify_emit_metrics_11",
+      "query": "Find all downstream code that uses notify_emit_metrics_11",
+      "expected_spans": [
+        {
+          "file": "services/svc_5/main.py",
+          "start_line": 26,
+          "end_line": 26
+        },
+        {
+          "file": "services/svc_6/main.py",
+          "start_line": 29,
+          "end_line": 29
+        },
+        {
+          "file": "services/svc_7/main.py",
+          "start_line": 29,
+          "end_line": 29
+        },
+        {
+          "file": "services/svc_9/main.py",
+          "start_line": 28,
+          "end_line": 28
+        },
+        {
+          "file": "services/svc_10/main.py",
+          "start_line": 22,
+          "end_line": 22
+        }
+      ]
+    },
+    {
+      "id": "definition:notify_emit_metrics_3",
+      "kind": "definition",
+      "symbol": "notify_emit_metrics_3",
+      "query": "Where is the function notify_emit_metrics_3 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/notify/module_1.py",
+          "start_line": 143,
+          "end_line": 150
+        }
+      ]
+    },
+    {
+      "id": "definition:notify_flush_cache_1",
+      "kind": "definition",
+      "symbol": "notify_flush_cache_1",
+      "query": "Where is the function notify_flush_cache_1 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/notify/module_0.py",
+          "start_line": 143,
+          "end_line": 150
+        }
+      ]
+    },
+    {
+      "id": "definition:notify_flush_cache_9",
+      "kind": "definition",
+      "symbol": "notify_flush_cache_9",
+      "query": "Where is the function notify_flush_cache_9 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/notify/module_4.py",
+          "start_line": 143,
+          "end_line": 150
+        }
+      ]
+    },
+    {
+      "id": "definition:notify_prune_stale_5",
+      "kind": "definition",
+      "symbol": "notify_prune_stale_5",
+      "query": "Where is the function notify_prune_stale_5 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/notify/module_2.py",
+          "start_line": 143,
+          "end_line": 150
+        }
+      ]
+    },
+    {
+      "id": "definition:pipeline_audit_access_7",
+      "kind": "definition",
+      "symbol": "pipeline_audit_access_7",
+      "query": "Where is the function pipeline_audit_access_7 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/pipeline/module_3.py",
+          "start_line": 143,
+          "end_line": 150
+        }
+      ]
+    },
+    {
+      "id": "definition:pipeline_emit_metrics_11",
+      "kind": "definition",
+      "symbol": "pipeline_emit_metrics_11",
+      "query": "Where is the function pipeline_emit_metrics_11 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/pipeline/module_5.py",
+          "start_line": 143,
+          "end_line": 150
+        }
+      ]
+    },
+    {
+      "id": "definition:pipeline_emit_metrics_3",
+      "kind": "definition",
+      "symbol": "pipeline_emit_metrics_3",
+      "query": "Where is the function pipeline_emit_metrics_3 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/pipeline/module_1.py",
+          "start_line": 143,
+          "end_line": 150
+        }
+      ]
+    },
+    {
+      "id": "definition:pipeline_flush_cache_1",
+      "kind": "definition",
+      "symbol": "pipeline_flush_cache_1",
+      "query": "Where is the function pipeline_flush_cache_1 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/pipeline/module_0.py",
+          "start_line": 143,
+          "end_line": 150
+        }
+      ]
+    },
+    {
+      "id": "definition:pipeline_flush_cache_9",
+      "kind": "definition",
+      "symbol": "pipeline_flush_cache_9",
+      "query": "Where is the function pipeline_flush_cache_9 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/pipeline/module_4.py",
+          "start_line": 143,
+          "end_line": 150
+        }
+      ]
+    },
+    {
+      "id": "definition:pipeline_prune_stale_5",
+      "kind": "definition",
+      "symbol": "pipeline_prune_stale_5",
+      "query": "Where is the function pipeline_prune_stale_5 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/pipeline/module_2.py",
+          "start_line": 143,
+          "end_line": 150
+        }
+      ]
+    },
+    {
+      "id": "definition:search_audit_access_7",
+      "kind": "definition",
+      "symbol": "search_audit_access_7",
+      "query": "Where is the function search_audit_access_7 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/search/module_3.py",
+          "start_line": 143,
+          "end_line": 150
+        }
+      ]
+    },
+    {
+      "id": "usage:search_audit_access_7",
+      "kind": "usage",
+      "symbol": "search_audit_access_7",
+      "query": "Find all downstream code that uses search_audit_access_7",
+      "expected_spans": [
+        {
+          "file": "services/svc_0/main.py",
+          "start_line": 15,
+          "end_line": 15
+        },
+        {
+          "file": "services/svc_6/main.py",
+          "start_line": 23,
+          "end_line": 23
+        },
+        {
+          "file": "services/svc_7/main.py",
+          "start_line": 24,
+          "end_line": 24
+        },
+        {
+          "file": "services/svc_9/main.py",
+          "start_line": 17,
+          "end_line": 17
+        }
+      ]
+    },
+    {
+      "id": "definition:search_emit_metrics_11",
+      "kind": "definition",
+      "symbol": "search_emit_metrics_11",
+      "query": "Where is the function search_emit_metrics_11 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/search/module_5.py",
+          "start_line": 143,
+          "end_line": 150
+        }
+      ]
+    },
+    {
+      "id": "definition:search_emit_metrics_3",
+      "kind": "definition",
+      "symbol": "search_emit_metrics_3",
+      "query": "Where is the function search_emit_metrics_3 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/search/module_1.py",
+          "start_line": 143,
+          "end_line": 150
+        }
+      ]
+    },
+    {
+      "id": "definition:search_flush_cache_1",
+      "kind": "definition",
+      "symbol": "search_flush_cache_1",
+      "query": "Where is the function search_flush_cache_1 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/search/module_0.py",
+          "start_line": 143,
+          "end_line": 150
+        }
+      ]
+    },
+    {
+      "id": "usage:search_flush_cache_1",
+      "kind": "usage",
+      "symbol": "search_flush_cache_1",
+      "query": "Find all downstream code that uses search_flush_cache_1",
+      "expected_spans": [
+        {
+          "file": "services/svc_2/main.py",
+          "start_line": 27,
+          "end_line": 27
+        },
+        {
+          "file": "services/svc_7/main.py",
+          "start_line": 30,
+          "end_line": 30
+        },
+        {
+          "file": "services/svc_11/main.py",
+          "start_line": 33,
+          "end_line": 33
+        }
+      ]
+    },
+    {
+      "id": "definition:search_flush_cache_9",
+      "kind": "definition",
+      "symbol": "search_flush_cache_9",
+      "query": "Where is the function search_flush_cache_9 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/search/module_4.py",
+          "start_line": 143,
+          "end_line": 150
+        }
+      ]
+    },
+    {
+      "id": "definition:search_prune_stale_5",
+      "kind": "definition",
+      "symbol": "search_prune_stale_5",
+      "query": "Where is the function search_prune_stale_5 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/search/module_2.py",
+          "start_line": 143,
+          "end_line": 150
+        }
+      ]
+    },
+    {
+      "id": "usage:search_prune_stale_5",
+      "kind": "usage",
+      "symbol": "search_prune_stale_5",
+      "query": "Find all downstream code that uses search_prune_stale_5",
+      "expected_spans": [
+        {
+          "file": "services/svc_0/main.py",
+          "start_line": 16,
+          "end_line": 16
+        },
+        {
+          "file": "services/svc_1/main.py",
+          "start_line": 18,
+          "end_line": 18
+        },
+        {
+          "file": "services/svc_9/main.py",
+          "start_line": 24,
+          "end_line": 24
+        },
+        {
+          "file": "services/svc_10/main.py",
+          "start_line": 20,
+          "end_line": 20
+        }
+      ]
+    },
+    {
+      "id": "definition:storage_audit_access_7",
+      "kind": "definition",
+      "symbol": "storage_audit_access_7",
+      "query": "Where is the function storage_audit_access_7 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/storage/module_3.py",
+          "start_line": 143,
+          "end_line": 150
+        }
+      ]
+    },
+    {
+      "id": "usage:storage_audit_access_7",
+      "kind": "usage",
+      "symbol": "storage_audit_access_7",
+      "query": "Find all downstream code that uses storage_audit_access_7",
+      "expected_spans": [
+        {
+          "file": "services/svc_0/main.py",
+          "start_line": 17,
+          "end_line": 17
+        },
+        {
+          "file": "services/svc_1/main.py",
+          "start_line": 19,
+          "end_line": 19
+        },
+        {
+          "file": "services/svc_3/main.py",
+          "start_line": 15,
+          "end_line": 15
+        },
+        {
+          "file": "services/svc_4/main.py",
+          "start_line": 17,
+          "end_line": 17
+        },
+        {
+          "file": "services/svc_8/main.py",
+          "start_line": 22,
+          "end_line": 22
+        },
+        {
+          "file": "services/svc_9/main.py",
+          "start_line": 25,
+          "end_line": 25
+        },
+        {
+          "file": "services/svc_10/main.py",
+          "start_line": 21,
+          "end_line": 21
+        },
+        {
+          "file": "services/svc_11/main.py",
+          "start_line": 29,
+          "end_line": 29
+        }
+      ]
+    },
+    {
+      "id": "definition:storage_emit_metrics_11",
+      "kind": "definition",
+      "symbol": "storage_emit_metrics_11",
+      "query": "Where is the function storage_emit_metrics_11 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/storage/module_5.py",
+          "start_line": 143,
+          "end_line": 150
+        }
+      ]
+    },
+    {
+      "id": "definition:storage_emit_metrics_3",
+      "kind": "definition",
+      "symbol": "storage_emit_metrics_3",
+      "query": "Where is the function storage_emit_metrics_3 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/storage/module_1.py",
+          "start_line": 143,
+          "end_line": 150
+        }
+      ]
+    },
+    {
+      "id": "definition:storage_flush_cache_1",
+      "kind": "definition",
+      "symbol": "storage_flush_cache_1",
+      "query": "Where is the function storage_flush_cache_1 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/storage/module_0.py",
+          "start_line": 143,
+          "end_line": 150
+        }
+      ]
+    },
+    {
+      "id": "definition:storage_flush_cache_9",
+      "kind": "definition",
+      "symbol": "storage_flush_cache_9",
+      "query": "Where is the function storage_flush_cache_9 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/storage/module_4.py",
+          "start_line": 143,
+          "end_line": 150
+        }
+      ]
+    },
+    {
+      "id": "definition:storage_prune_stale_5",
+      "kind": "definition",
+      "symbol": "storage_prune_stale_5",
+      "query": "Where is the function storage_prune_stale_5 defined?",
+      "expected_spans": [
+        {
+          "file": "packages/storage/module_2.py",
+          "start_line": 143,
+          "end_line": 150
+        }
+      ]
+    },
+    {
+      "id": "usage:storage_prune_stale_5",
+      "kind": "usage",
+      "symbol": "storage_prune_stale_5",
+      "query": "Find all downstream code that uses storage_prune_stale_5",
+      "expected_spans": [
+        {
+          "file": "services/svc_0/main.py",
+          "start_line": 18,
+          "end_line": 18
+        },
+        {
+          "file": "services/svc_2/main.py",
+          "start_line": 26,
+          "end_line": 26
+        },
+        {
+          "file": "services/svc_11/main.py",
+          "start_line": 32,
+          "end_line": 32
+        }
+      ]
+    },
+    {
+      "id": "config:auth_cache_ttl",
+      "kind": "config",
+      "symbol": "auth_cache_ttl",
+      "query": "Where is the config key auth_cache_ttl set?",
+      "expected_spans": [
+        {
+          "file": "configs/auth.yaml",
+          "start_line": 6,
+          "end_line": 6
+        }
+      ]
+    },
+    {
+      "id": "config:auth_retry_limit",
+      "kind": "config",
+      "symbol": "auth_retry_limit",
+      "query": "Where is the config key auth_retry_limit set?",
+      "expected_spans": [
+        {
+          "file": "configs/auth.yaml",
+          "start_line": 3,
+          "end_line": 3
+        }
+      ]
+    },
+    {
+      "id": "config:billing_cache_ttl",
+      "kind": "config",
+      "symbol": "billing_cache_ttl",
+      "query": "Where is the config key billing_cache_ttl set?",
+      "expected_spans": [
+        {
+          "file": "configs/billing.yaml",
+          "start_line": 6,
+          "end_line": 6
+        }
+      ]
+    },
+    {
+      "id": "config:billing_retry_limit",
+      "kind": "config",
+      "symbol": "billing_retry_limit",
+      "query": "Where is the config key billing_retry_limit set?",
+      "expected_spans": [
+        {
+          "file": "configs/billing.yaml",
+          "start_line": 3,
+          "end_line": 3
+        }
+      ]
+    },
+    {
+      "id": "config:notify_cache_ttl",
+      "kind": "config",
+      "symbol": "notify_cache_ttl",
+      "query": "Where is the config key notify_cache_ttl set?",
+      "expected_spans": [
+        {
+          "file": "configs/notify.yaml",
+          "start_line": 6,
+          "end_line": 6
+        }
+      ]
+    },
+    {
+      "id": "config:notify_retry_limit",
+      "kind": "config",
+      "symbol": "notify_retry_limit",
+      "query": "Where is the config key notify_retry_limit set?",
+      "expected_spans": [
+        {
+          "file": "configs/notify.yaml",
+          "start_line": 3,
+          "end_line": 3
+        }
+      ]
+    },
+    {
+      "id": "config:pipeline_cache_ttl",
+      "kind": "config",
+      "symbol": "pipeline_cache_ttl",
+      "query": "Where is the config key pipeline_cache_ttl set?",
+      "expected_spans": [
+        {
+          "file": "configs/pipeline.yaml",
+          "start_line": 6,
+          "end_line": 6
+        }
+      ]
+    },
+    {
+      "id": "config:pipeline_retry_limit",
+      "kind": "config",
+      "symbol": "pipeline_retry_limit",
+      "query": "Where is the config key pipeline_retry_limit set?",
+      "expected_spans": [
+        {
+          "file": "configs/pipeline.yaml",
+          "start_line": 3,
+          "end_line": 3
+        }
+      ]
+    },
+    {
+      "id": "config:search_cache_ttl",
+      "kind": "config",
+      "symbol": "search_cache_ttl",
+      "query": "Where is the config key search_cache_ttl set?",
+      "expected_spans": [
+        {
+          "file": "configs/search.yaml",
+          "start_line": 6,
+          "end_line": 6
+        }
+      ]
+    },
+    {
+      "id": "config:search_retry_limit",
+      "kind": "config",
+      "symbol": "search_retry_limit",
+      "query": "Where is the config key search_retry_limit set?",
+      "expected_spans": [
+        {
+          "file": "configs/search.yaml",
+          "start_line": 3,
+          "end_line": 3
+        }
+      ]
+    },
+    {
+      "id": "config:storage_cache_ttl",
+      "kind": "config",
+      "symbol": "storage_cache_ttl",
+      "query": "Where is the config key storage_cache_ttl set?",
+      "expected_spans": [
+        {
+          "file": "configs/storage.yaml",
+          "start_line": 6,
+          "end_line": 6
+        }
+      ]
+    },
+    {
+      "id": "config:storage_retry_limit",
+      "kind": "config",
+      "symbol": "storage_retry_limit",
+      "query": "Where is the config key storage_retry_limit set?",
+      "expected_spans": [
+        {
+          "file": "configs/storage.yaml",
+          "start_line": 3,
+          "end_line": 3
+        }
+      ]
+    }
+  ]
+}

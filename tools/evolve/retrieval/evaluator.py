@@ -37,6 +37,27 @@ def _estimate_tokens(text: str) -> int:
     return max(1, len(text) // 4) if text else 0
 
 
+def compute_lift(candidate: dict, default: dict) -> dict:
+    """Lift of a candidate's metrics over the default behavior's."""
+    c_score, d_score = candidate["combined_score"], default["combined_score"]
+    c_tok = candidate["avg_tokens_returned"]
+    d_tok = default["avg_tokens_returned"]
+    return {
+        "combined_score_delta": round(c_score - d_score, 4),
+        "combined_score_lift_pct": (
+            round((c_score - d_score) / d_score * 100, 1) if d_score > 0 else 0.0
+        ),
+        "token_reduction_pct": (
+            round((d_tok - c_tok) / d_tok * 100, 1) if d_tok > 0 else 0.0
+        ),
+        "recall_delta": round(candidate["recall"] - default["recall"], 4),
+        "precision_delta": round(
+            candidate["precision"] - default["precision"], 4
+        ),
+        "mrr_delta": round(candidate["mrr"] - default["mrr"], 4),
+    }
+
+
 def _overlap_lines(chunk: dict, span: dict) -> int:
     if chunk["file"] != span["file"]:
         return 0

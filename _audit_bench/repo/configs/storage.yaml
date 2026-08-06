@@ -1,0 +1,6 @@
+# Runtime configuration for the storage package
+storage:
+  storage_retry_limit: 198
+  storage_timeout_seconds: 290
+  storage_max_connections: 7
+  storage_cache_ttl: 84
