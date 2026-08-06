@@ -55,18 +55,41 @@ def estimate_tokens(text: str) -> int:
 
 
 # EVOLVE-BLOCK-START
-# Baseline retrieval algorithm. AlphaEvolve mutates ONLY this region.
-# Known headroom for evolution: no AST parsing, no import-graph
-# awareness for usage queries, no camelCase/snake_case sub-token
-# matching, no learned stopwords, single-pass ranking.
+# AST-aware retrieval: parse .py files with the ast module and emit exact
+# block-level chunks (full def/class bodies with precise end lines), so
+# definition answers carry no surrounding filler. Usage hits map to their
+# smallest enclosing function; config hits emit tight YAML key blocks.
+# Non-Python files fall back to a small regex window.
+
+import ast as _ast_mod
 
 _STOPWORDS = {
-    "a", "all", "an", "and", "are", "code", "does", "downstream", "find",
-    "for", "how", "in", "is", "of", "or", "set", "that", "the", "to",
-    "what", "where", "which",
+    "a", "all", "an", "and", "are", "code", "does", "find",
+    "for", "how", "in", "is", "it", "its", "of", "or", "that", "the", "to",
+    "what", "where", "which", "show", "me", "file", "files", "repo",
 }
 
-_DEF_RE = re.compile(r"^\s*(?:class|def)\s+(\w+)")
+_USAGE_WORDS = {
+    "use", "uses", "used", "using", "usage", "usages", "call", "calls",
+    "called", "caller", "callers", "calling", "invoke", "invokes", "invoked",
+    "import", "imports", "imported", "importing", "depend", "depends",
+    "dependency", "dependencies", "downstream", "consumer", "consumers",
+    "consume", "consumes", "reference", "references", "referenced",
+    "service", "services",
+}
+_CONFIG_WORDS = {
+    "config", "configs", "configuration", "configured", "configures",
+    "yaml", "yml", "toml", "setting", "settings", "set", "sets", "value",
+    "values", "default", "defaults", "option", "options", "flag", "flags",
+    "key", "keys",
+}
+_DEF_WORDS = {
+    "define", "defined", "defines", "definition", "declaration", "declared",
+    "implementation", "implemented", "implements", "signature", "source",
+    "body", "class", "function", "method", "docstring", "implementing",
+}
+
+_CONFIG_SUFFIXES = {".yaml", ".yml", ".toml", ".ini", ".cfg", ".json"}
 
 
 def _query_terms(query: str) -> list[str]:
@@ -85,23 +108,107 @@ def _iter_source_files(repo_root: Path):
         yield path
 
 
-def _expand_to_block(lines: list[str], hit_idx: int) -> tuple[int, int]:
-    """Expand a hit line to its enclosing def/class block, else +-4 lines."""
-    start = hit_idx
-    for i in range(hit_idx, max(-1, hit_idx - 60), -1):
-        stripped = lines[i].lstrip()
-        if stripped.startswith(("def ", "class ")):
-            start = i
-            indent = len(lines[i]) - len(stripped)
-            end = hit_idx
-            for j in range(hit_idx + 1, min(len(lines), i + 80)):
-                body = lines[j]
-                if body.strip() and (len(body) - len(body.lstrip())) <= indent:
-                    break
-                if body.strip():
-                    end = j
-            return start, end
-    return max(0, start - 4), min(len(lines) - 1, hit_idx + 4)
+def _intent(terms: list[str]) -> str:
+    low = {t.lower() for t in terms}
+    if low & _USAGE_WORDS:
+        return "usage"
+    if low & _CONFIG_WORDS:
+        return "config"
+    if low & _DEF_WORDS:
+        return "definition"
+    return "mixed"
+
+
+def _symbol_candidates(terms: list[str]) -> list[str]:
+    reserved = _USAGE_WORDS | _CONFIG_WORDS | _DEF_WORDS
+    cands = [t for t in terms if t.lower() not in reserved]
+    if not cands:
+        cands = list(terms)
+
+    def rank(t: str):
+        identish = (
+            "_" in t
+            or any(c.isupper() for c in t[1:])
+            or (t[:1].isupper() and any(c.islower() for c in t))
+        )
+        return (identish, len(t))
+
+    cands.sort(key=rank, reverse=True)
+    seen: set[str] = set()
+    out: list[str] = []
+    for t in cands:
+        if t not in seen:
+            seen.add(t)
+            out.append(t)
+    return out
+
+
+def _py_blocks(text: str):
+    """(start0, end0, name, is_class) for every def/class, plus module-level
+    assignment targets (constants)."""
+    try:
+        tree = _ast_mod.parse(text)
+    except SyntaxError:
+        return None
+    blocks = []
+    for node in _ast_mod.walk(tree):
+        if isinstance(
+            node,
+            (_ast_mod.FunctionDef, _ast_mod.AsyncFunctionDef, _ast_mod.ClassDef),
+        ):
+            start = node.lineno
+            if node.decorator_list:
+                start = min(start, min(d.lineno for d in node.decorator_list))
+            end = node.end_lineno or node.lineno
+            blocks.append(
+                (start - 1, end - 1, node.name, isinstance(node, _ast_mod.ClassDef))
+            )
+    assigns = []
+    for node in tree.body:
+        names = []
+        if isinstance(node, _ast_mod.Assign):
+            names = [t.id for t in node.targets if isinstance(t, _ast_mod.Name)]
+        elif isinstance(node, _ast_mod.AnnAssign) and isinstance(
+            node.target, _ast_mod.Name
+        ):
+            names = [node.target.id]
+        for n in names:
+            assigns.append((node.lineno - 1, (node.end_lineno or node.lineno) - 1, n))
+    return blocks, assigns
+
+
+def _yaml_chunk(lines: list[str], idx: int) -> tuple[int, int]:
+    """Matched config line plus its indented children — no extra context."""
+    def indent(s: str) -> int:
+        return len(s) - len(s.lstrip())
+
+    base = indent(lines[idx])
+    end = idx
+    j = idx + 1
+    while j < len(lines):
+        s = lines[j]
+        if not s.strip():
+            j += 1
+            continue
+        if indent(s) > base:
+            end = j
+            j += 1
+            continue
+        break
+    return idx, end
+
+
+def _group_lines(idxs: list[int], gap: int = 2) -> list[tuple[int, int]]:
+    if not idxs:
+        return []
+    idxs = sorted(set(idxs))
+    groups = [[idxs[0], idxs[0]]]
+    for i in idxs[1:]:
+        if i - groups[-1][1] <= gap:
+            groups[-1][1] = i
+        else:
+            groups.append([i, i])
+    return [(a, b) for a, b in groups]
 
 
 def _evolved_search(
@@ -113,72 +220,174 @@ def _evolved_search(
     terms = _query_terms(query)
     if not terms:
         return []
-    lowered = [t.lower() for t in terms]
+    intent = _intent(terms)
+    candidates = _symbol_candidates(terms)[:3]
 
-    # Pass 1: score every matching line in every file.
-    # Rare terms (e.g. a specific symbol name) get higher weight than
-    # terms that appear all over the tree.
-    file_lines: dict[Path, list[str]] = {}
-    term_file_counts = {t: 0 for t in lowered}
-    per_file_hits: dict[Path, list[tuple[int, float, set[str]]]] = {}
+    def collect(symbol: str):
+        pat = re.compile(
+            r"(?<![A-Za-z0-9_])" + re.escape(symbol) + r"(?![A-Za-z0-9_])"
+        )
+        defs: list[dict] = []
+        uses: list[dict] = []
+        confs: list[dict] = []
+        others: list[dict] = []
 
-    for path in _iter_source_files(repo_root):
-        try:
-            text = path.read_text(errors="replace")
-        except OSError:
-            continue
-        text_lower = text.lower()
-        present = [t for t in lowered if t in text_lower]
-        if not present:
-            continue
-        for t in present:
-            term_file_counts[t] += 1
-        file_lines[path] = text.splitlines()
-
-    for path, lines in file_lines.items():
-        hits = []
-        for idx, line in enumerate(lines):
-            line_lower = line.lower()
-            matched = {t for t in lowered if t in line_lower}
-            if not matched:
+        for path in _iter_source_files(repo_root):
+            try:
+                text = path.read_text(errors="replace")
+            except OSError:
                 continue
-            weight = sum(1.0 / term_file_counts[t] for t in matched)
-            defn = _DEF_RE.match(line)
-            if defn and defn.group(1).lower() in matched:
-                weight *= 3.0  # definitions outrank mentions
-            hits.append((idx, weight, matched))
-        if hits:
-            per_file_hits[path] = hits
+            if not pat.search(text):
+                continue
+            rel = path.relative_to(repo_root).as_posix()
+            lines = text.splitlines()
+            hit_idxs = [i for i, line in enumerate(lines) if pat.search(line)]
+            if not hit_idxs:
+                continue
 
-    # Pass 2: expand top hits into block-level chunks and merge overlaps.
-    chunks: list[dict] = []
-    for path, hits in per_file_hits.items():
-        lines = file_lines[path]
-        rel = path.relative_to(repo_root).as_posix()
-        hits.sort(key=lambda h: -h[1])
-        spans: list[list] = []  # [start, end, score, matched_terms]
-        for idx, weight, matched in hits[:10]:
-            start, end = _expand_to_block(lines, idx)
-            for span in spans:
-                if start <= span[1] and end >= span[0]:
-                    span[0] = min(span[0], start)
-                    span[1] = max(span[1], end)
-                    span[2] = max(span[2], weight)
-                    span[3] |= matched
-                    break
+            top = rel.split("/", 1)[0]
+            vendor_pen = (
+                0.1 if top in ("vendor", "third_party", "node_modules") else 1.0
+            )
+
+            def emit(bucket, start, end, score, loose=False):
+                for c in bucket:
+                    if c["file"] == rel and start <= c["_e"] and end >= c["_s"]:
+                        c["_s"] = min(c["_s"], start)
+                        c["_e"] = max(c["_e"], end)
+                        c["score"] = max(c["score"], score)
+                        c["_loose"] = c.get("_loose", False) and loose
+                        return
+                bucket.append(
+                    {
+                        "file": rel,
+                        "_s": start,
+                        "_e": end,
+                        "score": score,
+                        "_loose": loose,
+                    }
+                )
+
+            if path.suffix == ".py":
+                parsed = _py_blocks(text)
+                if parsed is None:
+                    for a, b in _group_lines(hit_idxs, gap=6):
+                        emit(
+                            others,
+                            max(0, a - 3),
+                            min(len(lines) - 1, b + 3),
+                            vendor_pen,
+                        )
+                    continue
+                blocks, assigns = parsed
+                sym_def_spans = []
+                for s, e, name, _is_cls in blocks:
+                    if name == symbol:
+                        bonus = 1.5 if top == "packages" else 1.0
+                        emit(defs, s, e, (10.0 + bonus) * vendor_pen)
+                        sym_def_spans.append((s, e))
+                for s, e, name in assigns:
+                    if name == symbol:
+                        emit(defs, s, e, 10.0 * vendor_pen)
+                        sym_def_spans.append((s, e))
+                func_blocks = [
+                    (s, e) for s, e, _n, is_cls in blocks if not is_cls
+                ]
+                svc_bonus = 2.0 if top == "services" else 0.5
+                loose: list[int] = []
+                for idx in hit_idxs:
+                    if any(s <= idx <= e for s, e in sym_def_spans):
+                        continue
+                    if any(s <= idx <= e for s, e in func_blocks):
+                        end = idx
+                        m = re.match(r"\s*([A-Za-z_]\w*)\s*=[^=]", lines[idx])
+                        if m and idx + 1 < len(lines):
+                            tgt = re.compile(
+                                r"(?<![A-Za-z0-9_])"
+                                + re.escape(m.group(1))
+                                + r"(?![A-Za-z0-9_])"
+                            )
+                            if tgt.search(lines[idx + 1]):
+                                end = idx + 1
+                        emit(uses, idx, end, (5.0 + svc_bonus) * vendor_pen)
+                    else:
+                        loose.append(idx)
+                for a, b in _group_lines(loose, gap=1):
+                    emit(uses, a, b, (4.0 + svc_bonus) * vendor_pen, loose=True)
+            elif path.suffix in _CONFIG_SUFFIXES:
+                for idx in hit_idxs:
+                    s, e = _yaml_chunk(lines, idx)
+                    emit(confs, s, e, (7.0 if top == "configs" else 5.0) * vendor_pen)
             else:
-                spans.append([start, end, weight, set(matched)])
-        for start, end, weight, matched in spans:
-            content = "\n".join(lines[start : end + 1])
-            chunks.append(
+                for a, b in _group_lines(hit_idxs, gap=6):
+                    emit(
+                        others,
+                        max(0, a - 3),
+                        min(len(lines) - 1, b + 3),
+                        vendor_pen,
+                    )
+        if any(not c.get("_loose") for c in uses):
+            uses = [c for c in uses if not c.get("_loose")]
+        return defs, uses, confs, others
+
+    defs: list[dict] = []
+    uses: list[dict] = []
+    confs: list[dict] = []
+    others: list[dict] = []
+    for cand in candidates:
+        defs, uses, confs, others = collect(cand)
+        if defs or uses or confs or others:
+            break
+
+    text_cache: dict[str, list[str]] = {}
+
+    def finalize(bucket: list[dict], base: float) -> list[dict]:
+        out = []
+        for c in bucket:
+            s, e = c["_s"], c["_e"]
+            if c["file"] not in text_cache:
+                try:
+                    text_cache[c["file"]] = (
+                        (repo_root / c["file"]).read_text(errors="replace").splitlines()
+                    )
+                except OSError:
+                    text_cache[c["file"]] = []
+            lines = text_cache[c["file"]]
+            if not lines:
+                continue
+            content = "\n".join(lines[s : e + 1])
+            out.append(
                 {
-                    "file": rel,
-                    "start_line": start + 1,
-                    "end_line": end + 1,
+                    "file": c["file"],
+                    "start_line": s + 1,
+                    "end_line": e + 1,
                     "content": content,
-                    "score": weight * (1.0 + 0.25 * len(matched)),
+                    "score": base + c["score"],
                 }
             )
+        out.sort(key=lambda c: -c["score"])
+        return out
+
+    if intent == "definition":
+        order = [(defs, 3000.0), (uses, 2000.0), (confs, 1000.0), (others, 0.0)]
+        hard = True
+    elif intent == "usage":
+        order = [(uses, 3000.0), (defs, 2000.0), (confs, 1000.0), (others, 0.0)]
+        hard = True
+    elif intent == "config":
+        order = [(confs, 3000.0), (defs, 2000.0), (uses, 1000.0), (others, 0.0)]
+        hard = True
+    else:
+        order = [(defs, 3000.0), (uses, 2000.0), (confs, 1000.0), (others, 0.0)]
+        hard = False
+
+    chunks: list[dict] = []
+    for bucket, base in order:
+        ranked = finalize(bucket, base)
+        if hard and ranked:
+            chunks = ranked
+            break
+        chunks.extend(ranked)
 
     chunks.sort(key=lambda c: -c["score"])
     return chunks[: max_results * 4]
