@@ -1,6 +1,6 @@
 # Progress — Real-Log Retrieval Eval Set & Skills Impact Measurement
 
-Last updated: 2026-08-06 ~09:45 UTC
+Last updated: 2026-08-06 ~09:55 UTC
 Branch: `alphaevolve-retrieval-real-eval` (pushed to `origin`)
 Worktree: `/home/ivanmkc/agents-cli/.claude/worktrees/alphaevolve-retrieval`
 
@@ -55,20 +55,23 @@ instructions (`skills/google-agents-cli-adk-code/references/samples.md`
 - `samples.md` with clone-and-study protocol: v1.3.1 (2026-08-04)
 - The mined run: 2026-04-13 18:02 UTC
 
-### 4. Consensus validation (IN PROGRESS)
+### 4. Consensus validation (DONE — committed to `validation/`)
 
 3-validator pass over every eval-set row: 2 Claude subagent lenses
 (query-faithfulness + ground-truth skeptic) + Gemini 3.1 Pro.
 
-**Status:**
-- **Claude track**: DONE — 175/175 rows, both lenses. Saved to
-  `/home/ivanmkc/.claude/jobs/8c477bb8/tmp/claude_verdicts.json`
-- **Gemini track**: IN PROGRESS — 1/12 batches complete, 3 concurrent
-  Gemini CLI processes running. Script:
-  `/home/ivanmkc/.claude/jobs/8c477bb8/tmp/gemini_validate.py`.
-  Verdicts save to: `/home/ivanmkc/.claude/jobs/8c477bb8/tmp/gemini_verdicts/`
-- **Merger**: `/home/ivanmkc/.claude/jobs/8c477bb8/tmp/merge_consensus.py`
-  — run once both tracks finish.
+**Note**: the original Gemini-CLI-based validator hung — `subprocess.run`
+timeouts killed the fnm shim but orphaned the node children (24 zombie
+gemini-3.1-pro processes saturating quota, 1/12 batches in 68 min). Rewritten
+against the google-genai SDK (Vertex ADC) → all 12 batches in ~2 min.
+
+**Results** (see `validation/README.md` for full writeup):
+- 175 rows → **63 valid / 41 flag / 71 invalid** (47 unanimous valid)
+- Per family: project-file 60/41/63; sdk-symbol 3/0/8
+- Dominant issues: `fragmented-episode` (44), `verification-read` (42),
+  `span-wrong` (32) — mostly miner artifacts, fixable in `log_mining.py`
+- **`real_eval_manifest.validated.json`** = the 63 consensus-valid tasks,
+  annotated with `row_id` + `validation` — use THIS for fitness/eval
 
 ### 5. agents-cli upgraded to v1.3.1 (DONE)
 
@@ -77,15 +80,19 @@ instructions (`skills/google-agents-cli-adk-code/references/samples.md`
   `google-agents-cli-adk-code` (with `samples.md` and `adk-python.md`)
 - Verified: `agents-cli --version` → `1.3.1`
 
-### 6. Benchmark re-run (NOT STARTED — needs launch)
+### 6. Benchmark re-run (RUNNING — launched 2026-08-06 ~09:36 UTC)
 
-Two partial runs were killed:
+Launched: `benchmark-runner --case-set agents-cli-sandbox --generator-set
+agents-cli --name "skills-v1.3.1-retrieval-eval" --concurrency 4` —
+71 cases × 2 generators (Interactive_claude_agents-cli +
+Interactive_gemini_agents-cli) = 142 transcripts, matching the mined
+baseline's per-model scale. Expect several hours at concurrency 4.
+Log: `/home/ivanmkc/.claude/jobs/2cfe6680/tmp/benchmark_run.log`;
+results land under `~/.agent_generator/benchmark_runs/2026-08-06_*skills-v1_3_1*`.
+
+Two earlier partial runs were killed (Claude-only, not comparable):
 - v0.3.0 run (wrong version): `~/.agent_generator/benchmark_runs/2026-08-06_09-19-27_*` — 3 cases done, killed
 - v1.3.1 Claude-only run: `~/.agent_generator/benchmark_runs/2026-08-06_09-26-01_*` — 2 cases done, killed
-
-Both were Claude-only. The termchart book used **Claude + Gemini + AGY**
-across all its analyses, so the re-run must include all available backends
-for a comparable dataset.
 
 ## Data scale comparison
 
@@ -120,32 +127,24 @@ model coverage and is directly comparable.
 
 ## What's NOT done yet (TODOs)
 
-### TODO 1: Launch the v1.3.1 benchmark with all backends
+### TODO 1: ~~Launch the v1.3.1 benchmark~~ LAUNCHED (see section 6) — await completion
 
-```bash
-cd /home/ivanmkc/agent-generator
-benchmark-runner \
-  --case-set agents-cli-sandbox \
-  --generator-set agents-cli \
-  --name "skills-v1.3.1-retrieval-eval" \
-  --concurrency 4 \
-  --description "v1.3.1 skills impact: Claude + Gemini on agents-cli-sandbox"
-```
+When it finishes, verify `results_detail/` has ~142 files across both
+generators, then proceed to TODO 3.
 
-`agents-cli` generator set = `Interactive_gemini_agents-cli` +
-`Interactive_claude_agents-cli` (Gemini Flash + Claude Haiku).
+### TODO 2: ~~Finish consensus validation and commit results~~ DONE
 
-Expected: ~74 transcripts, several hours at concurrency 4.
+Committed to `tools/evolve/retrieval/real_data/validation/` +
+`real_eval_manifest.validated.json` (63 consensus-valid tasks).
 
-Results land in: `~/.agent_generator/benchmark_runs/<run-name>/results_detail/`
+### TODO 2b (NEW): Fix the miner per validation findings
 
-### TODO 2: Finish consensus validation and commit results
-
-Once Gemini track finishes (check: `ls ~/.claude/jobs/8c477bb8/tmp/gemini_verdicts/ | wc -l` → should be 12):
-```bash
-python3 /home/ivanmkc/.claude/jobs/8c477bb8/tmp/merge_consensus.py
-```
-Commit results to `tools/evolve/retrieval/real_data/validation/`.
+`log_mining.py` improvements that would recover much of the invalid 41%:
+- Drop read-after-own-write episodes (`verification-read`, 42 rows)
+- Segment episodes on assistant-message boundaries so queries aren't
+  mid-sentence fragments (`fragmented-episode`, 44 rows)
+Then re-mine, re-build, re-validate (the validator inputs/scripts are
+preserved under `validation/`).
 
 ### TODO 3: Mine new transcripts and compare retrieval behavior
 

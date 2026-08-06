@@ -1,0 +1,1889 @@
+{
+ "source_episodes": 236,
+ "validation": "tools/evolve/retrieval/real_data/validation/consensus_report.json",
+ "tasks": [
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "Great! Now let me check the current agent.py file and understand the structure:",
+   "expected_spans": [
+    {
+     "file": "app/agent.py",
+     "start_line": 1,
+     "end_line": 79
+    }
+   ],
+   "observed": {
+    "steps": 4,
+    "tokens": 3348,
+    "wall_seconds": 6.275,
+    "generator": "Interactive_claude_agents-cli",
+    "case": "CLI-DEV-001-EXP",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 0,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": true,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "Excellent! Now let me check the project structure:",
+   "expected_spans": [
+    {
+     "file": "app/agent.py",
+     "start_line": 1,
+     "end_line": 79
+    },
+    {
+     "file": "tests/integration/test_agent.py",
+     "start_line": 1,
+     "end_line": 57
+    }
+   ],
+   "observed": {
+    "steps": 3,
+    "tokens": 1628,
+    "wall_seconds": 3.866,
+    "generator": "Interactive_claude_agents-cli",
+    "case": "CLI-DEV-001",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 1,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": true,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "Let me check the current agent structure:",
+   "expected_spans": [
+    {
+     "file": "app/agent.py",
+     "start_line": 1,
+     "end_line": 79
+    },
+    {
+     "file": "tests/integration/test_agent.py",
+     "start_line": 1,
+     "end_line": 57
+    },
+    {
+     "file": "pyproject.toml",
+     "start_line": 1,
+     "end_line": 97
+    }
+   ],
+   "observed": {
+    "steps": 6,
+    "tokens": 2604,
+    "wall_seconds": 10.072,
+    "generator": "Interactive_claude_agents-cli",
+    "case": "CLI-DEV-002",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 3,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": true,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "Good! Now let me explore the project structure to see what was generated.",
+   "expected_spans": [
+    {
+     "file": "app/agent.py",
+     "start_line": 1,
+     "end_line": 79
+    }
+   ],
+   "observed": {
+    "steps": 2,
+    "tokens": 878,
+    "wall_seconds": 0.075,
+    "generator": "Interactive_claude_agents-cli",
+    "case": "CLI-DEV-SERVE-001-EXP",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 5,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": true,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "Let me check the current agent implementation:",
+   "expected_spans": [
+    {
+     "file": "app/agent.py",
+     "start_line": 1,
+     "end_line": 79
+    }
+   ],
+   "observed": {
+    "steps": 2,
+    "tokens": 878,
+    "wall_seconds": 1.268,
+    "generator": "Interactive_claude_agents-cli",
+    "case": "CLI-DEV-SERVE-001",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 6,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": true,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "Great! Now let me explore the project structure:",
+   "expected_spans": [
+    {
+     "file": "app/agent.py",
+     "start_line": 1,
+     "end_line": 79
+    }
+   ],
+   "observed": {
+    "steps": 2,
+    "tokens": 984,
+    "wall_seconds": 1.83,
+    "generator": "Interactive_claude_agents-cli",
+    "case": "CLI-ENH-001",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 9,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": true,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "Great! Now let me explore the project structure:",
+   "expected_spans": [
+    {
+     "file": "app/agent.py",
+     "start_line": 1,
+     "end_line": 79
+    }
+   ],
+   "observed": {
+    "steps": 5,
+    "tokens": 1157,
+    "wall_seconds": 5.496,
+    "generator": "Interactive_claude_agents-cli",
+    "case": "CLI-ENH-002",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 14,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": true,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "Let me read the existing agent.py file to understand the structure:",
+   "expected_spans": [
+    {
+     "file": "app/agent.py",
+     "start_line": 1,
+     "end_line": 79
+    }
+   ],
+   "observed": {
+    "steps": 2,
+    "tokens": 878,
+    "wall_seconds": 1.825,
+    "generator": "Interactive_claude_agents-cli",
+    "case": "CLI-EVAL-CUSTOM",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 19,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": true,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "Great! Now let me check the project structure:",
+   "expected_spans": [
+    {
+     "file": "app/agent.py",
+     "start_line": 1,
+     "end_line": 79
+    }
+   ],
+   "observed": {
+    "steps": 2,
+    "tokens": 1105,
+    "wall_seconds": 1.441,
+    "generator": "Interactive_claude_agents-cli",
+    "case": "CLI-EXT-001",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 21,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": true,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "Let me check the project structure:",
+   "expected_spans": [
+    {
+     "file": "app/agent.py",
+     "start_line": 1,
+     "end_line": 79
+    }
+   ],
+   "observed": {
+    "steps": 2,
+    "tokens": 1038,
+    "wall_seconds": 2.888,
+    "generator": "Interactive_claude_agents-cli",
+    "case": "CLI-FLOW-CB-001-EXP",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 23,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": true,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "sdk-symbol",
+   "kind": "sdk-symbol",
+   "corpus": "sdk",
+   "query": "Let me find the _SingleBeforeToolCallback definition:",
+   "symbols": [
+    "_SingleBeforeToolCallback"
+   ],
+   "expected_spans": [
+    {
+     "file": "agents/llm_agent.py",
+     "start_line": 102,
+     "end_line": 105
+    }
+   ],
+   "observed": {
+    "steps": 2,
+    "tokens": 203,
+    "wall_seconds": 1.522,
+    "generator": "Interactive_claude_agents-cli",
+    "case": "CLI-FLOW-CB-001-EXP",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 24,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": true,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "Great! Now let me explore the project structure:",
+   "expected_spans": [
+    {
+     "file": "app/agent.py",
+     "start_line": 1,
+     "end_line": 79
+    },
+    {
+     "file": "tests/integration/test_agent.py",
+     "start_line": 1,
+     "end_line": 57
+    }
+   ],
+   "observed": {
+    "steps": 5,
+    "tokens": 1819,
+    "wall_seconds": 5.158,
+    "generator": "Interactive_claude_agents-cli",
+    "case": "CLI-FLOW-CB-001",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 27,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": true,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "Great! Now let me check the current agent.py structure and then modify it to implement the two-agent system:",
+   "expected_spans": [
+    {
+     "file": "app/agent.py",
+     "start_line": 1,
+     "end_line": 79
+    }
+   ],
+   "observed": {
+    "steps": 2,
+    "tokens": 871,
+    "wall_seconds": 1.958,
+    "generator": "Interactive_claude_agents-cli",
+    "case": "CLI-FLOW-HO-001-EXP",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 28,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": true,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "Excellent! Now let me examine the project structure and the agent.py file:",
+   "expected_spans": [
+    {
+     "file": "app/agent.py",
+     "start_line": 1,
+     "end_line": 79
+    }
+   ],
+   "observed": {
+    "steps": 3,
+    "tokens": 3228,
+    "wall_seconds": 4.341,
+    "generator": "Interactive_claude_agents-cli",
+    "case": "CLI-INFO-001",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 29,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": true,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "Great! Now let me check the structure and verify the agent file:",
+   "expected_spans": [
+    {
+     "file": "app/agent.py",
+     "start_line": 1,
+     "end_line": 79
+    }
+   ],
+   "observed": {
+    "steps": 3,
+    "tokens": 3413,
+    "wall_seconds": 2.782,
+    "generator": "Interactive_claude_agents-cli",
+    "case": "CLI-INIT-A2A-EXP",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 31,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": false,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "Let me verify the directory and structure:",
+   "expected_spans": [
+    {
+     "file": "app/__init__.py",
+     "start_line": 1,
+     "end_line": 17
+    }
+   ],
+   "observed": {
+    "steps": 2,
+    "tokens": 363,
+    "wall_seconds": 3.151,
+    "generator": "Interactive_claude_agents-cli",
+    "case": "CLI-INIT-A2A-EXP",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 32,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": false,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "Great! Now let me check the project structure and install dependencies:",
+   "expected_spans": [
+    {
+     "file": "app/agent.py",
+     "start_line": 1,
+     "end_line": 79
+    }
+   ],
+   "observed": {
+    "steps": 3,
+    "tokens": 1273,
+    "wall_seconds": 4.838,
+    "generator": "Interactive_claude_agents-cli",
+    "case": "CLI-INIT-A2A",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 33,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": true,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "Excellent! Dependencies are installed. Now let me verify the project structure and test the agent:",
+   "expected_spans": [
+    {
+     "file": "pyproject.toml",
+     "start_line": 1,
+     "end_line": 97
+    },
+    {
+     "file": "tests/integration/test_agent.py",
+     "start_line": 1,
+     "end_line": 57
+    }
+   ],
+   "observed": {
+    "steps": 3,
+    "tokens": 1485,
+    "wall_seconds": 4.136,
+    "generator": "Interactive_claude_agents-cli",
+    "case": "CLI-INIT-A2A",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 34,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": true,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "Perfect! Now let me check the project structure and examine the existing agent.py file.",
+   "expected_spans": [
+    {
+     "file": "app/agent.py",
+     "start_line": 1,
+     "end_line": 79
+    },
+    {
+     "file": "tests/unit/test_dummy.py",
+     "start_line": 1,
+     "end_line": 23
+    }
+   ],
+   "observed": {
+    "steps": 6,
+    "tokens": 1899,
+    "wall_seconds": 11.204,
+    "generator": "Interactive_claude_agents-cli",
+    "case": "CLI-LINT-TEST-001-EXP",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 37,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": false,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "Great! Now let me navigate to the project and examine its structure:",
+   "expected_spans": [
+    {
+     "file": "app/agent.py",
+     "start_line": 1,
+     "end_line": 79
+    },
+    {
+     "file": "tests/integration/test_agent.py",
+     "start_line": 1,
+     "end_line": 57
+    },
+    {
+     "file": "pyproject.toml",
+     "start_line": 1,
+     "end_line": 97
+    }
+   ],
+   "observed": {
+    "steps": 7,
+    "tokens": 2867,
+    "wall_seconds": 7.7,
+    "generator": "Interactive_claude_agents-cli",
+    "case": "CLI-MULTI-001",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 38,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": true,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "Great! Now let me explore the project structure:",
+   "expected_spans": [
+    {
+     "file": "app/agent.py",
+     "start_line": 1,
+     "end_line": 79
+    },
+    {
+     "file": "pyproject.toml",
+     "start_line": 1,
+     "end_line": 97
+    }
+   ],
+   "observed": {
+    "steps": 4,
+    "tokens": 2054,
+    "wall_seconds": 5.421,
+    "generator": "Interactive_claude_agents-cli",
+    "case": "CLI-MULTI-HIER-001",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 40,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": true,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "Great! Now let me explore the project structure:",
+   "expected_spans": [
+    {
+     "file": "app/agent.py",
+     "start_line": 1,
+     "end_line": 79
+    },
+    {
+     "file": "pyproject.toml",
+     "start_line": 1,
+     "end_line": 97
+    }
+   ],
+   "observed": {
+    "steps": 5,
+    "tokens": 2088,
+    "wall_seconds": 6.41,
+    "generator": "Interactive_claude_agents-cli",
+    "case": "CLI-MULTI-PAR-001",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 42,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": true,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "Great! Dependencies are installed. Now let me examine the current agent structure to understand what's already there.",
+   "expected_spans": [
+    {
+     "file": "app/agent.py",
+     "start_line": 1,
+     "end_line": 79
+    }
+   ],
+   "observed": {
+    "steps": 4,
+    "tokens": 1014,
+    "wall_seconds": 5.586,
+    "generator": "Interactive_claude_agents-cli",
+    "case": "CLI-MULTI-ROUTER-001-EXP",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 43,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": true,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "Perfect! Now let's explore the project structure and then build our multi-agent system:",
+   "expected_spans": [
+    {
+     "file": "app/agent.py",
+     "start_line": 1,
+     "end_line": 79
+    },
+    {
+     "file": "pyproject.toml",
+     "start_line": 1,
+     "end_line": 97
+    },
+    {
+     "file": "tests/integration/test_agent.py",
+     "start_line": 1,
+     "end_line": 57
+    }
+   ],
+   "observed": {
+    "steps": 5,
+    "tokens": 2684,
+    "wall_seconds": 3.836,
+    "generator": "Interactive_claude_agents-cli",
+    "case": "CLI-MULTI-ROUTER-001",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 44,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": true,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "Good! Now let me examine the current agent structure and then modify it to implement the sequential data pipeline:",
+   "expected_spans": [
+    {
+     "file": "app/agent.py",
+     "start_line": 1,
+     "end_line": 79
+    }
+   ],
+   "observed": {
+    "steps": 5,
+    "tokens": 1572,
+    "wall_seconds": 7.783,
+    "generator": "Interactive_claude_agents-cli",
+    "case": "CLI-MULTI-SEQ-001-EXP",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 45,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": true,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "Now let me check the current project structure and examine the agent file:",
+   "expected_spans": [
+    {
+     "file": "app/agent.py",
+     "start_line": 1,
+     "end_line": 79
+    }
+   ],
+   "observed": {
+    "steps": 2,
+    "tokens": 878,
+    "wall_seconds": 0.03,
+    "generator": "Interactive_claude_agents-cli",
+    "case": "CLI-PLAT-A2A-001-EXP",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 48,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": true,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "Good! Now let me read the current agent.py file to understand the structure:",
+   "expected_spans": [
+    {
+     "file": "app/agent.py",
+     "start_line": 1,
+     "end_line": 79
+    }
+   ],
+   "observed": {
+    "steps": 2,
+    "tokens": 884,
+    "wall_seconds": 1.757,
+    "generator": "Interactive_claude_agents-cli",
+    "case": "CLI-PLAT-CODE-001-EXP",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 52,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": true,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "Now let me install dependencies and explore the project structure:",
+   "expected_spans": [
+    {
+     "file": "app/agent.py",
+     "start_line": 1,
+     "end_line": 79
+    }
+   ],
+   "observed": {
+    "steps": 2,
+    "tokens": 878,
+    "wall_seconds": 10.969,
+    "generator": "Interactive_claude_agents-cli",
+    "case": "CLI-PLAT-PLAN-001-EXP",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 56,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": true,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "Good! Now let me explore the project structure:",
+   "expected_spans": [
+    {
+     "file": "app/agent.py",
+     "start_line": 1,
+     "end_line": 79
+    },
+    {
+     "file": "tests/integration/test_agent.py",
+     "start_line": 1,
+     "end_line": 57
+    }
+   ],
+   "observed": {
+    "steps": 6,
+    "tokens": 1831,
+    "wall_seconds": 8.311,
+    "generator": "Interactive_claude_agents-cli",
+    "case": "CLI-PLAT-PLAN-001",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 57,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": true,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "Great! Dependencies are installed. Now let me examine the current agent structure:",
+   "expected_spans": [
+    {
+     "file": "app/agent.py",
+     "start_line": 1,
+     "end_line": 79
+    }
+   ],
+   "observed": {
+    "steps": 2,
+    "tokens": 923,
+    "wall_seconds": 0.384,
+    "generator": "Interactive_claude_agents-cli",
+    "case": "CLI-RUN-001-EXP",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 58,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": true,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "Perfect! Now let me examine the project structure and the agent template:",
+   "expected_spans": [
+    {
+     "file": "app/agent.py",
+     "start_line": 1,
+     "end_line": 79
+    }
+   ],
+   "observed": {
+    "steps": 2,
+    "tokens": 878,
+    "wall_seconds": 0.03,
+    "generator": "Interactive_claude_agents-cli",
+    "case": "CLI-RUN-001",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 59,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": true,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "Great! Dependencies are installed. Now let me check the current structure and modify the agent.py file.",
+   "expected_spans": [
+    {
+     "file": "app/agent.py",
+     "start_line": 1,
+     "end_line": 79
+    }
+   ],
+   "observed": {
+    "steps": 2,
+    "tokens": 878,
+    "wall_seconds": 0.124,
+    "generator": "Interactive_claude_agents-cli",
+    "case": "CLI-SETUP-001-EXP",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 62,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": true,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "Let me check the current directory:",
+   "expected_spans": [
+    {
+     "file": "app/agent.py",
+     "start_line": 1,
+     "end_line": 79
+    }
+   ],
+   "observed": {
+    "steps": 3,
+    "tokens": 1054,
+    "wall_seconds": 2.851,
+    "generator": "Interactive_claude_agents-cli",
+    "case": "CLI-SETUP-001",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 63,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": false,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "Perfect! Now let me explore the project structure:",
+   "expected_spans": [
+    {
+     "file": "app/agent.py",
+     "start_line": 1,
+     "end_line": 79
+    },
+    {
+     "file": "tests/integration/test_agent.py",
+     "start_line": 1,
+     "end_line": 57
+    },
+    {
+     "file": "pyproject.toml",
+     "start_line": 1,
+     "end_line": 97
+    }
+   ],
+   "observed": {
+    "steps": 5,
+    "tokens": 2804,
+    "wall_seconds": 6.119,
+    "generator": "Interactive_claude_agents-cli",
+    "case": "CLI-STATE-CART-001",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 65,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": true,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "Now let me install dependencies and examine the project structure:",
+   "expected_spans": [
+    {
+     "file": "app/agent.py",
+     "start_line": 1,
+     "end_line": 79
+    }
+   ],
+   "observed": {
+    "steps": 2,
+    "tokens": 878,
+    "wall_seconds": 12.995,
+    "generator": "Interactive_claude_agents-cli",
+    "case": "CLI-STATE-ORD-001-EXP",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 67,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": true,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "Great! Now let's examine the project structure and create the order pipeline agent:",
+   "expected_spans": [
+    {
+     "file": "app/agent.py",
+     "start_line": 1,
+     "end_line": 79
+    }
+   ],
+   "observed": {
+    "steps": 5,
+    "tokens": 1157,
+    "wall_seconds": 4.781,
+    "generator": "Interactive_claude_agents-cli",
+    "case": "CLI-STATE-ORD-001",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 68,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": true,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "Now let me examine the generated project structure and the agent file:",
+   "expected_spans": [
+    {
+     "file": "app/agent.py",
+     "start_line": 1,
+     "end_line": 79
+    }
+   ],
+   "observed": {
+    "steps": 2,
+    "tokens": 878,
+    "wall_seconds": 0.088,
+    "generator": "Interactive_claude_agents-cli",
+    "case": "CLI-TEST-001-EXP",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 71,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": true,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "Now let me create the test file. First, let me check the tests directory structure:",
+   "expected_spans": [
+    {
+     "file": "tests/unit/test_dummy.py",
+     "start_line": 1,
+     "end_line": 23
+    }
+   ],
+   "observed": {
+    "steps": 2,
+    "tokens": 492,
+    "wall_seconds": 1.547,
+    "generator": "Interactive_claude_agents-cli",
+    "case": "CLI-TEST-001-EXP",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 72,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": true,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "Great! Now let me explore the project structure:",
+   "expected_spans": [
+    {
+     "file": "app/agent.py",
+     "start_line": 1,
+     "end_line": 79
+    },
+    {
+     "file": "tests/unit/test_dummy.py",
+     "start_line": 1,
+     "end_line": 23
+    },
+    {
+     "file": "tests/integration/test_agent.py",
+     "start_line": 1,
+     "end_line": 57
+    }
+   ],
+   "observed": {
+    "steps": 4,
+    "tokens": 1989,
+    "wall_seconds": 6.716,
+    "generator": "Interactive_claude_agents-cli",
+    "case": "CLI-TEST-001",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 74,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": true,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "Excellent! Now let me check the project structure and read the agent file.",
+   "expected_spans": [
+    {
+     "file": "app/agent.py",
+     "start_line": 1,
+     "end_line": 79
+    },
+    {
+     "file": "pyproject.toml",
+     "start_line": 1,
+     "end_line": 97
+    }
+   ],
+   "observed": {
+    "steps": 3,
+    "tokens": 1969,
+    "wall_seconds": 1.743,
+    "generator": "Interactive_claude_agents-cli",
+    "case": "CLI-TOOL-FX-001",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 77,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": false,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "Great! Now let me explore the project structure:",
+   "expected_spans": [
+    {
+     "file": "app/agent.py",
+     "start_line": 1,
+     "end_line": 79
+    }
+   ],
+   "observed": {
+    "steps": 4,
+    "tokens": 1092,
+    "wall_seconds": 3.857,
+    "generator": "Interactive_claude_agents-cli",
+    "case": "CLI-TOOL-INV-001",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 78,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": false,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "Now let me install dependencies and examine the project structure:",
+   "expected_spans": [
+    {
+     "file": "app/agent.py",
+     "start_line": 1,
+     "end_line": 79
+    }
+   ],
+   "observed": {
+    "steps": 3,
+    "tokens": 1056,
+    "wall_seconds": 12.65,
+    "generator": "Interactive_claude_agents-cli",
+    "case": "CLI-TOOL-RCP-001-EXP",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 82,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": false,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "Great! Now let me check the current agent.py file and the project structure:",
+   "expected_spans": [
+    {
+     "file": "app/agent.py",
+     "start_line": 1,
+     "end_line": 79
+    }
+   ],
+   "observed": {
+    "steps": 2,
+    "tokens": 878,
+    "wall_seconds": 0.117,
+    "generator": "Interactive_claude_agents-cli",
+    "case": "CLI-TOOL-TKT-001-EXP",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 85,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": false,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "Let me examine the main agent.py file and understand the structure.",
+   "expected_spans": [
+    {
+     "file": "app/agent.py",
+     "start_line": 1,
+     "end_line": 79
+    }
+   ],
+   "observed": {
+    "steps": 2,
+    "tokens": 878,
+    "wall_seconds": 0.067,
+    "generator": "Interactive_claude_agents-cli",
+    "case": "CLI-TOOL-TKT-001",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 86,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": false,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "Good! Now let me check the current agent.py file and the project structure:",
+   "expected_spans": [
+    {
+     "file": "app/agent.py",
+     "start_line": 1,
+     "end_line": 79
+    }
+   ],
+   "observed": {
+    "steps": 2,
+    "tokens": 878,
+    "wall_seconds": 0.061,
+    "generator": "Interactive_claude_agents-cli",
+    "case": "CLI-TOOL-USR-001-EXP",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 87,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": false,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "Perfect! Now let me explore the generated project structure:",
+   "expected_spans": [
+    {
+     "file": "app/agent.py",
+     "start_line": 1,
+     "end_line": 79
+    }
+   ],
+   "observed": {
+    "steps": 4,
+    "tokens": 1087,
+    "wall_seconds": 3.486,
+    "generator": "Interactive_claude_agents-cli",
+    "case": "CLI-TOOL-USR-001",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 89,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": false,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "Great! Now let me verify the agent is correct by testing it. First, let me check if there's a test file already:",
+   "expected_spans": [
+    {
+     "file": "tests/integration/test_agent.py",
+     "start_line": 1,
+     "end_line": 57
+    }
+   ],
+   "observed": {
+    "steps": 6,
+    "tokens": 1008,
+    "wall_seconds": 7.949,
+    "generator": "Interactive_claude_agents-cli",
+    "case": "CLI-TOOL-USR-001",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 90,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": true,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "Great! Now let me explore the generated project structure:",
+   "expected_spans": [
+    {
+     "file": "app/agent.py",
+     "start_line": 1,
+     "end_line": 79
+    },
+    {
+     "file": "README.md",
+     "start_line": 1,
+     "end_line": 89
+    }
+   ],
+   "observed": {
+    "steps": 4,
+    "tokens": 1990,
+    "wall_seconds": 4.878,
+    "generator": "Interactive_claude_agents-cli",
+    "case": "CLI-UPG-001",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 92,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": true,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "Great! Now let me explore the project structure and then implement the customer support agent:",
+   "expected_spans": [
+    {
+     "file": "app/agent.py",
+     "start_line": 1,
+     "end_line": 79
+    },
+    {
+     "file": "pyproject.toml",
+     "start_line": 1,
+     "end_line": 97
+    }
+   ],
+   "observed": {
+    "steps": 4,
+    "tokens": 1948,
+    "wall_seconds": 4.594,
+    "generator": "Interactive_claude_agents-cli",
+    "case": "E2E-CS-PROJ-001",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 93,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": true,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "I'll check for any `.env` files or other configuration files that `agents-cli` might have created to understand how to properly configure the model and location.",
+   "expected_spans": [
+    {
+     "file": "deployment_metadata.json",
+     "start_line": 1,
+     "end_line": 4
+    }
+   ],
+   "observed": {
+    "steps": 2,
+    "tokens": 81,
+    "wall_seconds": 0.0,
+    "generator": "Interactive_gemini_agents-cli",
+    "case": "CLI-DEV-SERVE-001",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 100,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": false,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "I will check for a configuration file for `agents-cli`.",
+   "expected_spans": [
+    {
+     "file": "pyproject.toml",
+     "start_line": 1,
+     "end_line": 97
+    }
+   ],
+   "observed": {
+    "steps": 2,
+    "tokens": 69,
+    "wall_seconds": 0.0,
+    "generator": "Interactive_gemini_agents-cli",
+    "case": "CLI-EVAL-CUSTOM-EXP",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 110,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": true,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "I will check the content of the `tests` directory in the `agent-project` to see if there are any existing tests I can use as a reference.",
+   "expected_spans": [
+    {
+     "file": "tests/integration/test_agent.py",
+     "start_line": 1,
+     "end_line": 57
+    }
+   ],
+   "observed": {
+    "steps": 3,
+    "tokens": 130,
+    "wall_seconds": 0.0,
+    "generator": "Interactive_gemini_agents-cli",
+    "case": "CLI-FLOW-CB-001",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 120,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": true,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "list the files in the `agent-project` directory to understand the project structure.",
+   "expected_spans": [
+    {
+     "file": "app/agent.py",
+     "start_line": 1,
+     "end_line": 79
+    }
+   ],
+   "observed": {
+    "steps": 3,
+    "tokens": 34,
+    "wall_seconds": 0.0,
+    "generator": "Interactive_gemini_agents-cli",
+    "case": "CLI-FLOW-HO-001",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 122,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": true,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "I will list the files in the `agent-project` directory.",
+   "expected_spans": [
+    {
+     "file": "app/agent.py",
+     "start_line": 1,
+     "end_line": 79
+    }
+   ],
+   "observed": {
+    "steps": 2,
+    "tokens": 22,
+    "wall_seconds": 0.0,
+    "generator": "Interactive_gemini_agents-cli",
+    "case": "CLI-INIT-A2A",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 127,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": true,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "I'll check the structure of the `agent-project` directory.",
+   "expected_spans": [
+    {
+     "file": "app/agent.py",
+     "start_line": 1,
+     "end_line": 79
+    }
+   ],
+   "observed": {
+    "steps": 3,
+    "tokens": 34,
+    "wall_seconds": 0.0,
+    "generator": "Interactive_gemini_agents-cli",
+    "case": "CLI-LINT-001",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 129,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": true,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "I will check the existing tests in `agent-project/tests`.",
+   "expected_spans": [
+    {
+     "file": "tests/unit/test_dummy.py",
+     "start_line": 1,
+     "end_line": 23
+    }
+   ],
+   "observed": {
+    "steps": 3,
+    "tokens": 41,
+    "wall_seconds": 0.0,
+    "generator": "Interactive_gemini_agents-cli",
+    "case": "CLI-LINT-TEST-001",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 131,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": true,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "see how they run the agent in tests.",
+   "expected_spans": [
+    {
+     "file": "tests/integration/test_agent.py",
+     "start_line": 1,
+     "end_line": 57
+    }
+   ],
+   "observed": {
+    "steps": 5,
+    "tokens": 75,
+    "wall_seconds": 0.0,
+    "generator": "Interactive_gemini_agents-cli",
+    "case": "CLI-MULTI-ROUTER-001",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 141,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": false,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "sdk-symbol",
+   "kind": "sdk-symbol",
+   "corpus": "sdk",
+   "query": "I will now check if `SequentialAgent` is available in the `google-adk` package.",
+   "symbols": [
+    "SequentialAgent"
+   ],
+   "expected_spans": [
+    {
+     "file": "agents/sequential_agent.py",
+     "start_line": 48,
+     "end_line": 159
+    }
+   ],
+   "observed": {
+    "steps": 3,
+    "tokens": 72761,
+    "wall_seconds": 0.0,
+    "generator": "Interactive_gemini_agents-cli",
+    "case": "CLI-MULTI-SEQ-001-EXP",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 142,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": true,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "the files in the newly created `agent-project` directory to understand its structure.",
+   "expected_spans": [
+    {
+     "file": "app/agent.py",
+     "start_line": 1,
+     "end_line": 79
+    }
+   ],
+   "observed": {
+    "steps": 2,
+    "tokens": 22,
+    "wall_seconds": 0.0,
+    "generator": "Interactive_gemini_agents-cli",
+    "case": "CLI-MULTI-SEQ-001",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 143,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": false,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "I'll examine the agent's definition and dependencies to prepare for the translation feature implementation.",
+   "expected_spans": [
+    {
+     "file": "app/agent.py",
+     "start_line": 1,
+     "end_line": 79
+    },
+    {
+     "file": "pyproject.toml",
+     "start_line": 1,
+     "end_line": 97
+    }
+   ],
+   "observed": {
+    "steps": 2,
+    "tokens": 22,
+    "wall_seconds": 0.0,
+    "generator": "Interactive_gemini_agents-cli",
+    "case": "CLI-PLAT-A2A-001",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen1.turn0"
+   },
+   "row_id": 145,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": true,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "sdk-symbol",
+   "kind": "sdk-symbol",
+   "corpus": "sdk",
+   "query": "I'll check the imports in `google.adk.agents` to see how `Agent` is defined.",
+   "symbols": [
+    "Agent"
+   ],
+   "expected_spans": [
+    {
+     "file": "agents/llm_agent.py",
+     "start_line": 1027,
+     "end_line": 1027
+    }
+   ],
+   "observed": {
+    "steps": 2,
+    "tokens": 52,
+    "wall_seconds": 0.0,
+    "generator": "Interactive_gemini_agents-cli",
+    "case": "CLI-PLAT-CODE-001",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 149,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": true,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "list the contents of the `agent-project` directory to understand its structure.",
+   "expected_spans": [
+    {
+     "file": "app/agent.py",
+     "start_line": 1,
+     "end_line": 79
+    }
+   ],
+   "observed": {
+    "steps": 3,
+    "tokens": 34,
+    "wall_seconds": 0.0,
+    "generator": "Interactive_gemini_agents-cli",
+    "case": "CLI-SETUP-001",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 152,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": false,
+    "agreed_issues": []
+   }
+  },
+  {
+   "family": "project-file",
+   "kind": "project-file",
+   "corpus": "project",
+   "query": "now explore the directory structure of the newly scaffolded project.",
+   "expected_spans": [
+    {
+     "file": "app/agent.py",
+     "start_line": 1,
+     "end_line": 79
+    },
+    {
+     "file": "pyproject.toml",
+     "start_line": 1,
+     "end_line": 97
+    }
+   ],
+   "observed": {
+    "steps": 3,
+    "tokens": 33,
+    "wall_seconds": 0.0,
+    "generator": "Interactive_gemini_agents-cli",
+    "case": "CLI-TOOL-NOTIF-001",
+    "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "stream": "gen0.turn0"
+   },
+   "row_id": 164,
+   "validation": {
+    "consensus": "valid",
+    "unanimous": false,
+    "agreed_issues": []
+   }
+  }
+ ]
+}

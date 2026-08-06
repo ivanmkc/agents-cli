@@ -1,0 +1,5574 @@
+{
+ "num_rows": 175,
+ "validators_per_row": 3,
+ "consensus_summary": {
+  "valid": 63,
+  "flag": 41,
+  "invalid": 71
+ },
+ "unanimous_valid": 47,
+ "agreed_issue_counts": {
+  "fragmented-episode": 44,
+  "verification-read": 42,
+  "span-wrong": 32,
+  "span-incomplete": 25,
+  "query-not-faithful": 16,
+  "query-leaks-answer": 14,
+  "query-vacuous": 10,
+  "observed-mismatch": 3,
+  "other": 2,
+  "family-wrong": 1
+ },
+ "rows_missing_votes": [],
+ "rows": [
+  {
+   "row_id": 0,
+   "family": "project-file",
+   "query": "Great! Now let me check the current agent.py file and understand the structure:",
+   "consensus": "valid",
+   "unanimous": true,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Query names 'agent.py' (filename only, not full path+line) \u2014 borderline hint but within policy; need is genuine orientation; steps=4 matches calls; span is the file read."
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Genuine early orientation read; span app/agent.py 1-79 matches the Read call and evidence shows the full scaffolded agent file. Query names agent.py but not path+line, so not a leak. steps=4=calls, to"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Query and spans match the episode perfectly."
+    }
+   }
+  },
+  {
+   "row_id": 1,
+   "family": "project-file",
+   "query": "Excellent! Now let me check the project structure:",
+   "consensus": "valid",
+   "unanimous": true,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Generic 'check the project structure' faithfully covers reading agent.py + test_agent.py; both captured as spans; steps=3 matches."
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Both files Read (app/agent.py, tests/integration/test_agent.py) are captured as whole-file spans; evidence matches. steps=3=calls."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Query and spans match the episode perfectly."
+    }
+   }
+  },
+  {
+   "row_id": 2,
+   "family": "project-file",
+   "query": "Excellent! Let me also verify the project structure and ensure all required files are in place:",
+   "consensus": "flag",
+   "unanimous": false,
+   "agreed_issues": [
+    "verification-read"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "flag",
+     "issues": [
+      "verification-read"
+     ],
+     "note": "'verify the project structure and ensure all required files are in place' \u2014 re-checking scaffolded/edited files, not a genuine search. Query otherwise faithful; __init__.py is 17 lines so head -20 = w"
+    },
+    "claude_B": {
+     "verdict": "flag",
+     "issues": [
+      "verification-read"
+     ],
+     "note": "Context says 'verify the project structure and ensure all required files are in place' late in CLI-DEV-001 \u2014 re-reading files the agent had just been editing. Spans themselves are complete (cat app/__"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Query and spans match the episode perfectly."
+    }
+   }
+  },
+  {
+   "row_id": 3,
+   "family": "project-file",
+   "query": "Let me check the current agent structure:",
+   "consensus": "valid",
+   "unanimous": true,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Orientation at start of CLI-DEV-002; all three files read (agent.py, test_agent.py, pyproject.toml) captured; steps=6 matches 6 calls."
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "All three Read files (agent.py, test_agent.py, pyproject.toml) captured as spans; evidence matches. steps=6=calls."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Query and spans match the episode perfectly."
+    }
+   }
+  },
+  {
+   "row_id": 4,
+   "family": "project-file",
+   "query": "Let me use a simpler command:",
+   "consensus": "invalid",
+   "unanimous": true,
+   "agreed_issues": [
+    "fragmented-episode",
+    "query-vacuous"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "query-vacuous",
+      "fragmented-episode"
+     ],
+     "note": "'Let me use a simpler command:' expresses no information need and references a prior failed command \u2014 a fragment of a longer hunt. No searcher could reach README.md from this query. Also agent only sa"
+    },
+    "claude_B": {
+     "verdict": "invalid",
+     "issues": [
+      "query-vacuous",
+      "fragmented-episode"
+     ],
+     "note": "'Let me use a simpler command:' expresses no information need and references a prior failed command (fragment of a longer sequence); no retrieval system could link this query to README.md. Also the ag"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "query-vacuous"
+     ],
+     "note": "The query 'Let me use a simpler command:' does not express an information need."
+    }
+   }
+  },
+  {
+   "row_id": 5,
+   "family": "project-file",
+   "query": "Good! Now let me explore the project structure to see what was generated.",
+   "consensus": "valid",
+   "unanimous": true,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "'explore the project structure to see what was generated' \u2014 genuine post-scaffold orientation; span = agent.py read; steps=2 matches."
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Orientation read of scaffolded project; span matches the single file Read. wall_seconds=0.075 is oddly low but steps/tokens are consistent."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Query and spans match the episode perfectly."
+    }
+   }
+  },
+  {
+   "row_id": 6,
+   "family": "project-file",
+   "query": "Let me check the current agent implementation:",
+   "consensus": "valid",
+   "unanimous": true,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "'check the current agent implementation' faithfully targets app/agent.py; steps=2 matches; family correct."
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "find + Read agent.py; span matches. steps=2=calls."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Query and spans match the episode perfectly."
+    }
+   }
+  },
+  {
+   "row_id": 7,
+   "family": "project-file",
+   "query": "Perfect! The server is starting successfully and the agent is being loaded. Let me verify the final structure of the pro",
+   "consensus": "flag",
+   "unanimous": false,
+   "agreed_issues": [
+    "verification-read"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "flag",
+     "issues": [
+      "verification-read"
+     ],
+     "note": "'verify the final structure... confirm everything is in place' after successful server start \u2014 classic post-hoc confirmation read of its own project, late in case. Query/span/cost otherwise consistent"
+    },
+    "claude_B": {
+     "verdict": "flag",
+     "issues": [
+      "verification-read"
+     ],
+     "note": "'verify the final structure... confirm everything is in place' after the server started \u2014 re-reading agent.py the agent had authored. Span itself is correct and complete (other calls were ls/pwd)."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Query and spans match the episode perfectly."
+    }
+   }
+  },
+  {
+   "row_id": 8,
+   "family": "project-file",
+   "query": "Perfect! The agent project has been successfully created and tested. Let me verify the project structure:",
+   "consensus": "flag",
+   "unanimous": false,
+   "agreed_issues": [
+    "verification-read"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "flag",
+     "issues": [
+      "verification-read"
+     ],
+     "note": "'successfully created and tested. Let me verify the project structure' \u2014 post-completion confirmation re-read. Query faithful to that (non-search) intent; steps=3 matches; ended_by null acceptable."
+    },
+    "claude_B": {
+     "verdict": "flag",
+     "issues": [
+      "verification-read"
+     ],
+     "note": "'successfully created and tested... verify the project structure' \u2014 post-completion self-check, not a genuine search. Span (agent.py) is complete for the one Read."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Query and spans match the episode perfectly."
+    }
+   }
+  },
+  {
+   "row_id": 9,
+   "family": "project-file",
+   "query": "Great! Now let me explore the project structure:",
+   "consensus": "valid",
+   "unanimous": true,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Standard orientation query; agent.py span matches the one Read; steps=2 matches."
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "find + Read agent.py orientation; span matches. steps=2=calls."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Query and spans match the episode perfectly."
+    }
+   }
+  },
+  {
+   "row_id": 10,
+   "family": "project-file",
+   "query": "Let me verify the updated agent file:",
+   "consensus": "invalid",
+   "unanimous": true,
+   "agreed_issues": [
+    "query-not-faithful",
+    "span-incomplete",
+    "verification-read"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "span-incomplete",
+      "query-not-faithful",
+      "verification-read"
+     ],
+     "note": "Query asks only for 'the updated agent file' but ground truth spans 4 files (deployment_metadata.json, pyproject.toml, README.md unrecoverable from the query), and app/agent_engine_app.py was Read but"
+    },
+    "claude_B": {
+     "verdict": "invalid",
+     "issues": [
+      "span-incomplete",
+      "verification-read"
+     ],
+     "note": "Episode Read 5 files: agent.py, deployment_metadata.json, pyproject.toml, README.md, AND app/agent_engine_app.py, but expected_spans captures only the first 4 \u2014 missing agent_engine_app.py poisons gro"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "query-not-faithful",
+      "span-incomplete"
+     ],
+     "note": "The query only mentions verifying the 'updated agent file', but the agent reads multiple files. Furthermore, the expected spans miss 'app/agent_engine_app.py' which was also read."
+    }
+   }
+  },
+  {
+   "row_id": 11,
+   "family": "project-file",
+   "query": "Perfect! All files are in place. Now let me create a final summary:",
+   "consensus": "invalid",
+   "unanimous": true,
+   "agreed_issues": [
+    "query-not-faithful",
+    "span-incomplete",
+    "verification-read"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "query-not-faithful",
+      "span-incomplete",
+      "verification-read"
+     ],
+     "note": "'Now let me create a final summary:' states a writing task, not a retrieval need. Dockerfile was Read but absent from expected_spans. Late-case confirmation/summary reads of self-authored project."
+    },
+    "claude_B": {
+     "verdict": "invalid",
+     "issues": [
+      "span-incomplete",
+      "verification-read",
+      "query-not-faithful"
+     ],
+     "note": "Agent Read both app/agent.py and Dockerfile but spans capture only agent.py. Query 'create a final summary' expresses document-writing during wrap-up, not a search need."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "query-vacuous",
+      "span-incomplete"
+     ],
+     "note": "The query 'Now let me create a final summary:' is vacuous for retrieval. The expected spans also miss the 'Dockerfile' which was read."
+    }
+   }
+  },
+  {
+   "row_id": 12,
+   "family": "project-file",
+   "query": "Perfect! Let me verify the project structure and create a summary:",
+   "consensus": "invalid",
+   "unanimous": true,
+   "agreed_issues": [
+    "span-incomplete",
+    "verification-read"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "span-incomplete",
+      "verification-read"
+     ],
+     "note": "Dockerfile was Read but only app/__init__.py is in expected_spans \u2014 a retriever returning Dockerfile would be penalized against the real behavior. Episode is a 'verify... and create a summary' confirm"
+    },
+    "claude_B": {
+     "verdict": "invalid",
+     "issues": [
+      "span-incomplete",
+      "verification-read"
+     ],
+     "note": "Agent Read both Dockerfile and app/__init__.py; spans capture only app/__init__.py. Post-completion 'verify... and create a summary' episode."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "span-incomplete"
+     ],
+     "note": "The expected spans miss the 'Dockerfile' which was read during the episode."
+    }
+   }
+  },
+  {
+   "row_id": 13,
+   "family": "project-file",
+   "query": "Perfect! Now let me create a summary document:",
+   "consensus": "invalid",
+   "unanimous": true,
+   "agreed_issues": [
+    "query-not-faithful",
+    "verification-read"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "query-not-faithful",
+      "verification-read"
+     ],
+     "note": "'Now let me create a summary document:' expresses no search need \u2014 the agent.py re-read is incidental input to summary writing, not a retrieval workload; nothing in the query points at agent.py."
+    },
+    "claude_B": {
+     "verdict": "invalid",
+     "issues": [
+      "query-not-faithful",
+      "verification-read",
+      "other"
+     ],
+     "note": "First 'call' is a file WRITE (cat > PROJECT_SUMMARY.md heredoc), not retrieval, yet counted in steps=2; query 'create a summary document' expresses no information need; agent.py read is a self-verific"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "query-vacuous"
+     ],
+     "note": "The query 'Perfect! Now let me create a summary document:' describes an action, not an information need for retrieval."
+    }
+   }
+  },
+  {
+   "row_id": 14,
+   "family": "project-file",
+   "query": "Great! Now let me explore the project structure:",
+   "consensus": "valid",
+   "unanimous": true,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Orientation query faithful; directory listings plus one file Read; span = agent.py; steps=5 matches 5 calls; tokens>0."
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Orientation reads (dirs/find) culminating in Read agent.py; span matches the only file read. steps=5=calls."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Query and spans match the episode perfectly."
+    }
+   }
+  },
+  {
+   "row_id": 15,
+   "family": "project-file",
+   "query": "Good! The enhance command ran successfully. Now let me verify the project is ready for Cloud Run deployment by checking ",
+   "consensus": "flag",
+   "unanimous": true,
+   "agreed_issues": [
+    "verification-read"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "flag",
+     "issues": [
+      "verification-read"
+     ],
+     "note": "Query is a faithful restatement (checking deployment config for Cloud Run) and both read files are captured as spans; family and cost check out. But the episode opens with 'verify the project is ready"
+    },
+    "claude_B": {
+     "verdict": "flag",
+     "issues": [
+      "verification-read"
+     ],
+     "note": "Genuine inspection of files produced by the enhance command (agent had not read them before), but context says 'verify' post-command; spans match the two Reads, steps=3=calls, tokens>0. Third call (fi"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "flag",
+     "issues": [
+      "verification-read"
+     ],
+     "note": "Agent is verifying files that were likely just generated by the enhance command."
+    }
+   }
+  },
+  {
+   "row_id": 16,
+   "family": "project-file",
+   "query": "Perfect! Let me verify that the module-level `root_agent` variable is properly defined:",
+   "consensus": "flag",
+   "unanimous": true,
+   "agreed_issues": [
+    "verification-read"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "flag",
+     "issues": [
+      "verification-read"
+     ],
+     "note": "Query faithfully states the need (module-level root_agent definition) and the span contains it. However it is a 'Let me verify...properly defined' re-read of the agent's own app file (read twice in on"
+    },
+    "claude_B": {
+     "verdict": "flag",
+     "issues": [
+      "verification-read"
+     ],
+     "note": "'Perfect! Let me verify...' re-read of app/agent.py the agent had just been working on; span evidence does contain the root_agent definition, steps/tokens consistent. Usable but a verification workloa"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "flag",
+     "issues": [
+      "verification-read"
+     ],
+     "note": "Agent is verifying a variable it likely just defined."
+    }
+   }
+  },
+  {
+   "row_id": 17,
+   "family": "project-file",
+   "query": "Perfect! Let me verify the summary one more time:",
+   "consensus": "invalid",
+   "unanimous": true,
+   "agreed_issues": [
+    "query-not-faithful",
+    "span-wrong",
+    "verification-read"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "query-not-faithful",
+      "span-wrong",
+      "verification-read"
+     ],
+     "note": "Episode is summary-writing, not retrieval: calls include 'cat > AGENT_PROJECT_SUMMARY.md' (a write) and banner printing. Query 'verify the summary one more time' expresses no information need answered"
+    },
+    "claude_B": {
+     "verdict": "invalid",
+     "issues": [
+      "verification-read",
+      "observed-mismatch"
+     ],
+     "note": "Final-summary episode: 2 of 4 'calls' are heredoc writes/banner output (cat > AGENT_PROJECT_SUMMARY.md), not retrieval; tokens=3486 dominated by generated summary text, so observed cost does not measu"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "query-not-faithful",
+      "span-wrong"
+     ],
+     "note": "Query is about verifying a summary, but expected span is agent.py which the agent only grepped, not read."
+    }
+   }
+  },
+  {
+   "row_id": 18,
+   "family": "project-file",
+   "query": "Perfect! Let me verify the key files one more time:",
+   "consensus": "invalid",
+   "unanimous": true,
+   "agreed_issues": [
+    "span-incomplete",
+    "verification-read"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "span-incomplete",
+      "verification-read"
+     ],
+     "note": "Query says 'verify the key files' (plural) and the episode reads two files (app/agent.py AND tests/eval/evalsets/emails.evalset.json), but expected_spans captures only agent.py \u2014 a retriever returning"
+    },
+    "claude_B": {
+     "verdict": "invalid",
+     "issues": [
+      "span-incomplete",
+      "verification-read"
+     ],
+     "note": "Agent read TWO key files (app/agent.py AND tests/eval/evalsets/emails.evalset.json) but expected_spans capture only agent.py; per project-file family the evalset file belongs in ground truth. Also a '"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "verification-read",
+      "span-incomplete"
+     ],
+     "note": "Agent is verifying files, and it read both agent.py and emails.evalset.json, but the latter is missing from expected spans."
+    }
+   }
+  },
+  {
+   "row_id": 19,
+   "family": "project-file",
+   "query": "Let me read the existing agent.py file to understand the structure:",
+   "consensus": "valid",
+   "unanimous": true,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Genuine orientation read at case start ('read the existing agent.py to understand the structure'); query faithful and self-contained, span matches, family correct, cost consistent. Naming 'agent.py' i"
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Genuine orientation read ('read the existing agent.py to understand the structure'); span 1-79 is the whole file read; second call is a directory read, correctly unspanned; steps=2=calls, tokens>0."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Genuine read to understand the existing file structure."
+    }
+   }
+  },
+  {
+   "row_id": 20,
+   "family": "project-file",
+   "query": "Excellent! The evaluation ran successfully. Let me verify the agent structure is correct and show the complete setup:",
+   "consensus": "invalid",
+   "unanimous": true,
+   "agreed_issues": [
+    "span-incomplete",
+    "verification-read"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "span-incomplete",
+      "verification-read"
+     ],
+     "note": "Episode reads app/agent.py AND email_validation.evalset.json ('verify the agent structure...and show the complete setup') but only agent.py is in expected_spans; observed cost (1418 tokens) covers bot"
+    },
+    "claude_B": {
+     "verdict": "invalid",
+     "issues": [
+      "span-incomplete",
+      "verification-read"
+     ],
+     "note": "Same defect as row 18: agent read both app/agent.py and tests/eval/evalsets/email_validation.evalset.json but only agent.py is in expected_spans; also a post-eval 'verify the agent structure' re-read."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "verification-read",
+      "span-incomplete"
+     ],
+     "note": "Agent is verifying the setup, and read an evalset JSON which is missing from expected spans."
+    }
+   }
+  },
+  {
+   "row_id": 21,
+   "family": "project-file",
+   "query": "Great! Now let me check the project structure:",
+   "consensus": "valid",
+   "unanimous": true,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Orientation episode at start of CLI-EXT-001; query ('check the project structure') is generic but a fair restatement of the visible need, and the whole-file agent.py read is the captured ground truth."
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Orientation at start of extension task; Read of agent.py captured as whole-file span, Bash ls/find correctly unspanned; steps=2=calls, tokens>0."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Agent explores the project structure and reads the main agent file."
+    }
+   }
+  },
+  {
+   "row_id": 22,
+   "family": "project-file",
+   "query": "Let me verify the updated agent.py:",
+   "consensus": "invalid",
+   "unanimous": false,
+   "agreed_issues": [
+    "span-wrong",
+    "verification-read"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "span-wrong",
+      "verification-read"
+     ],
+     "note": "Query says 'verify the UPDATED agent.py' \u2014 the file had just been edited (prior episode ended_by Edit) \u2014 yet span evidence is the pristine default weather/time scaffold template. Ground-truth text doe"
+    },
+    "claude_B": {
+     "verdict": "flag",
+     "issues": [
+      "verification-read"
+     ],
+     "note": "'Let me verify the updated agent.py' \u2014 re-read of a file the agent just edited. Both Reads (agent.py, pyproject.toml) are captured as spans, so ground truth is complete; cost consistent. Usable with c"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "verification-read",
+      "span-wrong"
+     ],
+     "note": "Query only mentions verifying agent.py, but pyproject.toml is included in expected spans."
+    }
+   }
+  },
+  {
+   "row_id": 23,
+   "family": "project-file",
+   "query": "Let me check the project structure:",
+   "consensus": "valid",
+   "unanimous": true,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Orientation read at start of CLI-FLOW-CB-001-EXP; query faithful (project-structure check), agent.py whole-file span matches the Read call, family project-file correct, cost consistent."
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Genuine structure check before an Edit; agent.py span matches the Read; Bash pwd/ls unspanned; steps=2=calls."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Agent checks project structure and reads agent.py."
+    }
+   }
+  },
+  {
+   "row_id": 24,
+   "family": "sdk-symbol",
+   "query": "Let me find the _SingleBeforeToolCallback definition:",
+   "consensus": "valid",
+   "unanimous": true,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Clean sdk-symbol row: query names the hunted symbol (_SingleBeforeToolCallback definition) without leaking file/line; span 102-105 of agents/llm_agent.py is exactly the TypeAlias definition; family an"
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "sdk-symbol row done right: span_evidence at agents/llm_agent.py:102-105 is exactly the _SingleBeforeToolCallback TypeAlias definition the greps targeted; family correct; steps=2=calls, tokens=203>0."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Perfect sdk-symbol search for a specific callback definition."
+    }
+   }
+  },
+  {
+   "row_id": 25,
+   "family": "sdk-symbol",
+   "query": "Let me check how the callback is actually being invoked in the functions.py file: (function_response)",
+   "consensus": "invalid",
+   "unanimous": true,
+   "agreed_issues": [
+    "span-wrong"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "span-wrong"
+     ],
+     "note": "The information need is HOW the callback is invoked (the agent grepped for 'function_response = callback('), but ground truth is line 848 = 'function_response = None' \u2014 an initializer, not the invocat"
+    },
+    "claude_B": {
+     "verdict": "invalid",
+     "issues": [
+      "span-wrong"
+     ],
+     "note": "Agent was hunting where the callback is INVOKED (grep 'function_response = callback('), but expected span functions.py:848 contains only 'function_response = None' \u2014 an initializer, not the invocation"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "span-wrong"
+     ],
+     "note": "Agent is looking for how the callback is invoked, but the expected span is just 'function_response = None', which does not answer the query."
+    }
+   }
+  },
+  {
+   "row_id": 26,
+   "family": "project-file",
+   "query": "Perfect! Let me create one final summary listing all documentation files:",
+   "consensus": "invalid",
+   "unanimous": true,
+   "agreed_issues": [
+    "query-not-faithful",
+    "span-wrong",
+    "verification-read"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "query-not-faithful",
+      "span-wrong",
+      "verification-read"
+     ],
+     "note": "Completion-banner episode: calls are heredoc banner printing, 'ls *.md', and 'wc -l agent.py' \u2014 no call retrieves agent.py content, yet ground truth is agent.py 1-79. Query ('create one final summary "
+    },
+    "claude_B": {
+     "verdict": "invalid",
+     "issues": [
+      "span-wrong",
+      "verification-read",
+      "observed-mismatch"
+     ],
+     "note": "Completion-summary episode: calls are a heredoc banner, ls of *.md, and wc -l on agent.py \u2014 agent.py content (span 1-79) was never retrieved, so the ground truth does not correspond to any retrieval; "
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "query-not-faithful",
+      "span-wrong"
+     ],
+     "note": "Query is about listing documentation files, but expected span is agent.py which the agent only ran wc -l on."
+    }
+   }
+  },
+  {
+   "row_id": 27,
+   "family": "project-file",
+   "query": "Great! Now let me explore the project structure:",
+   "consensus": "valid",
+   "unanimous": true,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Genuine multi-file orientation hunt at start of CLI-FLOW-CB-001; query faithful, both files read (app/agent.py, tests/integration/test_agent.py) are captured as spans with matching evidence; steps=5 m"
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Genuine project exploration; both file Reads (app/agent.py, tests/integration/test_agent.py) captured as whole-file spans with matching evidence; directory read/ls/find unspanned; steps=5=calls."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Valid exploration of the project structure reading key python files."
+    }
+   }
+  },
+  {
+   "row_id": 28,
+   "family": "project-file",
+   "query": "Great! Now let me check the current agent.py structure and then modify it to implement the two-agent system:",
+   "consensus": "valid",
+   "unanimous": true,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Pre-modification orientation read ('check the current agent.py structure' before implementing two-agent system); query faithful, span matches, family and cost correct. The stray 'echo $BILLING_API_URL"
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Pre-modification read of agent.py ('check the current structure and then modify it') \u2014 genuine need; span matches; env-var echo unspanned; steps=2=calls."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Genuine read to understand the file before modifying it."
+    }
+   }
+  },
+  {
+   "row_id": 29,
+   "family": "project-file",
+   "query": "Excellent! Now let me examine the project structure and the agent.py file:",
+   "consensus": "valid",
+   "unanimous": true,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Orientation episode (Read dir + Glob + Read agent.py) at CLI-INFO-001; query is a fair restatement ('examine the project structure and the agent.py file'), whole-file span matches, family and cost cor"
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Orientation episode (Read dir, Glob, Read agent.py); the single file Read is captured as the whole-file span; steps=3=calls, tokens>0."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Genuine read to examine the project structure and agent.py."
+    }
+   }
+  },
+  {
+   "row_id": 30,
+   "family": "project-file",
+   "query": "Let me check the current agent.py structure:",
+   "consensus": "flag",
+   "unanimous": false,
+   "agreed_issues": [
+    "query-not-faithful"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "query-not-faithful"
+     ],
+     "note": "Query says only 'check the current agent.py structure' but ground truth also includes pyproject.toml (1-97). Nothing in the query signals a dependency/config need, so half the GT is unrecoverable from"
+    },
+    "claude_B": {
+     "verdict": "flag",
+     "issues": [
+      "query-not-faithful"
+     ],
+     "note": "Query names only agent.py ('check the current agent.py structure') but expected_spans also include pyproject.toml (read via a Glob for packaging files); a retriever cannot infer the pyproject span fro"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Standard project orientation."
+    }
+   }
+  },
+  {
+   "row_id": 31,
+   "family": "project-file",
+   "query": "Great! Now let me check the structure and verify the agent file:",
+   "consensus": "valid",
+   "unanimous": false,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "flag",
+     "issues": [
+      "verification-read"
+     ],
+     "note": "'check the structure and verify the agent file' right after scaffolding \u2014 verification-style check of CLI-generated files. Content was still unseen by the agent (scaffold wrote it), so it retains some"
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "First orientation read of the freshly scaffolded agent.py in CLI-INIT-A2A-EXP; 'verify' refers to scaffold output the agent had not authored or seen, so genuine discovery. Span evidence matches; steps"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Standard orientation in scaffolded project."
+    }
+   }
+  },
+  {
+   "row_id": 32,
+   "family": "project-file",
+   "query": "Let me verify the directory and structure:",
+   "consensus": "valid",
+   "unanimous": false,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "flag",
+     "issues": [
+      "verification-read",
+      "other"
+     ],
+     "note": "'Let me verify the directory and structure' is a post-init verification check, and the query is so generic it gives almost no signal that app/__init__.py specifically is the target (any project file w"
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Post-scaffold structure check; app/__init__.py read for the first time (scaffold-generated, not agent-written), evidence matches full 17-line file. steps=2 matches calls (Bash ls yields no span, corre"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Orienting and verifying structure."
+    }
+   }
+  },
+  {
+   "row_id": 33,
+   "family": "project-file",
+   "query": "Great! Now let me check the project structure and install dependencies:",
+   "consensus": "valid",
+   "unanimous": true,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Genuine post-init orientation; 'check the project structure' fairly covers the agent.py whole-file span. 'install dependencies' clause is non-retrieval intent but harmless. Steps 3=3, tokens ok."
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Generic project-structure orientation; agent.py span evidence matches; steps=3, tokens ok."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Checks structure as part of the stated plan."
+    }
+   }
+  },
+  {
+   "row_id": 34,
+   "family": "project-file",
+   "query": "Excellent! Dependencies are installed. Now let me verify the project structure and test the agent:",
+   "consensus": "valid",
+   "unanimous": true,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "'verify the project structure and test the agent' maps fairly to pyproject.toml and tests/integration/test_agent.py; files are scaffold-generated and unseen, so this is genuine orientation rather than"
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Pre-test orientation after dependency install. pyproject.toml span comes from a Bash 'cat' (correctly captured) and test_agent.py from a Read; both evidenced correctly. steps=3 matches."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Valid orientation reading test files."
+    }
+   }
+  },
+  {
+   "row_id": 35,
+   "family": "project-file",
+   "query": "Let me check the key files to confirm the structure:",
+   "consensus": "flag",
+   "unanimous": false,
+   "agreed_issues": [
+    "other",
+    "verification-read"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "flag",
+     "issues": [
+      "verification-read",
+      "other"
+     ],
+     "note": "'confirm the structure' check; actual workload was ls + a one-line grep for '^root_agent', but GT is the whole agent.py file (1-79). Span contains the answer so not span-wrong, but the whole-file GT o"
+    },
+    "claude_B": {
+     "verdict": "flag",
+     "issues": [
+      "verification-read",
+      "other"
+     ],
+     "note": "Late 'confirm the structure' episode whose only content retrieval is grep -n '^root_agent' \u2014 a one-line confirmation check, yet ground truth is the whole 79-line file; span is over-broad relative to t"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Valid structure check using grep to find agent definition."
+    }
+   }
+  },
+  {
+   "row_id": 36,
+   "family": "project-file",
+   "query": "Perfect! All lint checks passed. Now let me verify the project structure and ensure everything is in place:",
+   "consensus": "flag",
+   "unanimous": false,
+   "agreed_issues": [
+    "verification-read"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "flag",
+     "issues": [
+      "verification-read"
+     ],
+     "note": "'All lint checks passed. Now let me verify the project structure and ensure everything is in place' \u2014 classic post-work confirmation re-read late in a lint case, not a genuine search need. Span/query "
+    },
+    "claude_B": {
+     "verdict": "flag",
+     "issues": [
+      "verification-read"
+     ],
+     "note": "'All lint checks passed... verify the project structure and ensure everything is in place' \u2014 end-of-case confirmation re-read in CLI-LINT-001, not a genuine search. Span content (template with '# ruff"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Valid project file orientation."
+    }
+   }
+  },
+  {
+   "row_id": 37,
+   "family": "project-file",
+   "query": "Perfect! Now let me check the project structure and examine the existing agent.py file.",
+   "consensus": "valid",
+   "unanimous": false,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "flag",
+     "issues": [
+      "query-not-faithful"
+     ],
+     "note": "Query names 'project structure and the existing agent.py file'; GT also includes tests/unit/test_dummy.py, which is only covered by the generic 'project structure' clause \u2014 weak but not zero signal (u"
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Orientation episode; 'project structure' covers the test_dummy.py span and query also names agent.py. Both spans evidenced correctly; steps=6 matches 6 calls (two Globs returned no new spans)."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Valid project exploration."
+    }
+   }
+  },
+  {
+   "row_id": 38,
+   "family": "project-file",
+   "query": "Great! Now let me navigate to the project and examine its structure:",
+   "consensus": "valid",
+   "unanimous": true,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Broad 'examine its structure' query fairly covers the three key whole-file spans (agent.py, integration test, pyproject.toml) under the project-file family definition. Genuine orientation, steps 7=7."
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Full project orientation; all three spans (agent.py, tests/integration/test_agent.py, pyproject.toml) match the Reads and evidence. steps=7 matches."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Valid exploration of app and tests."
+    }
+   }
+  },
+  {
+   "row_id": 39,
+   "family": "project-file",
+   "query": "Excellent! The hierarchical agent system is working successfully. Let me verify the complete implementation by checking ",
+   "consensus": "invalid",
+   "unanimous": false,
+   "agreed_issues": [
+    "span-wrong",
+    "verification-read"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "verification-read",
+      "span-wrong"
+     ],
+     "note": "Episode is 'verify the complete implementation by checking the final agent.py' after building a hierarchical agent system \u2014 a self-verification read late in the case. Worse, span_evidence shows the pr"
+    },
+    "claude_B": {
+     "verdict": "invalid",
+     "issues": [
+      "span-wrong",
+      "verification-read"
+     ],
+     "note": "Context: 'hierarchical agent system is working... verify the complete implementation by checking the final agent.py' \u2014 but span_evidence is the untouched scaffold template (single root_agent with get_"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "flag",
+     "issues": [
+      "verification-read"
+     ],
+     "note": "Agent reading the file to verify its own recent implementation."
+    }
+   }
+  },
+  {
+   "row_id": 40,
+   "family": "project-file",
+   "query": "Great! Now let me explore the project structure:",
+   "consensus": "valid",
+   "unanimous": true,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "'explore the project structure' fairly covers agent.py + pyproject.toml whole-file spans; genuine pre-edit orientation (ended_by Edit). Steps 4=4. Near-duplicate of row 42 from a sibling case \u2014 redund"
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Early 'explore the project structure' in CLI-MULTI-HIER-001; agent.py + pyproject.toml spans match the Reads; steps=4."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Valid structural exploration."
+    }
+   }
+  },
+  {
+   "row_id": 41,
+   "family": "project-file",
+   "query": "Excellent! Now the root agent is providing a comprehensive morning briefing that includes weather, stock market, and new",
+   "consensus": "invalid",
+   "unanimous": true,
+   "agreed_issues": [
+    "query-not-faithful",
+    "span-wrong",
+    "verification-read"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "query-not-faithful",
+      "span-wrong",
+      "verification-read"
+     ],
+     "note": "Stated info need is 'verify all three APIs are called in parallel by checking the LOGS' \u2014 primary call is a grep of /tmp/agents_log, which is not in GT at all. GT is agent.py, whose evidence shows the"
+    },
+    "claude_B": {
+     "verdict": "invalid",
+     "issues": [
+      "span-wrong",
+      "verification-read",
+      "query-not-faithful"
+     ],
+     "note": "Agent had already built a morning-briefing system (weather/stock/news) and the stated need is checking HTTP request logs for parallel API calls; span_evidence is the default scaffold agent.py with onl"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "query-not-faithful",
+      "span-wrong"
+     ],
+     "note": "Query explicitly states checking logs, reading agent.py does not match the stated intent."
+    }
+   }
+  },
+  {
+   "row_id": 42,
+   "family": "project-file",
+   "query": "Great! Now let me explore the project structure:",
+   "consensus": "valid",
+   "unanimous": true,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Same pattern as row 40: generic structure-exploration query, GT = whole files actually read (agent.py, pyproject.toml), genuine pre-edit orientation, steps 5=5. Near-duplicate of row 40 (different ben"
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Early 'explore the project structure' in CLI-MULTI-PAR-001 (pre-edit; ended_by Edit); agent.py + pyproject.toml spans evidenced correctly; steps=5."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Valid project exploration."
+    }
+   }
+  },
+  {
+   "row_id": 43,
+   "family": "project-file",
+   "query": "Great! Dependencies are installed. Now let me examine the current agent structure to understand what's already there.",
+   "consensus": "valid",
+   "unanimous": true,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "'examine the current agent structure to understand what's already there' \u2014 clear genuine orientation before an Edit; GT agent.py matches. The env-var echo call is counted in steps (4=4) but adds no re"
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "'Examine the current agent structure to understand what's already there' \u2014 genuine pre-edit orientation; agent.py span matches; env-var echo call correctly produces no span; steps=4."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Valid orientation."
+    }
+   }
+  },
+  {
+   "row_id": 44,
+   "family": "project-file",
+   "query": "Perfect! Now let's explore the project structure and then build our multi-agent system:",
+   "consensus": "valid",
+   "unanimous": true,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "'explore the project structure and then build our multi-agent system' fairly covers the three whole-file spans read (agent.py, pyproject.toml, integration test); genuine pre-edit orientation, steps 5="
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Pre-build orientation ('explore... then build our multi-agent system'); all three spans (agent.py, pyproject.toml, test_agent.py) match Reads and evidence; steps=5."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Valid project structure exploration."
+    }
+   }
+  },
+  {
+   "row_id": 45,
+   "family": "project-file",
+   "query": "Good! Now let me examine the current agent structure and then modify it to implement the sequential data pipeline:",
+   "consensus": "valid",
+   "unanimous": true,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Query faithfully states orientation need (examine current agent structure); span agent.py 1-79 is what was read pre-edit. Final echo of env vars is non-retrieval but steps/tokens consistent."
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Pre-edit orientation read; span matches the template agent.py actually read; steps=5 matches calls (last call is an env echo, still a call); tokens>0."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Query accurately reflects the files read to examine the agent structure."
+    }
+   }
+  },
+  {
+   "row_id": 46,
+   "family": "project-file",
+   "query": "Perfect! Now let me examine the current agent.py file and the integration test to understand the structure:",
+   "consensus": "flag",
+   "unanimous": false,
+   "agreed_issues": [
+    "other"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "flag",
+     "issues": [
+      "query-not-faithful",
+      "other"
+     ],
+     "note": "Query names agent.py and the integration test but ground truth also includes pyproject.toml, which the query never expresses; additionally pyproject span is 1-97 while the agent only ran `cat pyprojec"
+    },
+    "claude_B": {
+     "verdict": "flag",
+     "issues": [
+      "other"
+     ],
+     "note": "Query mentions only agent.py and the integration test, but expected spans also include pyproject.toml (unexpressed need); pyproject.toml was read via 'head -50' yet the span claims lines 1-97 (over-ex"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Query mentions agent.py and integration test, and 'understand the structure' covers pyproject.toml."
+    }
+   }
+  },
+  {
+   "row_id": 47,
+   "family": "project-file",
+   "query": "Perfect! The test passes. Now let me verify the final agent.py is correct and the structure matches the requirements:",
+   "consensus": "invalid",
+   "unanimous": false,
+   "agreed_issues": [
+    "span-wrong",
+    "verification-read"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "verification-read",
+      "span-wrong"
+     ],
+     "note": "'Test passes... verify the final agent.py' after prior Edits in CLI-MULTI-SEQ-001 \u2014 re-read of self-written file, not a search workload. Span evidence shows the pristine scaffold template (weather/tim"
+    },
+    "claude_B": {
+     "verdict": "invalid",
+     "issues": [
+      "span-wrong",
+      "verification-read"
+     ],
+     "note": "'Test passes... verify the final agent.py' \u2014 re-read of a file the agent had just modified for the sequential-pipeline task; span_evidence shows the unmodified weather/time template, so ground truth c"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "flag",
+     "issues": [
+      "verification-read"
+     ],
+     "note": "Agent is verifying a file it just modified after tests passed."
+    }
+   }
+  },
+  {
+   "row_id": 48,
+   "family": "project-file",
+   "query": "Now let me check the current project structure and examine the agent file:",
+   "consensus": "valid",
+   "unanimous": true,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Pre-edit orientation; query matches the two reads; span correct. wall_seconds 0.03 is oddly low but steps/tokens consistent."
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Fresh -EXP case orientation read; template span matches; steps=2 matches calls, tokens=878>0 (wall 0.03s is odd but not a listed failure)."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Query matches the read action."
+    }
+   }
+  },
+  {
+   "row_id": 49,
+   "family": "project-file",
+   "query": "Perfect! Now let me explore the created project structure:",
+   "consensus": "invalid",
+   "unanimous": false,
+   "agreed_issues": [
+    "span-incomplete"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "flag",
+     "issues": [
+      "span-incomplete"
+     ],
+     "note": "Query ('explore the created project structure') is faithful though broad, but the episode also read project.yaml and app/agent_engine_app.py which are absent from expected_spans \u2014 ground truth capture"
+    },
+    "claude_B": {
+     "verdict": "invalid",
+     "issues": [
+      "span-incomplete"
+     ],
+     "note": "Agent fully read four project files (app/agent.py, project.yaml, pyproject.toml, app/agent_engine_app.py) but only agent.py and pyproject.toml are captured; a retriever returning the other genuinely-r"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "span-incomplete"
+     ],
+     "note": "Agent also read project.yaml and app/agent_engine_app.py, which are missing from expected_spans."
+    }
+   }
+  },
+  {
+   "row_id": 50,
+   "family": "project-file",
+   "query": "Let me check the current directory:",
+   "consensus": "invalid",
+   "unanimous": true,
+   "agreed_issues": [
+    "fragmented-episode",
+    "query-not-faithful"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "query-not-faithful",
+      "fragmented-episode"
+     ],
+     "note": "Query 'Let me check the current directory:' expresses only a pwd/ls need; ground truth is tests/integration/test_agent.py, which no fair reading of the query would retrieve. Context is a mid-hunt dire"
+    },
+    "claude_B": {
+     "verdict": "invalid",
+     "issues": [
+      "query-not-faithful",
+      "fragmented-episode"
+     ],
+     "note": "Query 'Let me check the current directory:' carries no signal for the ground truth tests/integration/test_agent.py; the episode is a mid-hunt recovery fragment after a wrong-cwd command."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "query-not-faithful"
+     ],
+     "note": "Query only mentions checking the directory, but the agent reads a specific test file."
+    }
+   }
+  },
+  {
+   "row_id": 51,
+   "family": "project-file",
+   "query": "Excellent! All tests pass. Now let me verify the agent.py file to ensure it meets all requirements:",
+   "consensus": "invalid",
+   "unanimous": false,
+   "agreed_issues": [
+    "span-wrong",
+    "verification-read"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "verification-read",
+      "span-wrong"
+     ],
+     "note": "'All tests pass... verify the agent.py file meets all requirements' \u2014 post-implementation self-verification (same episode writes TRANSLATION_AGENT_SUMMARY.md for a translation agent). Span evidence sh"
+    },
+    "claude_B": {
+     "verdict": "invalid",
+     "issues": [
+      "span-wrong",
+      "verification-read"
+     ],
+     "note": "'All tests pass... verify the agent.py meets all requirements' followed by writing TRANSLATION_AGENT_SUMMARY.md \u2014 final verification re-read of the agent's own translation-agent edit, but span_evidenc"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "flag",
+     "issues": [
+      "verification-read"
+     ],
+     "note": "Agent is verifying the file after tests passed."
+    }
+   }
+  },
+  {
+   "row_id": 52,
+   "family": "project-file",
+   "query": "Good! Now let me read the current agent.py file to understand the structure:",
+   "consensus": "valid",
+   "unanimous": true,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Pre-edit orientation read; query faithful; span correct; steps/tokens consistent."
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Pre-edit 'understand the structure' read in a fresh -EXP case; template span matches the read; steps=2 matches, tokens>0."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Query matches the read action."
+    }
+   }
+  },
+  {
+   "row_id": 53,
+   "family": "project-file",
+   "query": "Perfect! The agent is working correctly. Let me verify the final implementation by reading the agent.py file:",
+   "consensus": "invalid",
+   "unanimous": false,
+   "agreed_issues": [
+    "span-wrong",
+    "verification-read"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "verification-read",
+      "span-wrong"
+     ],
+     "note": "'Agent working correctly... verify the final implementation' after an Edit earlier in CLI-PLAT-CODE-001-EXP (row 52's episode ended_by Edit). Re-read of self-written file; span evidence shows pre-edit"
+    },
+    "claude_B": {
+     "verdict": "invalid",
+     "issues": [
+      "span-wrong",
+      "verification-read"
+     ],
+     "note": "'Agent is working correctly... verify the final implementation' \u2014 post-edit self-verification; span_evidence shows the pristine template, not the final implementation the agent was reading."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "flag",
+     "issues": [
+      "verification-read"
+     ],
+     "note": "Agent is verifying the final implementation."
+    }
+   }
+  },
+  {
+   "row_id": 54,
+   "family": "project-file",
+   "query": "Let me check the current agent.py structure:",
+   "consensus": "flag",
+   "unanimous": false,
+   "agreed_issues": [
+    "query-not-faithful"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "query-not-faithful"
+     ],
+     "note": "Query mentions only 'the current agent.py structure' but ground truth requires three files (agent.py, pyproject.toml, test_agent.py). A retriever correctly answering the query misses 2/3 spans, unfair"
+    },
+    "claude_B": {
+     "verdict": "flag",
+     "issues": [
+      "other"
+     ],
+     "note": "Query expresses only 'check the current agent.py structure' but expected spans also include pyproject.toml and test_agent.py (read but not expressed in query); spans themselves match the reads, so usa"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "flag",
+     "issues": [
+      "query-not-faithful"
+     ],
+     "note": "Query only mentions agent.py, but the agent also reads pyproject.toml and test_agent.py."
+    }
+   }
+  },
+  {
+   "row_id": 55,
+   "family": "project-file",
+   "query": "Let me check from the correct directory:",
+   "consensus": "invalid",
+   "unanimous": true,
+   "agreed_issues": [
+    "fragmented-episode",
+    "query-not-faithful"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "query-not-faithful",
+      "fragmented-episode"
+     ],
+     "note": "'Let me check from the correct directory:' is a near-vacuous recovery fragment referencing a prior failed attempt; it expresses no information need pointing at agent.py or test_agent.py in ground trut"
+    },
+    "claude_B": {
+     "verdict": "invalid",
+     "issues": [
+      "query-not-faithful",
+      "fragmented-episode"
+     ],
+     "note": "Query 'Let me check from the correct directory:' references a prior failed attempt (mid-hunt fragment) and gives no signal for the agent.py/test_agent.py ground truth."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "query-not-faithful"
+     ],
+     "note": "Query is about checking the directory, but the agent reads specific files."
+    }
+   }
+  },
+  {
+   "row_id": 56,
+   "family": "project-file",
+   "query": "Now let me install dependencies and explore the project structure:",
+   "consensus": "valid",
+   "unanimous": true,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Query ('install dependencies and explore the project structure') covers the orientation read; span agent.py correct; directory Read has no span but that is expected for a listing."
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Fresh -EXP orientation ('explore the project structure'); span matches the agent.py read; steps=2 matches, tokens>0."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Query matches the read action."
+    }
+   }
+  },
+  {
+   "row_id": 57,
+   "family": "project-file",
+   "query": "Good! Now let me explore the project structure:",
+   "consensus": "valid",
+   "unanimous": true,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Faithful if broad exploration query; both files read appear in spans; the find/ls/Glob calls are listing operations with no span needed. Steps 6 matches calls."
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Orientation episode; both full-file reads (agent.py, test_agent.py) captured as spans; other calls are listings/globs with no file content; steps=6 matches, tokens>0."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Query matches the read actions."
+    }
+   }
+  },
+  {
+   "row_id": 58,
+   "family": "project-file",
+   "query": "Great! Dependencies are installed. Now let me examine the current agent structure:",
+   "consensus": "valid",
+   "unanimous": true,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Pre-edit orientation; query faithful; span correct; steps/tokens consistent."
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Pre-edit read of agent.py plus a glob; span matches; steps=2 matches, tokens>0."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Query matches the read action."
+    }
+   }
+  },
+  {
+   "row_id": 59,
+   "family": "project-file",
+   "query": "Perfect! Now let me examine the project structure and the agent template:",
+   "consensus": "valid",
+   "unanimous": true,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Query ('examine the project structure and the agent template') faithful; span correct. Note: rows 45/48/52/56/58/59 are near-duplicate episodes (same query intent, same agent.py 1-79 ground truth), wh"
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Fresh case orientation ('examine the project structure and the agent template'); template span matches the read; steps=2 matches, tokens>0."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Query matches the read action."
+    }
+   }
+  },
+  {
+   "row_id": 60,
+   "family": "project-file",
+   "query": "Perfect! Let me verify the project structure and confirm everything is set up correctly:",
+   "consensus": "flag",
+   "unanimous": false,
+   "agreed_issues": [
+    "verification-read"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "flag",
+     "issues": [
+      "verification-read"
+     ],
+     "note": "Post-setup 'verify/confirm' re-read late in CLI-RUN-001, not a genuine search; but __init__.py was never edited so span evidence is accurate. Query verbatim and faithful; family and cost fields check "
+    },
+    "claude_B": {
+     "verdict": "flag",
+     "issues": [
+      "verification-read"
+     ],
+     "note": "Post-setup 'verify/confirm' re-read of scaffold files, not a genuine search. Ground truth OK: app/__init__.py is scaffold-generated and untouched; cat head -20 covers the whole 17-line file."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Agent verifies project structure and reads __init__.py."
+    }
+   }
+  },
+  {
+   "row_id": 61,
+   "family": "project-file",
+   "query": "Perfect! Let me verify the agent one more time by checking it directly:",
+   "consensus": "invalid",
+   "unanimous": false,
+   "agreed_issues": [
+    "span-wrong",
+    "verification-read"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "span-wrong",
+      "verification-read",
+      "observed-mismatch"
+     ],
+     "note": "'Verify the agent one more time' after implementing a Unit Conversion agent (per its own IMPLEMENTATION_SUMMARY heredoc), yet span evidence is the pristine weather/time scaffold \u2014 ground-truth text is"
+    },
+    "claude_B": {
+     "verdict": "invalid",
+     "issues": [
+      "span-wrong",
+      "verification-read"
+     ],
+     "note": "'Verify the agent one more time' after implementing a Unit Conversion Agent (per the IMPLEMENTATION_SUMMARY being written), but span_evidence is the pristine scaffold (weather/time tools) \u2014 the file r"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Agent reads agent.py to verify it."
+    }
+   }
+  },
+  {
+   "row_id": 62,
+   "family": "project-file",
+   "query": "Great! Dependencies are installed. Now let me check the current structure and modify the agent.py file.",
+   "consensus": "valid",
+   "unanimous": true,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Genuine pre-edit orientation ('check the current structure and modify the agent.py file', ended_by Edit); scaffold span matches the read; naming agent.py is the honest need, not a path+line leak."
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Pre-edit orientation read; scaffold span matches. Query names 'agent.py' (borderline hint for a whole-file ground truth) but does not embed path+lines."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Agent checks structure and reads agent.py."
+    }
+   }
+  },
+  {
+   "row_id": 63,
+   "family": "project-file",
+   "query": "Let me check the current directory:",
+   "consensus": "valid",
+   "unanimous": false,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "flag",
+     "issues": [
+      "query-not-faithful"
+     ],
+     "note": "Query 'Let me check the current directory:' only expresses a pwd/ls need and gives no signal toward the agent.py span that is the ground truth; near-vacuous relative to the expected answer. Episode it"
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Pre-edit orientation (ended_by Edit); scaffold agent.py span matches what was read. Query is thin ('check the current directory') but not vacuous."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Agent explores directory and reads agent.py."
+    }
+   }
+  },
+  {
+   "row_id": 64,
+   "family": "project-file",
+   "query": "Now let me verify the updated file looks correct:",
+   "consensus": "invalid",
+   "unanimous": false,
+   "agreed_issues": [
+    "span-wrong",
+    "verification-read"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "span-wrong",
+      "verification-read"
+     ],
+     "note": "'Verify the updated file' \u2014 explicit post-edit verification, but the agent.py span evidence is byte-identical to the pre-edit scaffold (rows 62/63), so ground truth does not reflect what was read. Que"
+    },
+    "claude_B": {
+     "verdict": "invalid",
+     "issues": [
+      "span-wrong",
+      "verification-read"
+     ],
+     "note": "Context explicitly says 'verify the updated file' \u2014 agent.py had just been edited (episode 76 ended_by Edit), yet span_evidence for agent.py is the unmodified scaffold. Ground truth content provably d"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "flag",
+     "issues": [
+      "verification-read"
+     ],
+     "note": "Agent is verifying an updated file, which is a verification read."
+    }
+   }
+  },
+  {
+   "row_id": 65,
+   "family": "project-file",
+   "query": "Perfect! Now let me explore the project structure:",
+   "consensus": "valid",
+   "unanimous": true,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Pre-edit exploration (ended_by Edit) of a freshly scaffolded project; 3 spans match the 3 file reads, scaffold content correct at this point; 5 steps = 5 calls; query faithfully generic for a project-"
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "First orientation in CLI-STATE-CART-001, pre-edit; all three spans (agent.py, test_agent.py, pyproject.toml) match the scaffold files actually read. 5 steps = 5 calls."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Agent explores project structure and reads multiple files."
+    }
+   }
+  },
+  {
+   "row_id": 66,
+   "family": "project-file",
+   "query": "Now let me verify the structure of the project directory:",
+   "consensus": "invalid",
+   "unanimous": false,
+   "agreed_issues": [
+    "span-wrong",
+    "verification-read"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "span-wrong",
+      "verification-read"
+     ],
+     "note": "Episode 80 follows the edit in episode 79 (same CLI-STATE-CART-001 case, ended_by Edit after reading agent.py), so this 'verify the structure' re-read saw the cart-agent rewrite, yet span evidence is "
+    },
+    "claude_B": {
+     "verdict": "invalid",
+     "issues": [
+      "span-wrong",
+      "verification-read"
+     ],
+     "note": "Follows episode 79 which ended in an Edit to agent.py (cart agent); this 'verify the structure' read saw the modified file, but span_evidence is the pristine scaffold \u2014 ground truth mismatch."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Agent verifies structure and reads agent.py."
+    }
+   }
+  },
+  {
+   "row_id": 67,
+   "family": "project-file",
+   "query": "Now let me install dependencies and examine the project structure:",
+   "consensus": "valid",
+   "unanimous": true,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Pre-edit orientation; scaffold span matches the read; query faithfully states the examine-project need (the 'install dependencies' clause is extraneous but harmless); 2 steps = 2 calls."
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Pre-edit orientation read in CLI-STATE-ORD-001-EXP; scaffold span matches."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Agent examines project structure and reads agent.py."
+    }
+   }
+  },
+  {
+   "row_id": 68,
+   "family": "project-file",
+   "query": "Great! Now let's examine the project structure and create the order pipeline agent:",
+   "consensus": "valid",
+   "unanimous": true,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Pre-edit orientation before creating the order-pipeline agent (ended_by Edit); scaffold span correct at read time; 5 steps = 5 calls; query faithful."
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Pre-edit orientation ('examine the project structure and create the order pipeline agent', ended_by Edit); scaffold agent.py span matches. 5 steps = 5 calls."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Agent examines project structure and reads agent.py."
+    }
+   }
+  },
+  {
+   "row_id": 69,
+   "family": "project-file",
+   "query": "Perfect! The agent is working correctly and chaining the API calls properly. Let me verify the project structure one mor",
+   "consensus": "invalid",
+   "unanimous": false,
+   "agreed_issues": [
+    "span-wrong",
+    "verification-read"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "span-wrong",
+      "verification-read"
+     ],
+     "note": "'Agent is working correctly and chaining the API calls' \u2014 the order-pipeline agent was already implemented, so this 'one more time' verify read the edited agent.py; span evidence is the stale default "
+    },
+    "claude_B": {
+     "verdict": "invalid",
+     "issues": [
+      "span-wrong",
+      "verification-read"
+     ],
+     "note": "'Agent is working correctly and chaining the API calls' \u2014 order-pipeline agent already implemented (episode 84 ended_by Edit), so the agent.py read returned the modified file; span_evidence is the pri"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Agent verifies project structure and reads agent.py."
+    }
+   }
+  },
+  {
+   "row_id": 70,
+   "family": "project-file",
+   "query": "Perfect! Let me verify the core implementation one final time:",
+   "consensus": "invalid",
+   "unanimous": false,
+   "agreed_issues": [
+    "span-wrong",
+    "verification-read"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "span-wrong",
+      "verification-read",
+      "observed-mismatch"
+     ],
+     "note": "'Verify the core implementation one final time': post-edit case, stale scaffold evidence; the only retrieval was a 3-line grep of root_agent yet ground truth is the whole 79-line file; second call is "
+    },
+    "claude_B": {
+     "verdict": "invalid",
+     "issues": [
+      "span-wrong",
+      "verification-read"
+     ],
+     "note": "'Verify the core implementation one final time' post-edit; only retrieval is a 3-line grep of root_agent yet expected span is the whole 79-line file, and that file's content was the modified order age"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Agent verifies core implementation by grepping agent.py."
+    }
+   }
+  },
+  {
+   "row_id": 71,
+   "family": "project-file",
+   "query": "Now let me examine the generated project structure and the agent file:",
+   "consensus": "valid",
+   "unanimous": true,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Pre-edit examination of the freshly generated project (ended_by Edit); scaffold span matches; query is a fair, self-contained restatement of the need."
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "First orientation in CLI-TEST-001-EXP, pre-edit (ended_by Edit); scaffold agent.py span matches."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Agent examines generated project structure and reads agent.py."
+    }
+   }
+  },
+  {
+   "row_id": 72,
+   "family": "project-file",
+   "query": "Now let me create the test file. First, let me check the tests directory structure:",
+   "consensus": "valid",
+   "unanimous": true,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Genuine look-before-write: inspecting tests directory structure and scaffold test_dummy.py before creating a new test file; span matches the read; query faithful; 2 steps = 2 calls."
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Reads tests/unit/test_dummy.py before writing new tests; test_dummy.py was never modified so scaffold span content is accurate even though agent.py had been edited earlier in the case."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Agent checks tests directory and reads test_dummy.py."
+    }
+   }
+  },
+  {
+   "row_id": 73,
+   "family": "project-file",
+   "query": "Perfect! Let me verify the project structure and create a summary:",
+   "consensus": "invalid",
+   "unanimous": true,
+   "agreed_issues": [
+    "span-incomplete",
+    "span-wrong",
+    "verification-read"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "span-wrong",
+      "verification-read",
+      "span-incomplete"
+     ],
+     "note": "Final 'verify + summary' pass in a case that produced tests/unit/test_interest.py, implying agent.py was rewritten for interest calculation; span evidence is the stale weather/time scaffold. The cat o"
+    },
+    "claude_B": {
+     "verdict": "invalid",
+     "issues": [
+      "span-wrong",
+      "span-incomplete",
+      "verification-read"
+     ],
+     "note": "Post-edit verify+summary episode: agent.py had been rewritten (episode 87 ended_by Edit), so scaffold span_evidence mismatches; the cat of tests/unit/test_interest.py (an actual read in the episode) i"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "span-incomplete"
+     ],
+     "note": "Agent explicitly cats test_interest.py but it is missing from expected_spans."
+    }
+   }
+  },
+  {
+   "row_id": 74,
+   "family": "project-file",
+   "query": "Great! Now let me explore the project structure:",
+   "consensus": "valid",
+   "unanimous": true,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Pre-edit exploration (ended_by Edit) of the scaffolded project; 3 spans match the 3 file reads and scaffold content is correct at this point; 4 steps = 4 calls; query faithful for project-file orienta"
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "First orientation in CLI-TEST-001, pre-edit; all three spans (agent.py, test_dummy.py, test_agent.py) match the scaffold files read. 4 steps = 4 calls."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Agent explores project structure and reads multiple files."
+    }
+   }
+  },
+  {
+   "row_id": 75,
+   "family": "project-file",
+   "query": "Perfect! All tests pass. Let me verify the project structure and the agent implementation one more time:",
+   "consensus": "flag",
+   "unanimous": false,
+   "agreed_issues": [
+    "verification-read"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "flag",
+     "issues": [
+      "verification-read"
+     ],
+     "note": "Post-test 'verify one more time' re-read of files in the agent's own project (CLI-TEST-001). Query is a faithful verbatim context message and spans match the two Read calls, but this is a verification"
+    },
+    "claude_B": {
+     "verdict": "flag",
+     "issues": [
+      "verification-read"
+     ],
+     "note": "End-of-case re-read after 'All tests pass' \u2014 verification workload, not a genuine search. Span identity matches the two Reads, but evidence for test_dummy.py is the placeholder test despite a test-foc"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "query-not-faithful",
+      "verification-read"
+     ],
+     "note": "Conversational filler query and the agent is just verifying files it already knows about/modified."
+    }
+   }
+  },
+  {
+   "row_id": 76,
+   "family": "project-file",
+   "query": "Perfect! Let me verify the final agent.py file:",
+   "consensus": "invalid",
+   "unanimous": false,
+   "agreed_issues": [
+    "verification-read"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "verification-read",
+      "span-wrong"
+     ],
+     "note": "'Verify the final agent.py file' after the CLI-TOOL-FX fix, but span_evidence is the pristine scaffold template still containing the planted docstring bug (Args: city vs param query) that the fix case"
+    },
+    "claude_B": {
+     "verdict": "flag",
+     "issues": [
+      "verification-read"
+     ],
+     "note": "'Verify the final agent.py file' after a tool-fix case (CLI-TOOL-FX-001-EXP). Span file matches the Read, but evidence shows the pre-fix scaffold (docstring says 'city' while code uses 'query'), so th"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "query-not-faithful",
+      "verification-read"
+     ],
+     "note": "Conversational filler query verifying a final file."
+    }
+   }
+  },
+  {
+   "row_id": 77,
+   "family": "project-file",
+   "query": "Excellent! Now let me check the project structure and read the agent file.",
+   "consensus": "valid",
+   "unanimous": false,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Genuine pre-edit orientation (ended_by Edit). Query 'check the project structure and read the agent file' fairly covers agent.py, and pyproject.toml is reasonably inferable from 'project structure'. S"
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Genuine pre-edit orientation (ended_by Edit). Both Read targets (agent.py, pyproject.toml) captured as whole-file spans; evidence matches scaffold state at read time. Steps=3=calls, tokens>0."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "query-not-faithful"
+     ],
+     "note": "Conversational filler query rather than a genuine search intent."
+    }
+   }
+  },
+  {
+   "row_id": 78,
+   "family": "project-file",
+   "query": "Great! Now let me explore the project structure:",
+   "consensus": "valid",
+   "unanimous": false,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Pre-edit orientation hunt (ls/find/Read), ended_by Edit. Query 'explore the project structure' is vague but honestly expresses the orientation need; single agent.py span matches the only file-content "
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Orientation episode; only real file Read is agent.py (other calls are ls/find/directory-Read, correctly not spanned). Steps=4=calls, tokens>0."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "query-not-faithful"
+     ],
+     "note": "Conversational filler query rather than a genuine search intent."
+    }
+   }
+  },
+  {
+   "row_id": 79,
+   "family": "project-file",
+   "query": "Perfect! All tests pass. Now let me create a comprehensive summary and verify the project structure:",
+   "consensus": "invalid",
+   "unanimous": false,
+   "agreed_issues": [
+    "verification-read"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "verification-read",
+      "span-wrong"
+     ],
+     "note": "'All tests pass... create a summary and verify' at end of CLI-TOOL-INV-001, after the earlier episode in the same case ended with an Edit. The agent.py it re-read would contain the implemented invento"
+    },
+    "claude_B": {
+     "verdict": "flag",
+     "issues": [
+      "verification-read"
+     ],
+     "note": "'All tests pass... create a summary and verify' \u2014 end-of-case verification. Span matches the single file Read, but for CLI-TOOL-INV-001 the actual agent.py likely contained inventory tools by then; ev"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "query-not-faithful",
+      "verification-read"
+     ],
+     "note": "Conversational filler query verifying files after tests pass."
+    }
+   }
+  },
+  {
+   "row_id": 80,
+   "family": "project-file",
+   "query": "Let me check the current agent.py file:",
+   "consensus": "invalid",
+   "unanimous": false,
+   "agreed_issues": [
+    "query-not-faithful",
+    "span-incomplete"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "query-not-faithful",
+      "span-incomplete"
+     ],
+     "note": "Query says only 'check the current agent.py file' but ground truth demands agent.py + tests/integration/test_agent.py + pyproject.toml \u2014 two-thirds of the expected spans are unreachable from the query"
+    },
+    "claude_B": {
+     "verdict": "flag",
+     "issues": [
+      "query-not-faithful",
+      "span-incomplete"
+     ],
+     "note": "Episode reads 4 files (agent.py, integration test, requirements.txt, pyproject.toml) but query only says 'check the current agent.py file', and expected_spans omit requirements.txt which was Read. Gen"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "query-not-faithful",
+      "span-wrong"
+     ],
+     "note": "Query only mentions agent.py but expected spans include tests and pyproject.toml. Query is also conversational."
+    }
+   }
+  },
+  {
+   "row_id": 81,
+   "family": "project-file",
+   "query": "Let me just check the key files:",
+   "consensus": "invalid",
+   "unanimous": false,
+   "agreed_issues": [
+    "observed-mismatch",
+    "verification-read"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "verification-read",
+      "span-wrong",
+      "observed-mismatch"
+     ],
+     "note": "End-of-case episode (writes PROJECT_SUMMARY.md describing the finished notification system) re-reading its own agent.py; evidence shows the unmodified scaffold instead of the notification implementati"
+    },
+    "claude_B": {
+     "verdict": "flag",
+     "issues": [
+      "verification-read",
+      "observed-mismatch"
+     ],
+     "note": "Wrap-up read: agent then writes PROJECT_SUMMARY.md describing a notification system, so the agent.py it read had notification tools \u2014 evidence shows stale scaffold. Observed cost (4 steps, 3362 tokens"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "query-not-faithful"
+     ],
+     "note": "Conversational filler query rather than a genuine search intent."
+    }
+   }
+  },
+  {
+   "row_id": 82,
+   "family": "project-file",
+   "query": "Now let me install dependencies and examine the project structure:",
+   "consensus": "valid",
+   "unanimous": false,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Pre-edit orientation in CLI-TOOL-RCP-001-EXP. Query mentions dependency install plus 'examine the project structure' \u2014 a fair, if chatty, statement of the orientation need. Span matches the single fil"
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Early orientation (examine project structure); span matches the only file Read; evidence consistent with pre-edit state. Steps=3=calls, tokens>0."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "query-not-faithful"
+     ],
+     "note": "Conversational filler query rather than a genuine search intent."
+    }
+   }
+  },
+  {
+   "row_id": 83,
+   "family": "project-file",
+   "query": "Now let me read the current agent.py file to understand the structure:",
+   "consensus": "flag",
+   "unanimous": false,
+   "agreed_issues": [
+    "query-not-faithful"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "flag",
+     "issues": [
+      "query-not-faithful"
+     ],
+     "note": "Pre-edit orientation (ended_by Edit), scaffold evidence correct. But query names only agent.py ('to understand the structure') while ground truth also requires the whole tests/integration/test_agent.p"
+    },
+    "claude_B": {
+     "verdict": "flag",
+     "issues": [
+      "query-not-faithful"
+     ],
+     "note": "Query mentions only agent.py but ground truth also includes tests/integration/test_agent.py (which was Read). A retriever following the query has no cue toward the test span. Otherwise a genuine pre-e"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "query-not-faithful",
+      "span-wrong"
+     ],
+     "note": "Query only mentions agent.py but expected spans include test_agent.py. Query is also conversational."
+    }
+   }
+  },
+  {
+   "row_id": 84,
+   "family": "project-file",
+   "query": "Let me check the app files directly:",
+   "consensus": "invalid",
+   "unanimous": false,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "span-wrong",
+      "verification-read"
+     ],
+     "note": "Same case (CLI-TOOL-RCP-001) after episode 102 ended with an Edit; 'check the app files directly' is a post-edit re-read of the agent's own modified agent.py, yet span_evidence is the pristine scaffol"
+    },
+    "claude_B": {
+     "verdict": "flag",
+     "issues": [
+      "fragmented-episode"
+     ],
+     "note": "'Let me check the app files directly' references a prior (indirect/failed) attempt \u2014 fragment of a longer hunt. Occurs after an Edit-terminated episode in the same case, so may also be a post-edit re-"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "query-not-faithful"
+     ],
+     "note": "Conversational filler query rather than a genuine search intent."
+    }
+   }
+  },
+  {
+   "row_id": 85,
+   "family": "project-file",
+   "query": "Great! Now let me check the current agent.py file and the project structure:",
+   "consensus": "valid",
+   "unanimous": false,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Pre-edit orientation (CLI-TOOL-TKT-001-EXP). Query faithfully covers agent.py + project structure; the directory Read correctly has no span. Steps=2 matches; tokens 878 > 0 (wall_seconds 0.117 is impl"
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Early orientation; span matches the file Read (directory Read correctly unspanned). Tokens 878>0; very small wall time but plausible for cached reads."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "query-not-faithful"
+     ],
+     "note": "Conversational filler query rather than a genuine search intent."
+    }
+   }
+  },
+  {
+   "row_id": 86,
+   "family": "project-file",
+   "query": "Let me examine the main agent.py file and understand the structure.",
+   "consensus": "valid",
+   "unanimous": false,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Pre-edit orientation (CLI-TOOL-TKT-001). Query 'examine the main agent.py file and understand the structure' matches the single-file ground truth. Steps=2 matches calls; near-duplicate of rows 85/87 b"
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Near-duplicate of row 85 pattern in a different case; query faithful, span matches the single file Read, steps=2=calls, tokens>0."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "query-not-faithful"
+     ],
+     "note": "Conversational filler query rather than a genuine search intent."
+    }
+   }
+  },
+  {
+   "row_id": 87,
+   "family": "project-file",
+   "query": "Good! Now let me check the current agent.py file and the project structure:",
+   "consensus": "valid",
+   "unanimous": false,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Pre-edit orientation (CLI-TOOL-USR-001-EXP), query faithful to agent.py + structure need, span matches the one file-content Read. Steps=2, tokens>0."
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Same orientation pattern (directory Read + agent.py Read); span and cost consistent."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "query-not-faithful"
+     ],
+     "note": "Conversational filler query rather than a genuine search intent."
+    }
+   }
+  },
+  {
+   "row_id": 88,
+   "family": "project-file",
+   "query": "Perfect! The agent is working correctly. Let me verify the final implementation by reading the modified file:",
+   "consensus": "invalid",
+   "unanimous": false,
+   "agreed_issues": [
+    "verification-read"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "verification-read",
+      "span-wrong"
+     ],
+     "note": "'Verify the final implementation by reading the modified file' \u2014 explicit self-verification of the agent's own edit in CLI-TOOL-USR-001-EXP, and span_evidence shows the generic unmodified scaffold (ge"
+    },
+    "claude_B": {
+     "verdict": "flag",
+     "issues": [
+      "verification-read"
+     ],
+     "note": "Explicit 'verify the final implementation by reading the modified file' \u2014 textbook verification read. Evidence shows unmodified scaffold, not the modified content the agent was checking; file identity"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "query-not-faithful",
+      "verification-read"
+     ],
+     "note": "Conversational filler query verifying a modified file."
+    }
+   }
+  },
+  {
+   "row_id": 89,
+   "family": "project-file",
+   "query": "Perfect! Now let me explore the generated project structure:",
+   "consensus": "valid",
+   "unanimous": false,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Pre-edit orientation of the freshly generated project (ended_by Edit). Query 'explore the generated project structure' is a fair orientation query; agent.py span matches the only file-content Read; sc"
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Genuine post-scaffold exploration ending in Edit; only file Read is agent.py, correctly spanned whole-file; steps=4=calls, tokens>0."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "query-not-faithful"
+     ],
+     "note": "Conversational filler query rather than a genuine search intent."
+    }
+   }
+  },
+  {
+   "row_id": 90,
+   "family": "project-file",
+   "query": "Great! Now let me verify the agent is correct by testing it. First, let me check if there's a test file already:",
+   "consensus": "valid",
+   "unanimous": true,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Genuine discovery of whether a test file exists; 'verify' refers to testing the agent, and the read file (scaffolded test_agent.py) was not agent-written. Query faithful; steps=6 matches calls; tokens"
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Genuine hunt for an existing test file (several fumbling ls/find steps before locating tests/integration/test_agent.py); span matches the read; 'verify' refers to testing the agent, not re-reading sel"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Query expresses intent clearly and ground truth matches the read file."
+    }
+   }
+  },
+  {
+   "row_id": 91,
+   "family": "project-file",
+   "query": "Perfect! The agent successfully responded to the time query. Let me verify the project structure and the final state:",
+   "consensus": "flag",
+   "unanimous": false,
+   "agreed_issues": [
+    "verification-read"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "flag",
+     "issues": [
+      "verification-read"
+     ],
+     "note": "End-of-case 'verify the project structure and the final state' re-read of app/agent.py after a successful run (CLI-UPG-001-EXP) \u2014 not a genuine search workload, though query/spans are internally consi"
+    },
+    "claude_B": {
+     "verdict": "flag",
+     "issues": [
+      "verification-read"
+     ],
+     "note": "'Verify the project structure and the final state' after a successful run \u2014 end-of-case confirmation pass, not a genuine search. Span matches the read of app/agent.py; scaffold already contains get_cu"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Query expresses intent clearly and ground truth matches the read file."
+    }
+   }
+  },
+  {
+   "row_id": 92,
+   "family": "project-file",
+   "query": "Great! Now let me explore the generated project structure:",
+   "consensus": "valid",
+   "unanimous": true,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Genuine post-scaffold orientation; query faithful (if generic); both files read (app/agent.py, README.md) captured as spans; steps=4 matches."
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Early orientation in freshly scaffolded project; both read files (app/agent.py, README.md) captured as spans and evidence matches. Steps 4 = calls, tokens 1990."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Query expresses intent clearly and ground truth matches the read files."
+    }
+   }
+  },
+  {
+   "row_id": 93,
+   "family": "project-file",
+   "query": "Great! Now let me explore the project structure and then implement the customer support agent:",
+   "consensus": "valid",
+   "unanimous": true,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Genuine orientation before implementing the customer-support agent; both reads (app/agent.py, pyproject.toml) captured; query faithful."
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Early exploration before implementing the customer-support agent; spans (app/agent.py, pyproject.toml) match the two file reads. Steps 4 = calls, tokens 1948."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Query expresses intent clearly and ground truth matches the read files."
+    }
+   }
+  },
+  {
+   "row_id": 94,
+   "family": "project-file",
+   "query": "Perfect! Let me also verify that the existing integration test structure is in place:",
+   "consensus": "invalid",
+   "unanimous": false,
+   "agreed_issues": [
+    "observed-mismatch",
+    "verification-read"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "verification-read",
+      "observed-mismatch"
+     ],
+     "note": "Late-case 'verify the existing integration test structure is in place'; 2 of 3 calls are heredoc file WRITES (README_CUSTOMER_SUPPORT.md, AGENT_SUMMARY.md), so the 6057 tokens/26.5s observed cost is d"
+    },
+    "claude_B": {
+     "verdict": "invalid",
+     "issues": [
+      "verification-read",
+      "observed-mismatch"
+     ],
+     "note": "'Verify that the existing integration test structure is in place' late in E2E-CS-PROJ-001; only 1 of 3 calls is retrieval \u2014 the other two are heredoc file writes (README_CUSTOMER_SUPPORT.md, AGENT_SUM"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Query expresses intent clearly and ground truth matches the read file."
+    }
+   }
+  },
+  {
+   "row_id": 95,
+   "family": "project-file",
+   "query": "Excellent! Now let me display the final agent implementation to show you the complete code:",
+   "consensus": "invalid",
+   "unanimous": false,
+   "agreed_issues": [
+    "observed-mismatch",
+    "verification-read"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "query-not-faithful",
+      "verification-read",
+      "observed-mismatch"
+     ],
+     "note": "'Display the final agent implementation' is not an information need \u2014 the agent is showing code it already knows (reads same file twice), then a write call (SETUP_COMPLETE.txt) inflates observed cost "
+    },
+    "claude_B": {
+     "verdict": "invalid",
+     "issues": [
+      "verification-read",
+      "span-wrong",
+      "observed-mismatch"
+     ],
+     "note": "'Display the final agent implementation' \u2014 re-reading self-written code (same file read twice) after the customer-support agent was implemented (episode 114 ended in Edit). span_evidence shows the unt"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Query expresses intent clearly and ground truth matches the read file."
+    }
+   }
+  },
+  {
+   "row_id": 96,
+   "family": "project-file",
+   "query": "to identify the current tests and determine if any updates are needed.",
+   "consensus": "flag",
+   "unanimous": true,
+   "agreed_issues": [
+    "fragmented-episode"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "flag",
+     "issues": [
+      "fragmented-episode"
+     ],
+     "note": "Context is a mid-sentence fragment (' to identify the current tests...'), but the query still conveys the need (find current tests); span matches the one file read; steps/tokens OK."
+    },
+    "claude_B": {
+     "verdict": "flag",
+     "issues": [
+      "fragmented-episode"
+     ],
+     "note": "Context is a mid-sentence fragment (' to identify the current tests...') \u2014 opening clause lost \u2014 but intent is still recoverable and the span (tests/integration/test_agent.py) matches the one file rea"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "flag",
+     "issues": [
+      "fragmented-episode"
+     ],
+     "note": "Query is a mid-sentence fragment but still expresses the information need."
+    }
+   }
+  },
+  {
+   "row_id": 97,
+   "family": "project-file",
+   "query": "` directory to understand the structure of the scaffolded project.",
+   "consensus": "flag",
+   "unanimous": true,
+   "agreed_issues": [
+    "fragmented-episode"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "flag",
+     "issues": [
+      "fragmented-episode"
+     ],
+     "note": "Query starts with a stray backtick from a truncated sentence ('` directory to understand the structure...') but conveys the orientation need; both reads captured as spans."
+    },
+    "claude_B": {
+     "verdict": "flag",
+     "issues": [
+      "fragmented-episode"
+     ],
+     "note": "Query starts with a stray backtick ('` directory to understand the structure...') \u2014 truncated mid-sentence, missing the directory referent \u2014 but intent (orient in scaffold) is clear and both spans mat"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "flag",
+     "issues": [
+      "fragmented-episode"
+     ],
+     "note": "Query is a mid-sentence fragment but still expresses the information need."
+    }
+   }
+  },
+  {
+   "row_id": 98,
+   "family": "project-file",
+   "query": "the required additions.",
+   "consensus": "invalid",
+   "unanimous": true,
+   "agreed_issues": [
+    "fragmented-episode",
+    "query-vacuous"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "query-vacuous",
+      "fragmented-episode"
+     ],
+     "note": "Query 'the required additions.' is a vacuous sentence tail \u2014 no search tool could act on it."
+    },
+    "claude_B": {
+     "verdict": "invalid",
+     "issues": [
+      "query-vacuous",
+      "fragmented-episode"
+     ],
+     "note": "Query is 'the required additions.' \u2014 a mid-sentence tail carrying no information need; no retriever could locate app/agent.py + pyproject.toml from it. Spans do match the reads, but the row would only"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "fragmented-episode",
+      "query-vacuous"
+     ],
+     "note": "Query is a vacuous fragment that does not express what is being searched for."
+    }
+   }
+  },
+  {
+   "row_id": 99,
+   "family": "project-file",
+   "query": "'s tools.",
+   "consensus": "invalid",
+   "unanimous": true,
+   "agreed_issues": [
+    "fragmented-episode",
+    "query-vacuous",
+    "span-incomplete"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "query-vacuous",
+      "fragmented-episode"
+     ],
+     "note": "Query \"'s tools.\" is a vacuous fragment. Episode also attempted a second read (test_agent_engine_app.py, likely nonexistent/failed) not reflected in spans."
+    },
+    "claude_B": {
+     "verdict": "invalid",
+     "issues": [
+      "query-vacuous",
+      "span-incomplete",
+      "fragmented-episode"
+     ],
+     "note": "Query is \"'s tools.\" \u2014 vacuous fragment. Episode also reads tests/integration/test_agent_engine_app.py which is absent from expected_spans (possibly a failed read, but if it succeeded the ground truth"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "fragmented-episode",
+      "query-vacuous",
+      "span-incomplete"
+     ],
+     "note": "Query is a vacuous fragment. Expected spans are missing test_agent_engine_app.py which was read."
+    }
+   }
+  },
+  {
+   "row_id": 100,
+   "family": "project-file",
+   "query": "I'll check for any `.env` files or other configuration files that `agents-cli` might have created to understand how to p",
+   "consensus": "valid",
+   "unanimous": false,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Self-contained faithful query (config files agents-cli created); deployment_metadata.json is such a file and matches the read; steps=2, tokens=81."
+    },
+    "claude_B": {
+     "verdict": "flag",
+     "issues": [
+      "span-wrong"
+     ],
+     "note": "Query seeks .env/config files explaining model+location configuration; the only span, deployment_metadata.json (4 lines, both values 'None'), was a dead-end read containing none of that information. S"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Query expresses intent clearly and ground truth matches the read file."
+    }
+   }
+  },
+  {
+   "row_id": 101,
+   "family": "project-file",
+   "query": "`/tmp/agents_log/agent.latest.log` to see if there's any information about the agent's initialization or errors.",
+   "consensus": "invalid",
+   "unanimous": true,
+   "agreed_issues": [
+    "fragmented-episode",
+    "query-not-faithful"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "query-not-faithful",
+      "fragmented-episode"
+     ],
+     "note": "Query directs the search at /tmp/agents_log/agent.latest.log, but ground truth is app/agent.py \u2014 the expected span does not correspond to the stated information need; context is a sentence fragment."
+    },
+    "claude_B": {
+     "verdict": "invalid",
+     "issues": [
+      "query-not-faithful",
+      "span-wrong",
+      "fragmented-episode"
+     ],
+     "note": "Fragmentary query points at /tmp/agents_log/agent.latest.log, but the expected span is app/agent.py \u2014 the query directs a retriever to a file that is not the ground truth, and the span does not contai"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "fragmented-episode",
+      "query-not-faithful"
+     ],
+     "note": "Query is about checking a log file, but the expected span is app/agent.py."
+    }
+   }
+  },
+  {
+   "row_id": 102,
+   "family": "project-file",
+   "query": "Cloud Run deployment configuration.",
+   "consensus": "invalid",
+   "unanimous": true,
+   "agreed_issues": [
+    "fragmented-episode",
+    "span-incomplete",
+    "span-wrong"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "span-wrong",
+      "span-incomplete",
+      "fragmented-episode"
+     ],
+     "note": "Fragment query 'Cloud Run deployment configuration.' paired with ground truth app/agent.py, which contains no Cloud Run config; the relevant reads (Dockerfile, app/fast_api_app.py) are uncaptured. Eit"
+    },
+    "claude_B": {
+     "verdict": "invalid",
+     "issues": [
+      "span-wrong",
+      "fragmented-episode"
+     ],
+     "note": "Fragment query 'Cloud Run deployment configuration.' scored against app/agent.py, which contains no Cloud Run/deployment content; the deployment-config hunt failed (Dockerfile and app/fast_api_app.py "
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "fragmented-episode",
+      "span-incomplete"
+     ],
+     "note": "Expected spans are missing Dockerfile and fast_api_app.py which were read during the episode."
+    }
+   }
+  },
+  {
+   "row_id": 103,
+   "family": "project-file",
+   "query": "I will check the content of `agent-project/app/__init__.py` to see how it handles imports or if it specifies the agent m",
+   "consensus": "flag",
+   "unanimous": false,
+   "agreed_issues": [
+    "query-leaks-answer"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "flag",
+     "issues": [
+      "query-leaks-answer"
+     ],
+     "note": "Query embeds the exact path of the primary answer file (agent-project/app/__init__.py) whose whole-file span is the ground truth \u2014 trivially solvable by path matching; second span (app/agent.py) is no"
+    },
+    "claude_B": {
+     "verdict": "flag",
+     "issues": [
+      "query-leaks-answer"
+     ],
+     "note": "Query embeds the exact path app/__init__.py whose whole file (lines 1-17) is span 1 \u2014 for project-file family the path is the entire answer. Span evidence does contain the sought import info ('from .a"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "query-leaks-answer"
+     ],
+     "note": "Query explicitly names the exact file path to be read."
+    }
+   }
+  },
+  {
+   "row_id": 104,
+   "family": "project-file",
+   "query": "check if there is an `infra` directory or other deployment-related files that might be necessary for Cloud Run.",
+   "consensus": "flag",
+   "unanimous": false,
+   "agreed_issues": [
+    "fragmented-episode"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "query-not-faithful",
+      "fragmented-episode"
+     ],
+     "note": "Fragment query covers only 'infra/deployment-related files for Cloud Run', but expected spans include unrelated files (tests/unit/test_dummy.py, tests/integration/test_agent.py, app/agent.py) from a b"
+    },
+    "claude_B": {
+     "verdict": "flag",
+     "issues": [
+      "fragmented-episode"
+     ],
+     "note": "Mid-sentence context ('check if there is an `infra` directory...'); the query names only deployment files but the 12-call episode is a broad project survey and spans capture all 5 successful file read"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "flag",
+     "issues": [
+      "fragmented-episode"
+     ],
+     "note": "Query is a mid-sentence fragment but still expresses the information need."
+    }
+   }
+  },
+  {
+   "row_id": 105,
+   "family": "project-file",
+   "query": "`agent-project/README.md` file to see if there's any mention of Cloud Run deployment.",
+   "consensus": "invalid",
+   "unanimous": false,
+   "agreed_issues": [
+    "fragmented-episode",
+    "query-leaks-answer",
+    "span-incomplete"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "query-leaks-answer",
+      "span-incomplete"
+     ],
+     "note": "Query names the exact target file (agent-project/README.md) whose whole-file span is the sole ground truth, making retrieval trivial for a project-file row. Episode also read GEMINI.md (call 2), which"
+    },
+    "claude_B": {
+     "verdict": "flag",
+     "issues": [
+      "query-leaks-answer",
+      "span-incomplete",
+      "fragmented-episode"
+     ],
+     "note": "Query names the exact expected file (README.md) whose whole file is the GT span; episode also read GEMINI.md which is not captured; context is a mid-sentence fragment. Span content is the real README,"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "span-incomplete",
+      "fragmented-episode"
+     ],
+     "note": "Missing GEMINI.md in expected spans; query is a sentence fragment."
+    }
+   }
+  },
+  {
+   "row_id": 106,
+   "family": "project-file",
+   "query": "`agent-project` directory to understand its structure.",
+   "consensus": "flag",
+   "unanimous": false,
+   "agreed_issues": [
+    "fragmented-episode"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Query is a truncated fragment ('`agent-project` directory to understand its structure.') but still expresses a self-contained orientation need without naming the answer file. Only file read is app/age"
+    },
+    "claude_B": {
+     "verdict": "flag",
+     "issues": [
+      "fragmented-episode"
+     ],
+     "note": "Context is a truncated mid-sentence fragment ('`agent-project` directory to understand its structure.'). GT (app/agent.py, the only file read) matches span evidence; steps/tokens consistent."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "flag",
+     "issues": [
+      "fragmented-episode"
+     ],
+     "note": "Query is a sentence fragment."
+    }
+   }
+  },
+  {
+   "row_id": 107,
+   "family": "project-file",
+   "query": "will list the files in the `agent-project` directory to verify that the enhancement was successful and the necessary fil",
+   "consensus": "invalid",
+   "unanimous": true,
+   "agreed_issues": [
+    "span-incomplete",
+    "verification-read"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "verification-read",
+      "span-incomplete"
+     ],
+     "note": "Context says 'verify that the enhancement was successful' after running scaffold enhance \u2014 a post-write verification pass, not a genuine search. Also reads app/fast_api_app.py (the key newly-added fil"
+    },
+    "claude_B": {
+     "verdict": "invalid",
+     "issues": [
+      "verification-read",
+      "span-incomplete"
+     ],
+     "note": "Agent is verifying its own scaffold-enhance output ('verify that the enhancement was successful'), not searching. Worse, GT captures only pyproject.toml while the episode also read app/fast_api_app.py"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "span-incomplete",
+      "fragmented-episode",
+      "verification-read"
+     ],
+     "note": "Missing fast_api_app.py in expected spans; query is a fragment and indicates verifying its own recent action."
+    }
+   }
+  },
+  {
+   "row_id": 108,
+   "family": "project-file",
+   "query": "I'll navigate to `agent-project` and list its directory structure.",
+   "consensus": "invalid",
+   "unanimous": true,
+   "agreed_issues": [
+    "span-incomplete"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "span-incomplete"
+     ],
+     "note": "Episode reads three files (app/agent.py, tests/eval/evalsets/basic.evalset.json, tests/eval/eval_config.json) but expected_spans captures only app/agent.py; the eval-config files were the actual targe"
+    },
+    "claude_B": {
+     "verdict": "invalid",
+     "issues": [
+      "span-incomplete"
+     ],
+     "note": "Episode read three files (app/agent.py, tests/eval/evalsets/basic.evalset.json, tests/eval/eval_config.json) but GT captures only agent.py. In a CLI-EVAL case the eval files are central; a retriever r"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "span-incomplete"
+     ],
+     "note": "Missing basic.evalset.json and eval_config.json in expected spans."
+    }
+   }
+  },
+  {
+   "row_id": 109,
+   "family": "project-file",
+   "query": "final content of `agent-project/app/agent.py` to ensure it meets all requirements.",
+   "consensus": "invalid",
+   "unanimous": true,
+   "agreed_issues": [
+    "query-leaks-answer",
+    "span-incomplete",
+    "verification-read"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "verification-read",
+      "query-leaks-answer",
+      "span-incomplete"
+     ],
+     "note": "'final content of agent-project/app/agent.py to ensure it meets all requirements' \u2014 classic re-read of a file the agent just wrote ('final', 'ensure'), late in CLI-EVAL-001. Query also embeds the exac"
+    },
+    "claude_B": {
+     "verdict": "invalid",
+     "issues": [
+      "verification-read",
+      "query-leaks-answer",
+      "span-incomplete"
+     ],
+     "note": "'Final content ... ensure it meets all requirements' is a self-verification re-read late in the case, and the query embeds the exact answer path agent-project/app/agent.py. Episode also read agent_eng"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "span-incomplete",
+      "verification-read",
+      "fragmented-episode"
+     ],
+     "note": "Missing agent_engine_app.py and GEMINI.md in expected spans; verifying a written file; query is a fragment."
+    }
+   }
+  },
+  {
+   "row_id": 110,
+   "family": "project-file",
+   "query": "I will check for a configuration file for `agents-cli`.",
+   "consensus": "valid",
+   "unanimous": true,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Query 'I will check for a configuration file for agents-cli' is self-contained and does not name the answer file; pyproject.toml (the project config file read) is a reasonable whole-file ground truth."
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Genuine search ('check for a configuration file for agents-cli') that does not name the answer file; GT is the one file read (pyproject.toml, whole file) and span evidence matches; steps=2 calls, toke"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Valid row."
+    }
+   }
+  },
+  {
+   "row_id": 111,
+   "family": "project-file",
+   "query": "`agent-project` directory to understand its structure.",
+   "consensus": "flag",
+   "unanimous": false,
+   "agreed_issues": [
+    "fragmented-episode"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Same shape as row 106 (different case, CLI-EVAL-CUSTOM): truncated but meaningful orientation query, no path leak, sole file read (app/agent.py) matches the expected span. Steps=3=calls, tokens=34."
+    },
+    "claude_B": {
+     "verdict": "flag",
+     "issues": [
+      "fragmented-episode"
+     ],
+     "note": "Same truncated context as row 106 in a different case; GT (app/agent.py, only file read) matches span evidence; cost fields consistent."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "flag",
+     "issues": [
+      "fragmented-episode"
+     ],
+     "note": "Query is a sentence fragment."
+    }
+   }
+  },
+  {
+   "row_id": 112,
+   "family": "project-file",
+   "query": "I will check `GEMINI.md` and `README.md` in the `agent-project` directory for any mentions of specific models or configu",
+   "consensus": "invalid",
+   "unanimous": true,
+   "agreed_issues": [
+    "query-leaks-answer",
+    "span-incomplete"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "query-leaks-answer",
+      "span-incomplete"
+     ],
+     "note": "Query explicitly names both GEMINI.md and README.md, and README.md whole-file is the ground truth (path leak for a whole-file row). Worse, GEMINI.md \u2014 explicitly part of the stated need and actually r"
+    },
+    "claude_B": {
+     "verdict": "invalid",
+     "issues": [
+      "span-incomplete",
+      "query-leaks-answer"
+     ],
+     "note": "Query explicitly says it will check both GEMINI.md and README.md and both were read, but GT captures only README.md \u2014 a retriever returning GEMINI.md (equally the answer) scores zero. Query also names"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "span-incomplete"
+     ],
+     "note": "Missing GEMINI.md in expected spans despite the query explicitly asking for it."
+    }
+   }
+  },
+  {
+   "row_id": 113,
+   "family": "project-file",
+   "query": "I'll check the content of `app/__init__.py` to see how it handles imports.",
+   "consensus": "flag",
+   "unanimous": false,
+   "agreed_issues": [
+    "query-leaks-answer"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "query-leaks-answer"
+     ],
+     "note": "Query embeds the exact path app/__init__.py, which is the entire whole-file ground truth \u2014 retrieval is trivial. Span evidence does contain the import handling asked about. Note also the second call ("
+    },
+    "claude_B": {
+     "verdict": "flag",
+     "issues": [
+      "query-leaks-answer"
+     ],
+     "note": "GT is correct (app/__init__.py 1-17 does show how imports are handled: 'from .agent import app'), but the query embeds the exact file path of the whole-file answer, making retrieval trivial. The unrel"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Valid row."
+    }
+   }
+  },
+  {
+   "row_id": 114,
+   "family": "project-file",
+   "query": "I'll check the `README.md` in the `agent-project` directory for any clues regarding the `extract` command or other proje",
+   "consensus": "invalid",
+   "unanimous": false,
+   "agreed_issues": [
+    "query-leaks-answer",
+    "span-incomplete"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "query-leaks-answer",
+      "span-incomplete"
+     ],
+     "note": "Query names README.md, the sole expected whole-file span (path leak). GEMINI.md was also read in the episode but is absent from spans. Additionally, README contains no mention of an 'extract' command,"
+    },
+    "claude_B": {
+     "verdict": "flag",
+     "issues": [
+      "query-leaks-answer",
+      "span-incomplete"
+     ],
+     "note": "Query names README.md (the whole-file GT); GEMINI.md was also read but not captured. Note the README contains no 'extract' mention \u2014 the answer is an absence, acceptable for the project-file family bu"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "span-incomplete"
+     ],
+     "note": "Missing GEMINI.md in expected spans."
+    }
+   }
+  },
+  {
+   "row_id": 115,
+   "family": "project-file",
+   "query": "`extract` is a skill that can be installed or if there's more information about setting up the CLI.",
+   "consensus": "invalid",
+   "unanimous": false,
+   "agreed_issues": [
+    "fragmented-episode",
+    "span-wrong"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "span-wrong",
+      "fragmented-episode"
+     ],
+     "note": "Context is a mid-sentence fragment ('`extract` is a skill that can be installed or if...') from a longer hunt. The information actually sought (whether extract is an installable skill / CLI setup) was"
+    },
+    "claude_B": {
+     "verdict": "invalid",
+     "issues": [
+      "span-wrong",
+      "fragmented-episode"
+     ],
+     "note": "GT span (pyproject.toml) contains nothing about the 'extract' skill, skills, or CLI setup \u2014 the information need was answered by 'agents-cli setup --help' shell output (tokens=412 mostly from that), n"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "flag",
+     "issues": [
+      "fragmented-episode"
+     ],
+     "note": "Query is a sentence fragment."
+    }
+   }
+  },
+  {
+   "row_id": 116,
+   "family": "project-file",
+   "query": "'ll explore the newly created project structure.",
+   "consensus": "flag",
+   "unanimous": false,
+   "agreed_issues": [
+    "fragmented-episode",
+    "span-incomplete"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "flag",
+     "issues": [
+      "span-incomplete"
+     ],
+     "note": "Query ('ll explore the newly created project structure.') is truncated but a fair non-leaking orientation need, and three of the four files read are captured as spans. GEMINI.md was also read (call 6)"
+    },
+    "claude_B": {
+     "verdict": "flag",
+     "issues": [
+      "span-incomplete",
+      "fragmented-episode"
+     ],
+     "note": "GT captures 3 of the 4 files read (agent.py, pyproject.toml, __init__.py) but omits GEMINI.md; context starts mid-word (\"'ll explore\"). Query is faithful to a broad orientation need; steps=8 matches c"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "span-incomplete",
+      "fragmented-episode"
+     ],
+     "note": "Missing GEMINI.md in expected spans; query is a sentence fragment."
+    }
+   }
+  },
+  {
+   "row_id": 117,
+   "family": "sdk-symbol",
+   "query": "I'll check the `LlmResponse` definition in `agent-project/.venv/lib/python3.11/site-packages/google/adk/models/llm_respo",
+   "consensus": "invalid",
+   "unanimous": false,
+   "agreed_issues": [
+    "query-leaks-answer"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "query-leaks-answer",
+      "fragmented-episode"
+     ],
+     "note": "Only sdk-symbol row; family is correct and span 29-231 is genuinely the LlmResponse class definition. But the query embeds the exact site-packages file path of the answer (llm_response.py), and the cl"
+    },
+    "claude_B": {
+     "verdict": "flag",
+     "issues": [
+      "query-leaks-answer"
+     ],
+     "note": "GT is genuinely correct \u2014 span 29-231 of models/llm_response.py is the LlmResponse class definition per span evidence \u2014 but the query embeds the exact site-packages path of that file, nearly trivializ"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "query-leaks-answer"
+     ],
+     "note": "Query contains the exact file path to the answer."
+    }
+   }
+  },
+  {
+   "row_id": 118,
+   "family": "project-file",
+   "query": "I'll verify the contents of `minimal-agent/app/agent.py` to ensure it has all the necessary components.",
+   "consensus": "invalid",
+   "unanimous": true,
+   "agreed_issues": [
+    "query-leaks-answer",
+    "span-wrong",
+    "verification-read"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "span-wrong",
+      "verification-read",
+      "query-leaks-answer"
+     ],
+     "note": "Agent is verifying minimal-agent/app/agent.py, a file it had just written (extract task, 'verify... ensure it has all the necessary components'). The expected span's evidence is the ORIGINAL agent-pro"
+    },
+    "claude_B": {
+     "verdict": "invalid",
+     "issues": [
+      "span-wrong",
+      "verification-read",
+      "query-leaks-answer"
+     ],
+     "note": "Query asks to verify minimal-agent/app/agent.py (a file the agent just extracted/wrote \u2014 self-verification), but the span evidence is the original agent-project scaffold agent.py (79-line get_weather/"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "span-incomplete",
+      "verification-read"
+     ],
+     "note": "Missing one of the agent.py files read; verifying a written file."
+    }
+   }
+  },
+  {
+   "row_id": 119,
+   "family": "project-file",
+   "query": "`agent-project` directory to understand the project structure.",
+   "consensus": "flag",
+   "unanimous": false,
+   "agreed_issues": [
+    "fragmented-episode"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Truncated but meaningful orientation query with no path leak; both files read (app/agent.py, pyproject.toml) are captured as expected spans, so ground truth is complete. Family project-file correct; s"
+    },
+    "claude_B": {
+     "verdict": "flag",
+     "issues": [
+      "fragmented-episode"
+     ],
+     "note": "Context is a truncated fragment, but GT is complete for once: both files read (app/agent.py and pyproject.toml) are captured whole-file and span evidence matches; steps=3 calls, tokens=33."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "flag",
+     "issues": [
+      "fragmented-episode"
+     ],
+     "note": "Query is a sentence fragment."
+    }
+   }
+  },
+  {
+   "row_id": 120,
+   "family": "project-file",
+   "query": "I will check the content of the `tests` directory in the `agent-project` to see if there are any existing tests I can us",
+   "consensus": "valid",
+   "unanimous": true,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Query is a faithful copy of the context; span = the reference test file actually read; steps 3 = 3 calls, tokens 130. Genuine reference-hunting, not a verification read."
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Query faithful (looking for reference tests); span is the exact file read (tests/integration/test_agent.py, whole file); steps 3 = 3 calls, tokens 130 > 0."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Query is faithful and ground truth matches the files read."
+    }
+   }
+  },
+  {
+   "row_id": 121,
+   "family": "sdk-symbol",
+   "query": "_agent` function within the installed `google-adk` package to identify the correct import path. (transfer_to_agent)",
+   "consensus": "invalid",
+   "unanimous": false,
+   "agreed_issues": [
+    "fragmented-episode",
+    "span-wrong"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "span-wrong",
+      "fragmented-episode"
+     ],
+     "note": "Ground truth (events/event_actions.py:74) is the EventActions.transfer_to_agent Optional[str] field, not the transfer_to_agent tool/function whose import path the agent was hunting (it read agents/__i"
+    },
+    "claude_B": {
+     "verdict": "invalid",
+     "issues": [
+      "span-wrong",
+      "fragmented-episode"
+     ],
+     "note": "Agent hunted the import path of the transfer_to_agent FUNCTION/tool (grep + reads of agents/__init__.py and tools/__init__.py). Expected span is events/event_actions.py:74, a field declaration 'transf"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "flag",
+     "issues": [
+      "fragmented-episode"
+     ],
+     "note": "Context message is a fragment, making the query slightly awkward, though the symbol definition is correctly identified."
+    }
+   }
+  },
+  {
+   "row_id": 122,
+   "family": "project-file",
+   "query": "list the files in the `agent-project` directory to understand the project structure.",
+   "consensus": "valid",
+   "unanimous": true,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Full-sentence orientation query; ground truth is the one project file read (app/agent.py), consistent with the project-file family definition; steps/tokens consistent."
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Context slightly truncated but query is a complete, faithful imperative ('list the files ... to understand the project structure'); span = whole app/agent.py actually read; steps 3 = 3 calls."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Query is clear and ground truth matches the file read."
+    }
+   }
+  },
+  {
+   "row_id": 123,
+   "family": "project-file",
+   "query": "I will search for the string `transfer_to_agent` in the `agent-project` directory to see if there are any examples or do",
+   "consensus": "invalid",
+   "unanimous": false,
+   "agreed_issues": [
+    "span-wrong"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "span-wrong"
+     ],
+     "note": "Query asks for examples/docs of `transfer_to_agent`, but the expected span (tests/integration/test_agent.py) contains zero occurrences of that string \u2014 the grep found nothing and the agent fell back t"
+    },
+    "claude_B": {
+     "verdict": "invalid",
+     "issues": [
+      "span-wrong"
+     ],
+     "note": "Query is a search for 'transfer_to_agent' examples, but the ground-truth file (tests/integration/test_agent.py) contains no occurrence of transfer_to_agent at all \u2014 the grep evidently found nothing an"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Agent searched for a string and read a file; ground truth correctly captures the read file."
+    }
+   }
+  },
+  {
+   "row_id": 124,
+   "family": "project-file",
+   "query": "of the newly created `agent-project` directory.",
+   "consensus": "flag",
+   "unanimous": false,
+   "agreed_issues": [
+    "fragmented-episode",
+    "query-not-faithful"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "flag",
+     "issues": [
+      "query-not-faithful",
+      "fragmented-episode"
+     ],
+     "note": "Context/query is a verb-less mid-sentence fragment ('of the newly created `agent-project` directory.'). Target keywords survive and span matches the file read, so usable, but the information need is n"
+    },
+    "claude_B": {
+     "verdict": "flag",
+     "issues": [
+      "fragmented-episode"
+     ],
+     "note": "Context/query is a verbless mid-sentence fragment ('of the newly created `agent-project` directory.') \u2014 episode extraction cut the opening clause. Otherwise sound: span = app/agent.py actually read, s"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "fragmented-episode",
+      "query-not-faithful"
+     ],
+     "note": "Query is a meaningless fragment."
+    }
+   }
+  },
+  {
+   "row_id": 125,
+   "family": "project-file",
+   "query": "I will check `agent-project/app/agent_engine_app.py` to see if it requires any modifications to align with the arithmeti",
+   "consensus": "invalid",
+   "unanimous": true,
+   "agreed_issues": [
+    "span-incomplete"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "span-incomplete"
+     ],
+     "note": "Query explicitly targets app/agent_engine_app.py and that file was the first read, but expected_spans captures only the incidental app/__init__.py read. The primary answer file is missing from ground "
+    },
+    "claude_B": {
+     "verdict": "invalid",
+     "issues": [
+      "span-incomplete"
+     ],
+     "note": "Query explicitly targets app/agent_engine_app.py, and the first call reads that file \u2014 but expected_spans contains only app/__init__.py. The primary answer file is missing from ground truth, so a retr"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "span-incomplete"
+     ],
+     "note": "Agent read agent_engine_app.py and __init__.py, but agent_engine_app.py is missing from expected spans."
+    }
+   }
+  },
+  {
+   "row_id": 126,
+   "family": "project-file",
+   "query": "of the `agent-project` directory.",
+   "consensus": "flag",
+   "unanimous": false,
+   "agreed_issues": [
+    "fragmented-episode",
+    "query-not-faithful"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "flag",
+     "issues": [
+      "query-not-faithful",
+      "fragmented-episode"
+     ],
+     "note": "Verb-less fragment ('of the `agent-project` directory.'); nearly vacuous but retains the directory name. Span matches the file actually read; usable only with caveat."
+    },
+    "claude_B": {
+     "verdict": "flag",
+     "issues": [
+      "fragmented-episode"
+     ],
+     "note": "Verbless fragment query ('of the `agent-project` directory.') from truncated context; ground truth (app/agent.py, whole file read) and cost (steps 2 = 2 calls) are correct."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "fragmented-episode",
+      "query-not-faithful"
+     ],
+     "note": "Query is a meaningless fragment."
+    }
+   }
+  },
+  {
+   "row_id": 127,
+   "family": "project-file",
+   "query": "I will list the files in the `agent-project` directory.",
+   "consensus": "valid",
+   "unanimous": true,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Full-sentence orientation query faithfully copied; span = app/agent.py which was read; steps 2 = 2 calls, tokens 22."
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Complete faithful query; span = whole app/agent.py read; steps 2 = 2 calls, tokens 22 > 0."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Query is faithful and ground truth matches the file read."
+    }
+   }
+  },
+  {
+   "row_id": 128,
+   "family": "project-file",
+   "query": "I will check the latest log file to verify the tool call.",
+   "consensus": "invalid",
+   "unanimous": true,
+   "agreed_issues": [
+    "span-incomplete",
+    "verification-read"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "query-not-faithful",
+      "verification-read",
+      "span-incomplete"
+     ],
+     "note": "Classic verification workload: 'check the latest log file to verify the tool call', tail of agent.latest.log, late in CLI-INIT-A2A. The query's stated target (a log file) is absent from ground truth, "
+    },
+    "claude_B": {
+     "verdict": "invalid",
+     "issues": [
+      "verification-read",
+      "span-incomplete",
+      "span-wrong"
+     ],
+     "note": "Episode is a late-case verification pass ('check the latest log file to verify the tool call'): tail of /tmp log plus re-reads of app files \u2014 not a genuine search workload. Query asks for a log file b"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "span-incomplete"
+     ],
+     "note": "Agent read agent_engine_app.py but it is missing from the expected spans."
+    }
+   }
+  },
+  {
+   "row_id": 129,
+   "family": "project-file",
+   "query": "I'll check the structure of the `agent-project` directory.",
+   "consensus": "valid",
+   "unanimous": true,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Full-sentence structure-orientation query; span = app/agent.py read during the episode; steps 3 = 3 calls, tokens 34."
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Faithful structure-orientation query; span = app/agent.py actually read; steps 3 = 3 calls."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Query is faithful and ground truth matches the file read."
+    }
+   }
+  },
+  {
+   "row_id": 130,
+   "family": "project-file",
+   "query": "` directory.",
+   "consensus": "invalid",
+   "unanimous": true,
+   "agreed_issues": [
+    "fragmented-episode",
+    "query-vacuous"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "query-vacuous",
+      "fragmented-episode"
+     ],
+     "note": "Query is '` directory.' \u2014 a vacuous fragment carrying no information need; no retriever could be fairly evaluated on it."
+    },
+    "claude_B": {
+     "verdict": "invalid",
+     "issues": [
+      "query-vacuous",
+      "fragmented-episode"
+     ],
+     "note": "Query is '` directory.' \u2014 a vacuous fragment carrying no information need; no retriever could be fairly scored on it."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "fragmented-episode",
+      "query-vacuous"
+     ],
+     "note": "Query is completely vacuous."
+    }
+   }
+  },
+  {
+   "row_id": 131,
+   "family": "project-file",
+   "query": "I will check the existing tests in `agent-project/tests`.",
+   "consensus": "valid",
+   "unanimous": true,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Faithful full-sentence query about existing tests; span = tests/unit/test_dummy.py actually read; steps 3 = 3 calls, tokens 41."
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Faithful query about existing tests; span = tests/unit/test_dummy.py, the file actually read; steps 3 = 3 calls."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Query is faithful and ground truth matches the file read."
+    }
+   }
+  },
+  {
+   "row_id": 132,
+   "family": "project-file",
+   "query": "I will search for \"Gemini(\" in the codebase to see if other models are used.",
+   "consensus": "invalid",
+   "unanimous": false,
+   "agreed_issues": [
+    "span-wrong"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "span-wrong"
+     ],
+     "note": "Query hunts 'Gemini(' usages, but neither expected span (pyproject.toml, test_agent.py) contains that string; the real match is in app/agent.py, absent from ground truth. Spans are post-grep tangent r"
+    },
+    "claude_B": {
+     "verdict": "invalid",
+     "issues": [
+      "span-wrong",
+      "span-incomplete"
+     ],
+     "note": "Query is a search for 'Gemini(' usages, but neither ground-truth file (pyproject.toml, test_agent.py) contains 'Gemini(' \u2014 the file that does (app/agent.py, per its span evidence in sibling rows) is a"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Query is faithful and ground truth matches the files read."
+    }
+   }
+  },
+  {
+   "row_id": 133,
+   "family": "project-file",
+   "query": "the `agent-project` directory to see the structure.",
+   "consensus": "flag",
+   "unanimous": true,
+   "agreed_issues": [
+    "fragmented-episode"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "flag",
+     "issues": [
+      "fragmented-episode"
+     ],
+     "note": "Context/query is a truncated noun phrase ('the `agent-project` directory to see the structure.') but the purpose clause preserves the information need; span matches the file read. Usable with caveat."
+    },
+    "claude_B": {
+     "verdict": "flag",
+     "issues": [
+      "fragmented-episode"
+     ],
+     "note": "Verbless mid-sentence fragment ('the `agent-project` directory to see the structure.') but intent is recoverable; span = app/agent.py read, steps 3 = 3 calls."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "flag",
+     "issues": [
+      "fragmented-episode"
+     ],
+     "note": "Query is a fragment but still understandable."
+    }
+   }
+  },
+  {
+   "row_id": 134,
+   "family": "project-file",
+   "query": "existing tests in `agent-project/tests` to see if they need to be updated.",
+   "consensus": "flag",
+   "unanimous": true,
+   "agreed_issues": [
+    "fragmented-episode"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "flag",
+     "issues": [
+      "fragmented-episode"
+     ],
+     "note": "Mid-sentence truncation ('existing tests in `agent-project/tests` to see if they need to be updated.'), but the surviving phrase is self-explanatory and span (test_dummy.py) matches the read. Usable w"
+    },
+    "claude_B": {
+     "verdict": "flag",
+     "issues": [
+      "fragmented-episode"
+     ],
+     "note": "Context truncated to a verbless fragment, though the need (review existing tests for updates) is clear; span = tests/unit/test_dummy.py actually read; steps 3 = 3 calls."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "flag",
+     "issues": [
+      "fragmented-episode"
+     ],
+     "note": "Query is a fragment but still understandable."
+    }
+   }
+  },
+  {
+   "row_id": 135,
+   "family": "project-file",
+   "query": "necessary endpoints and parameters for the tools.",
+   "consensus": "invalid",
+   "unanimous": true,
+   "agreed_issues": [
+    "fragmented-episode",
+    "span-incomplete",
+    "span-wrong"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "span-wrong",
+      "span-incomplete",
+      "fragmented-episode"
+     ],
+     "note": "Query asks for 'necessary endpoints and parameters for the tools' \u2014 that answer is in research_api_spec.json / knowledge_api_spec.json, which the agent read first but which are missing from expected_s"
+    },
+    "claude_B": {
+     "verdict": "invalid",
+     "issues": [
+      "span-incomplete",
+      "fragmented-episode"
+     ],
+     "note": "Query seeks 'necessary endpoints and parameters for the tools' \u2014 that answer lives in research_api_spec.json and knowledge_api_spec.json, which the agent read first but which are absent from expected_"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "span-wrong",
+      "fragmented-episode"
+     ],
+     "note": "The query asks for endpoints and parameters, but the expected spans are just the scaffolded agent.py and pyproject.toml, which do not contain API specs."
+    }
+   }
+  },
+  {
+   "row_id": 136,
+   "family": "project-file",
+   "query": "`README.md` or the `tests` directory in the scaffolded project to see how to properly initialize and use the `Runner`.",
+   "consensus": "flag",
+   "unanimous": true,
+   "agreed_issues": [
+    "fragmented-episode",
+    "span-wrong"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "flag",
+     "issues": [
+      "span-wrong",
+      "fragmented-episode"
+     ],
+     "note": "Query (Runner initialization/usage) is answerable from tests/integration/test_agent.py, but tests/unit/test_dummy.py is a placeholder with zero Runner content \u2014 including it as ground truth penalizes "
+    },
+    "claude_B": {
+     "verdict": "flag",
+     "issues": [
+      "span-wrong"
+     ],
+     "note": "Information need is 'how to initialize and use the Runner'. tests/integration/test_agent.py genuinely answers it (Runner + InMemorySessionService usage), but the second span tests/unit/test_dummy.py i"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "flag",
+     "issues": [
+      "fragmented-episode"
+     ],
+     "note": "The query is a fragment of a sentence, but it clearly expresses the information need (how to initialize Runner in tests)."
+    }
+   }
+  },
+  {
+   "row_id": 137,
+   "family": "project-file",
+   "query": "auth/adc.json` to see if it provides any clues.",
+   "consensus": "invalid",
+   "unanimous": true,
+   "agreed_issues": [
+    "fragmented-episode",
+    "span-wrong"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "query-not-faithful",
+      "span-wrong",
+      "fragmented-episode"
+     ],
+     "note": "Query is about '.auth/adc.json ... clues' but the sole expected span is README.md; the file the query names was read but is not in ground truth, so query and ground truth describe different informatio"
+    },
+    "claude_B": {
+     "verdict": "invalid",
+     "issues": [
+      "span-wrong",
+      "fragmented-episode"
+     ],
+     "note": "Query is 'auth/adc.json ... to see if it provides any clues' but the only expected span is README.md; the actual hunted file (.auth/adc.json) was read yet excluded from GT. A searcher answering the qu"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "span-wrong",
+      "fragmented-episode"
+     ],
+     "note": "The query is looking for auth/adc.json, but the expected span is README.md."
+    }
+   }
+  },
+  {
+   "row_id": 138,
+   "family": "project-file",
+   "query": "I will explore the generated project structure and examine the content of `app/agent.py`.",
+   "consensus": "flag",
+   "unanimous": false,
+   "agreed_issues": [
+    "query-leaks-answer"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "flag",
+     "issues": [
+      "query-leaks-answer"
+     ],
+     "note": "Faithful and self-contained, but for a project-file row (ground truth = whole file) the query naming `app/agent.py` hands the retriever the answer path, making retrieval trivial. Steps/tokens/family c"
+    },
+    "claude_B": {
+     "verdict": "flag",
+     "issues": [
+      "query-leaks-answer"
+     ],
+     "note": "Query names the exact file `app/agent.py` and the GT is that whole file, so the query hands the searcher the complete answer location. Span/family/observed all correct otherwise."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Valid query and correct expected span."
+    }
+   }
+  },
+  {
+   "row_id": 139,
+   "family": "project-file",
+   "query": "agent.py` to understand how to implement the sub-agents and triage router.",
+   "consensus": "flag",
+   "unanimous": false,
+   "agreed_issues": [
+    "fragmented-episode"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "flag",
+     "issues": [
+      "fragmented-episode",
+      "query-not-faithful"
+     ],
+     "note": "Truncated fragment ('agent.py` to understand...') lost the leading clause; query only motivates the agent.py span while ground truth also includes pyproject.toml (read for dependencies, unstated in qu"
+    },
+    "claude_B": {
+     "verdict": "flag",
+     "issues": [
+      "fragmented-episode"
+     ],
+     "note": "Context/query starts mid-sentence ('agent.py` to understand...'), a slice of a longer message. Spans (agent.py, pyproject.toml) match the files read and are plausible orientation GT; requirements.txt "
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "span-wrong",
+      "fragmented-episode"
+     ],
+     "note": "The query looks for sub-agents and triage router, but the expected spans (agent.py and pyproject.toml) do not contain them."
+    }
+   }
+  },
+  {
+   "row_id": 140,
+   "family": "project-file",
+   "query": "FAQ APIs.",
+   "consensus": "invalid",
+   "unanimous": true,
+   "agreed_issues": [
+    "fragmented-episode",
+    "query-vacuous",
+    "span-wrong"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "query-vacuous",
+      "span-wrong",
+      "fragmented-episode"
+     ],
+     "note": "Query 'FAQ APIs.' is a two-word truncation fragment with no expressed need. The files actually addressing FAQ APIs (order_openapi.json, faq_openapi.json) are not in expected_spans; the included agent."
+    },
+    "claude_B": {
+     "verdict": "invalid",
+     "issues": [
+      "query-vacuous",
+      "span-wrong"
+     ],
+     "note": "Query is the two-word fragment 'FAQ APIs.' \u2014 near-vacuous. The episode's real targets, order_openapi.json and faq_openapi.json (read first), are missing from GT; the retained spans (agent.py, pyprojec"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "span-wrong",
+      "fragmented-episode"
+     ],
+     "note": "The query is about FAQ APIs, but the expected spans are the scaffolded agent.py and pyproject.toml."
+    }
+   }
+  },
+  {
+   "row_id": 141,
+   "family": "project-file",
+   "query": "see how they run the agent in tests.",
+   "consensus": "valid",
+   "unanimous": false,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Fragmentary phrasing but self-contained need ('how they run the agent in tests'); span (tests/integration/test_agent.py) squarely contains Runner-based test execution. Family, steps (5), tokens (75) c"
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Query 'see how they run the agent in tests' is exactly answered by tests/integration/test_agent.py (Runner.run usage). First call to nonexistent tests/test_agent.py was a miss, correctly excluded. Ste"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "flag",
+     "issues": [
+      "fragmented-episode"
+     ],
+     "note": "The query is a fragment, but it expresses a clear information need that is satisfied by the expected span."
+    }
+   }
+  },
+  {
+   "row_id": 142,
+   "family": "sdk-symbol",
+   "query": "I will now check if `SequentialAgent` is available in the `google-adk` package.",
+   "consensus": "valid",
+   "unanimous": true,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Clean self-contained query; naming the hunted symbol is required for sdk-symbol, not a leak. Span 48-159 is the SequentialAgent class definition. Steps 3 == calls, tokens > 0."
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "sdk-symbol row; span_evidence 48-159 is the actual `class SequentialAgent(BaseAgent)` definition, matching the hunted symbol. base_agent.py read was supporting context, reasonably excluded. Steps=3, t"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Valid query and correct expected span for the symbol."
+    }
+   }
+  },
+  {
+   "row_id": 143,
+   "family": "project-file",
+   "query": "the files in the newly created `agent-project` directory to understand its structure.",
+   "consensus": "valid",
+   "unanimous": false,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Truncated leading word but the need (orient in newly scaffolded agent-project) is fully expressed; whole-file agent.py span matches the read. Counts correct."
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Orientation query faithful to episode; GT is the whole app/agent.py the agent read. No leak (query names the directory, family GT is the file content)."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "flag",
+     "issues": [
+      "fragmented-episode"
+     ],
+     "note": "The query is a fragment, but expresses the intent to understand the project structure."
+    }
+   }
+  },
+  {
+   "row_id": 144,
+   "family": "sdk-symbol",
+   "query": "k/agents/llm_agent.py`. (Agent LlmAgent)",
+   "consensus": "invalid",
+   "unanimous": false,
+   "agreed_issues": [
+    "fragmented-episode",
+    "query-leaks-answer"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "query-leaks-answer",
+      "fragmented-episode",
+      "span-incomplete"
+     ],
+     "note": "Query is a truncation artifact 'k/agents/llm_agent.py`.' that embeds the exact answer file path, plus bolted-on symbol hints. The 16-call episode is dominated by an a2a/AgentCard/app.py hunt (agent_to"
+    },
+    "claude_B": {
+     "verdict": "flag",
+     "issues": [
+      "fragmented-episode",
+      "observed-mismatch"
+     ],
+     "note": "GT spans are correct (Agent TypeAlias at 1027, class LlmAgent 195-1024) but the 16-call episode is a multi-goal hunt (a2a_card, AgentCard, agent_card_builder.py, apps/app.py) far beyond the derived Ag"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "query-vacuous",
+      "query-leaks-answer",
+      "fragmented-episode"
+     ],
+     "note": "The query is a vacuous fragment that was modified to leak the exact symbols being searched for."
+    }
+   }
+  },
+  {
+   "row_id": 145,
+   "family": "project-file",
+   "query": "I'll examine the agent's definition and dependencies to prepare for the translation feature implementation.",
+   "consensus": "valid",
+   "unanimous": true,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Fully self-contained, faithful ('agent's definition and dependencies'), no path leak; spans (app/agent.py + pyproject.toml) are exactly definition + dependencies. Counts correct."
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Query ('agent's definition and dependencies') maps cleanly to the two spans read (app/agent.py, pyproject.toml). Steps=2, tokens 22."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Valid query and correct expected spans."
+    }
+   }
+  },
+  {
+   "row_id": 146,
+   "family": "sdk-symbol",
+   "query": "RPC_URL` within the `a2a` package to identify the correct import paths. (AGENT_CARD_WELL_KNOWN_PATH)",
+   "consensus": "invalid",
+   "unanimous": true,
+   "agreed_issues": [
+    "fragmented-episode",
+    "span-incomplete",
+    "span-wrong"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "span-wrong",
+      "span-incomplete",
+      "fragmented-episode"
+     ],
+     "note": "Agent grepped the standalone `a2a` package to find correct import paths for AGENT_CARD_WELL_KNOWN_PATH and DEFAULT_RPC_URL; the span is instead google/adk agents/remote_a2a_agent.py:54, a local consta"
+    },
+    "claude_B": {
+     "verdict": "invalid",
+     "issues": [
+      "span-wrong",
+      "span-incomplete"
+     ],
+     "note": "Agent grepped for AGENT_CARD_WELL_KNOWN_PATH and DEFAULT_RPC_URL inside site-packages/a2a to find import paths, but the GT span is an indented fallback assignment in google/adk/agents/remote_a2a_agent"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "span-wrong",
+      "query-leaks-answer",
+      "fragmented-episode"
+     ],
+     "note": "The query is a fragment looking for RPC_URL, but the expected span is AGENT_CARD_WELL_KNOWN_PATH, which is also leaked in the query."
+    }
+   }
+  },
+  {
+   "row_id": 147,
+   "family": "sdk-symbol",
+   "query": "`. (BuiltInCodeExecutor)",
+   "consensus": "invalid",
+   "unanimous": false,
+   "agreed_issues": [
+    "query-vacuous"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "query-vacuous"
+     ],
+     "note": "Query is '`. (BuiltInCodeExecutor)' \u2014 the natural-language portion is the canonical vacuous fragment '`.'; only the mechanically appended symbol token remains, which is not a fair restatement of an in"
+    },
+    "claude_B": {
+     "verdict": "flag",
+     "issues": [
+      "query-vacuous"
+     ],
+     "note": "Base context is the vacuous fragment '`.'; only the appended symbol '(BuiltInCodeExecutor)' makes the query usable. GT span 29-57 is the genuine class BuiltInCodeExecutor definition; steps=9 matches c"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "query-vacuous",
+      "query-leaks-answer"
+     ],
+     "note": "The query is completely vacuous and leaks the exact symbol being searched for."
+    }
+   }
+  },
+  {
+   "row_id": 148,
+   "family": "project-file",
+   "query": "of the scaffolded project.",
+   "consensus": "invalid",
+   "unanimous": false,
+   "agreed_issues": [
+    "fragmented-episode",
+    "query-vacuous"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "query-vacuous",
+      "fragmented-episode"
+     ],
+     "note": "Query 'of the scaffolded project.' is a truncation fragment expressing no information need; a retriever cannot be fairly scored against agent.py + pyproject.toml from it."
+    },
+    "claude_B": {
+     "verdict": "flag",
+     "issues": [
+      "query-vacuous",
+      "fragmented-episode"
+     ],
+     "note": "Query 'of the scaffolded project.' is a headless mid-sentence fragment (missing noun, e.g. 'structure'). Spans match the files actually read and are fine as orientation GT."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "query-vacuous",
+      "fragmented-episode"
+     ],
+     "note": "The query is a vacuous fragment ('of the scaffolded project.') that does not express a clear information need."
+    }
+   }
+  },
+  {
+   "row_id": 149,
+   "family": "sdk-symbol",
+   "query": "I'll check the imports in `google.adk.agents` to see how `Agent` is defined.",
+   "consensus": "valid",
+   "unanimous": true,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Self-contained, faithful sdk-symbol query ('how `Agent` is defined' in google.adk.agents); span llm_agent.py:1027 'Agent: TypeAlias = LlmAgent' is exactly the definition. Steps 2 == calls, tokens 52."
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Query faithful; GT span is exactly the definition of the hunted symbol (`Agent: TypeAlias = LlmAgent`, llm_agent.py:1027), consistent with sdk-symbol family (definition span, so the __init__.py re-exp"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Valid query and correct expected span for the symbol."
+    }
+   }
+  },
+  {
+   "row_id": 150,
+   "family": "project-file",
+   "query": "I will read the content of `agent-project/app/agent.py` to understand its current structure.",
+   "consensus": "flag",
+   "unanimous": false,
+   "agreed_issues": [
+    "query-leaks-answer"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "flag",
+     "issues": [
+      "query-leaks-answer"
+     ],
+     "note": "Query embeds exact path app/agent.py, leaking the whole-file span; second span (pyproject.toml) is not expressed in the query at all."
+    },
+    "claude_B": {
+     "verdict": "flag",
+     "issues": [
+      "query-leaks-answer"
+     ],
+     "note": "Query embeds exact path of span 1 (app/agent.py); for project-file family the path is the answer. Spans match files read; steps=2=calls, tokens>0."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "query-leaks-answer"
+     ],
+     "note": "The query explicitly names the file to read (`agent-project/app/agent.py`), leaking the exact answer."
+    }
+   }
+  },
+  {
+   "row_id": 151,
+   "family": "project-file",
+   "query": "`agent-project/tests` directory.",
+   "consensus": "flag",
+   "unanimous": false,
+   "agreed_issues": [
+    "fragmented-episode"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "flag",
+     "issues": [
+      "fragmented-episode"
+     ],
+     "note": "Context is a mid-sentence fragment; query is a truncated noun phrase but still points at the tests directory containing the span."
+    },
+    "claude_B": {
+     "verdict": "flag",
+     "issues": [
+      "fragmented-episode"
+     ],
+     "note": "Context is a mid-sentence fragment ('`agent-project/tests` directory.'). Span correctly matches the one file read (tests/integration/test_agent.py); steps=3=calls."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "fragmented-episode",
+      "query-not-faithful"
+     ],
+     "note": "The context message is a mid-sentence fragment. The query is not faithful to the specific file read."
+    }
+   }
+  },
+  {
+   "row_id": 152,
+   "family": "project-file",
+   "query": "list the contents of the `agent-project` directory to understand its structure.",
+   "consensus": "valid",
+   "unanimous": false,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Faithful orientation query; no specific-file leak; span, family, and cost consistent."
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Coherent orientation query; span is the file actually read (app/agent.py); steps=3=calls, tokens>0."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "fragmented-episode",
+      "query-not-faithful"
+     ],
+     "note": "The context message is a fragment. The query asks to list directory contents, but the expected span is a specific file."
+    }
+   }
+  },
+  {
+   "row_id": 153,
+   "family": "sdk-symbol",
+   "query": "I will read the project's README to see if there are any instructions or examples for using session state. (session_stat",
+   "consensus": "invalid",
+   "unanimous": true,
+   "agreed_issues": [
+    "span-wrong"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "span-wrong",
+      "query-not-faithful"
+     ],
+     "note": "Expected span is a local-variable usage line in agents-cli's adk_agent_builder_assistant.py, never read in the episode and not a definition of the hunted session-state API (agent read google.adk tool_"
+    },
+    "claude_B": {
+     "verdict": "invalid",
+     "issues": [
+      "span-wrong"
+     ],
+     "note": "Agent hunted session-state usage in google.adk SDK (tool_context.py, agents/context.py, llm_agent.py). Expected span is a local-variable assignment in cli/built_in_agents/adk_agent_builder_assistant.p"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "span-wrong"
+     ],
+     "note": "The agent is looking for instructions on using session state, but the expected span is a random local variable assignment in a CLI tool, not the SDK definition."
+    }
+   }
+  },
+  {
+   "row_id": 154,
+   "family": "sdk-symbol",
+   "query": "latest logs to investigate why the tool call for the \"Mechanical Keyboard\" failed or was skipped. (function_call)",
+   "consensus": "invalid",
+   "unanimous": true,
+   "agreed_issues": [
+    "family-wrong",
+    "span-wrong"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "span-wrong",
+      "family-wrong"
+     ],
+     "note": "'function_call' was a shell grep over a runtime log, not an SDK symbol hunt; expected span is an unrelated mock-FunctionCall usage in a2a/converters/to_adk_event.py that the agent never read."
+    },
+    "claude_B": {
+     "verdict": "invalid",
+     "issues": [
+      "span-wrong",
+      "family-wrong"
+     ],
+     "note": "Episode is log debugging; only SDK read was adk/utils/context_utils.py. Span a2a/converters/to_adk_event.py:301-305 is a local 'function_call =' assignment in a file never read; 'function_call' came f"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "fragmented-episode",
+      "family-wrong",
+      "span-wrong"
+     ],
+     "note": "The context message is a fragment. The agent is debugging logs for a specific run, not reverse-engineering an SDK symbol. The expected span is completely unrelated."
+    }
+   }
+  },
+  {
+   "row_id": 155,
+   "family": "project-file",
+   "query": "the files in the `agent-project` directory.",
+   "consensus": "flag",
+   "unanimous": false,
+   "agreed_issues": [
+    "fragmented-episode"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "flag",
+     "issues": [
+      "fragmented-episode"
+     ],
+     "note": "Mid-sentence context ('the files in the `agent-project` directory.'); query lacks a verb but the need is inferable; span and cost consistent."
+    },
+    "claude_B": {
+     "verdict": "flag",
+     "issues": [
+      "fragmented-episode"
+     ],
+     "note": "Context fragment ('the files in the `agent-project` directory.') lacks a verb but intent inferable. Span matches file read; steps=3=calls."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "fragmented-episode"
+     ],
+     "note": "The context message is a mid-sentence fragment."
+    }
+   }
+  },
+  {
+   "row_id": 156,
+   "family": "project-file",
+   "query": "I will read the `README.md` file in the `agent-project` directory.",
+   "consensus": "invalid",
+   "unanimous": true,
+   "agreed_issues": [
+    "query-leaks-answer",
+    "span-incomplete"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "query-leaks-answer",
+      "span-incomplete"
+     ],
+     "note": "Query names README.md exactly and README whole-file is the only span (full answer leak); episode also read GEMINI.md and tests/eval/evalsets/basic.evalset.json, which are missing from expected_spans."
+    },
+    "claude_B": {
+     "verdict": "invalid",
+     "issues": [
+      "span-incomplete",
+      "query-leaks-answer"
+     ],
+     "note": "Agent read README.md, GEMINI.md, and tests/eval/evalsets/basic.evalset.json, but ground truth captures only README.md \u2014 retrievers returning the other read files would be wrongly penalized. Query also"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "query-leaks-answer"
+     ],
+     "note": "The query explicitly names the file to read (`README.md`), leaking the answer."
+    }
+   }
+  },
+  {
+   "row_id": 157,
+   "family": "project-file",
+   "query": "py` to determine the best way to implement and import the tools for the order process.",
+   "consensus": "flag",
+   "unanimous": false,
+   "agreed_issues": [
+    "fragmented-episode"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "flag",
+     "issues": [
+      "fragmented-episode"
+     ],
+     "note": "Query begins mid-word ('py` to determine...'); the tools-for-order-process need is still conveyed and both read files are captured as spans."
+    },
+    "claude_B": {
+     "verdict": "flag",
+     "issues": [
+      "fragmented-episode"
+     ],
+     "note": "Context starts mid-word ('py` to determine...'). Spans (agent.py, pyproject.toml) match files read; steps=2=calls."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "fragmented-episode"
+     ],
+     "note": "The context message is a mid-sentence fragment."
+    }
+   }
+  },
+  {
+   "row_id": 158,
+   "family": "project-file",
+   "query": "I'll check the current test directory structure.",
+   "consensus": "invalid",
+   "unanimous": false,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "span-wrong"
+     ],
+     "note": "Query asks for the test directory structure, but the answer came from ls -R (not span-able); the sole span, pyproject.toml whole-file, does not contain what was sought and would reward wrong retrieval"
+    },
+    "claude_B": {
+     "verdict": "flag",
+     "issues": [
+      "other"
+     ],
+     "note": "Query asks about test directory structure but sole span is pyproject.toml (the ls -R output cannot be a span); pyproject only weakly answers the query via [tool.pytest.ini_options]. Usable but query/g"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "query-not-faithful"
+     ],
+     "note": "The query asks for the test directory structure, but the expected span is `pyproject.toml`."
+    }
+   }
+  },
+  {
+   "row_id": 159,
+   "family": "project-file",
+   "query": "created `agent-project` directory.",
+   "consensus": "flag",
+   "unanimous": false,
+   "agreed_issues": [
+    "fragmented-episode"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "flag",
+     "issues": [
+      "fragmented-episode"
+     ],
+     "note": "Mid-sentence fragment context/query ('created `agent-project` directory.'); otherwise consistent orientation row."
+    },
+    "claude_B": {
+     "verdict": "flag",
+     "issues": [
+      "fragmented-episode"
+     ],
+     "note": "Context fragment 'created `agent-project` directory.' reads as a statement, not a search need. Span matches file read (agent.py); steps=3=calls."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "fragmented-episode"
+     ],
+     "note": "The context message is a mid-sentence fragment."
+    }
+   }
+  },
+  {
+   "row_id": 160,
+   "family": "project-file",
+   "query": "tests` to see the current tests.",
+   "consensus": "flag",
+   "unanimous": false,
+   "agreed_issues": [
+    "fragmented-episode"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "flag",
+     "issues": [
+      "fragmented-episode"
+     ],
+     "note": "Query starts mid-word ('tests` to see the current tests.'); need is inferable and span (test_dummy.py) matches the read."
+    },
+    "claude_B": {
+     "verdict": "flag",
+     "issues": [
+      "fragmented-episode"
+     ],
+     "note": "Context starts mid-word ('tests` to see the current tests.'). Span matches file read (tests/unit/test_dummy.py); steps=3=calls."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "fragmented-episode"
+     ],
+     "note": "The context message is a mid-sentence fragment."
+    }
+   }
+  },
+  {
+   "row_id": 161,
+   "family": "project-file",
+   "query": "project` directory and examine the contents of `agent-project/app/agent.py` to prepare for the agent's implementation.",
+   "consensus": "flag",
+   "unanimous": false,
+   "agreed_issues": [
+    "fragmented-episode",
+    "query-leaks-answer"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "flag",
+     "issues": [
+      "fragmented-episode",
+      "query-leaks-answer"
+     ],
+     "note": "Mid-word fragment; also embeds exact path agent-project/app/agent.py, leaking span 1; pyproject.toml span unexpressed."
+    },
+    "claude_B": {
+     "verdict": "flag",
+     "issues": [
+      "query-leaks-answer",
+      "fragmented-episode"
+     ],
+     "note": "Query embeds exact path of span 1 (agent-project/app/agent.py) and starts mid-word ('project` directory...'). Spans match files cat'd; steps=2=calls."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "fragmented-episode",
+      "query-leaks-answer"
+     ],
+     "note": "The context message is a fragment and explicitly names the file to read, leaking the answer."
+    }
+   }
+  },
+  {
+   "row_id": 162,
+   "family": "project-file",
+   "query": "in the newly created agent project to understand its structure.",
+   "consensus": "flag",
+   "unanimous": false,
+   "agreed_issues": [
+    "fragmented-episode"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "flag",
+     "issues": [
+      "fragmented-episode"
+     ],
+     "note": "Verb-less fragment ('in the newly created agent project to understand its structure.'); intent inferable; spans and cost consistent."
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Coherent intent despite truncated lead-in; spans match both files read; steps=4=calls (2 list + 2 read)."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "fragmented-episode"
+     ],
+     "note": "The context message is a mid-sentence fragment."
+    }
+   }
+  },
+  {
+   "row_id": 163,
+   "family": "project-file",
+   "query": ".py` to see how the agent is being invoked.",
+   "consensus": "flag",
+   "unanimous": false,
+   "agreed_issues": [
+    "fragmented-episode",
+    "span-incomplete"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "flag",
+     "issues": [
+      "fragmented-episode",
+      "span-incomplete"
+     ],
+     "note": "Query starts with truncated token '.py`'; the first call read app/agent_engine_app.py which is absent from spans (possibly a failed read; scaffold uses agent_runtime_app.py). Tail of query ('how the a"
+    },
+    "claude_B": {
+     "verdict": "flag",
+     "issues": [
+      "fragmented-episode",
+      "span-incomplete"
+     ],
+     "note": "Query is a mangled tail ('.py` to see how the agent is being invoked') referring to the first read, app/agent_engine_app.py, which is absent from ground truth. README shows the scaffold ships agent_ru"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "fragmented-episode"
+     ],
+     "note": "The context message is a mid-sentence fragment."
+    }
+   }
+  },
+  {
+   "row_id": 164,
+   "family": "project-file",
+   "query": "now explore the directory structure of the newly scaffolded project.",
+   "consensus": "valid",
+   "unanimous": false,
+   "agreed_issues": [],
+   "votes": {
+    "claude_A": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Coherent, faithful orientation query with no file-path leak; both read files captured; steps match calls."
+    },
+    "claude_B": {
+     "verdict": "valid",
+     "issues": [],
+     "note": "Coherent orientation query with no path leak; spans match both files read; steps=3=calls, tokens>0."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "fragmented-episode"
+     ],
+     "note": "The context message is a mid-sentence fragment."
+    }
+   }
+  },
+  {
+   "row_id": 165,
+   "family": "project-file",
+   "query": "I'll now examine the contents of `agent-project/tests/conftest.py` and `agent-project/tests/test_agent.py` to understand",
+   "consensus": "invalid",
+   "unanimous": false,
+   "agreed_issues": [
+    "span-wrong"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "span-wrong"
+     ],
+     "note": "Query names tests/conftest.py and tests/test_agent.py but ground truth is tests/unit/test_dummy.py; a retriever faithful to the query (tests/integration/test_agent.py exists) would be scored wrong."
+    },
+    "claude_B": {
+     "verdict": "flag",
+     "issues": [
+      "other"
+     ],
+     "note": "Query names conftest.py and test_agent.py, which don't exist; ground truth is tests/unit/test_dummy.py, the file actually read. Span does serve the stated intent (testing practices), but a retriever f"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "span-wrong",
+      "query-leaks-answer"
+     ],
+     "note": "Query explicitly asks for conftest.py and test_agent.py, but the expected span is test_dummy.py."
+    }
+   }
+  },
+  {
+   "row_id": 166,
+   "family": "project-file",
+   "query": "I'll now examine the latest log file at `/tmp/agents_log/agent.latest.log` to confirm that the `check_notification_statu",
+   "consensus": "invalid",
+   "unanimous": true,
+   "agreed_issues": [
+    "span-wrong",
+    "verification-read"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "span-wrong",
+      "verification-read"
+     ],
+     "note": "Need is the /tmp/agents_log log file to confirm a tool call; ground truth app/agent.py does not contain that answer (no check_notification_status in evidence). Confirmation workload, not a search."
+    },
+    "claude_B": {
+     "verdict": "invalid",
+     "issues": [
+      "span-wrong",
+      "verification-read"
+     ],
+     "note": "Information need is the agent log confirming check_notification_status was called; expected span app/agent.py is a generic weather/time scaffold containing no such tool, so the span does not contain t"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "span-wrong"
+     ],
+     "note": "Query is about examining a log file, but the expected span is app/agent.py."
+    }
+   }
+  },
+  {
+   "row_id": 167,
+   "family": "project-file",
+   "query": "it provides any information on the `Agent` class and its available methods.",
+   "consensus": "flag",
+   "unanimous": false,
+   "agreed_issues": [
+    "fragmented-episode",
+    "query-not-faithful"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "flag",
+     "issues": [
+      "fragmented-episode",
+      "query-not-faithful"
+     ],
+     "note": "Mid-sentence fragment with dangling referent ('it provides any information on the Agent class'); still loosely searchable and spans relate to Agent usage, but not a self-contained query."
+    },
+    "claude_B": {
+     "verdict": "flag",
+     "issues": [
+      "fragmented-episode"
+     ],
+     "note": "Context is a mid-sentence fragment ('...it provides any information on the Agent class...'). With the implied antecedent (checking the README), the two whole-file spans match the files read, though th"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "fragmented-episode",
+      "query-not-faithful"
+     ],
+     "note": "Query is a mid-sentence fragment (' it provides...')."
+    }
+   }
+  },
+  {
+   "row_id": 168,
+   "family": "project-file",
+   "query": ".",
+   "consensus": "invalid",
+   "unanimous": true,
+   "agreed_issues": [
+    "query-vacuous"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "query-vacuous"
+     ],
+     "note": "Query is literally '.' \u2014 expresses no information need."
+    },
+    "claude_B": {
+     "verdict": "invalid",
+     "issues": [
+      "query-vacuous"
+     ],
+     "note": "Query is '.', a vacuous fragment; no retriever can act on it even though spans match the files read."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "query-vacuous"
+     ],
+     "note": "Query is just a period."
+    }
+   }
+  },
+  {
+   "row_id": 169,
+   "family": "project-file",
+   "query": "I will re-examine the `agent-project/app/agent.py` file to ensure its imports and structure are correct.",
+   "consensus": "invalid",
+   "unanimous": true,
+   "agreed_issues": [
+    "query-leaks-answer",
+    "verification-read"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "query-leaks-answer",
+      "verification-read"
+     ],
+     "note": "Query embeds the exact file path whose entire file is the expected span ('re-examine app/agent.py'), and it is a self-verification re-read ('ensure its imports and structure are correct')."
+    },
+    "claude_B": {
+     "verdict": "invalid",
+     "issues": [
+      "query-leaks-answer",
+      "verification-read"
+     ],
+     "note": "Query embeds the exact file path (app/agent.py) whose whole-file span is the ground truth, making retrieval trivial; 're-examine ... ensure imports and structure are correct' is a self-verification re"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "query-leaks-answer"
+     ],
+     "note": "Query explicitly names the exact file path to be examined."
+    }
+   }
+  },
+  {
+   "row_id": 170,
+   "family": "project-file",
+   "query": "project`.",
+   "consensus": "invalid",
+   "unanimous": true,
+   "agreed_issues": [
+    "fragmented-episode",
+    "query-vacuous"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "query-vacuous",
+      "fragmented-episode"
+     ],
+     "note": "Query is the truncated fragment 'project`.' \u2014 no information need expressed."
+    },
+    "claude_B": {
+     "verdict": "invalid",
+     "issues": [
+      "query-vacuous",
+      "fragmented-episode"
+     ],
+     "note": "Query 'project`.' is a vacuous mid-sentence fragment."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "query-vacuous",
+      "fragmented-episode"
+     ],
+     "note": "Query is a meaningless fragment ('project`.')."
+    }
+   }
+  },
+  {
+   "row_id": 171,
+   "family": "project-file",
+   "query": "agent.",
+   "consensus": "invalid",
+   "unanimous": true,
+   "agreed_issues": [
+    "fragmented-episode",
+    "query-vacuous"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "query-vacuous",
+      "fragmented-episode"
+     ],
+     "note": "Query is the truncated fragment 'agent.' \u2014 no information need expressed."
+    },
+    "claude_B": {
+     "verdict": "invalid",
+     "issues": [
+      "query-vacuous",
+      "fragmented-episode"
+     ],
+     "note": "Query 'agent.' is a vacuous mid-sentence fragment."
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "query-vacuous",
+      "fragmented-episode"
+     ],
+     "note": "Query is a meaningless fragment (' agent.')."
+    }
+   }
+  },
+  {
+   "row_id": 172,
+   "family": "project-file",
+   "query": "will examine the directory structure of the created project.",
+   "consensus": "invalid",
+   "unanimous": true,
+   "agreed_issues": [
+    "fragmented-episode",
+    "span-wrong"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "span-wrong",
+      "fragmented-episode"
+     ],
+     "note": "Stated need is 'directory structure of the created project' (answered by list_directory), but ground truth is the full contents of app/agent.py; mismatch would mislead scoring."
+    },
+    "claude_B": {
+     "verdict": "invalid",
+     "issues": [
+      "span-wrong",
+      "fragmented-episode"
+     ],
+     "note": "Query asks about directory structure (answered by list_directory output), but ground truth is the full content of app/agent.py, which contains no directory-structure information; mismatch would penali"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "fragmented-episode",
+      "span-wrong"
+     ],
+     "note": "Query is a fragment about examining directory structure, but the expected span is a specific python file."
+    }
+   }
+  },
+  {
+   "row_id": 173,
+   "family": "project-file",
+   "query": "API to understand how to check order status.",
+   "consensus": "invalid",
+   "unanimous": true,
+   "agreed_issues": [
+    "fragmented-episode",
+    "span-incomplete",
+    "span-wrong"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "invalid",
+     "issues": [
+      "span-wrong",
+      "span-incomplete",
+      "fragmented-episode"
+     ],
+     "note": "Fragment about checking order status via an API; the files that answer it (order_openapi.json et al.) are read in the episode but absent from expected_spans, which contain only the irrelevant app/agen"
+    },
+    "claude_B": {
+     "verdict": "invalid",
+     "issues": [
+      "span-wrong",
+      "span-incomplete",
+      "fragmented-episode"
+     ],
+     "note": "Query is about how to check order status; the answer lives in order_openapi.json (read in the episode) but expected spans contain only the generic app/agent.py, which has nothing about orders. The fou"
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "fragmented-episode",
+      "span-wrong"
+     ],
+     "note": "Query is a fragment about checking order status API, but the expected span is a generic agent file instead of the OpenAPI specs read."
+    }
+   }
+  },
+  {
+   "row_id": 174,
+   "family": "project-file",
+   "query": "to see if it needs any updates to correctly export the `root_agent`.",
+   "consensus": "flag",
+   "unanimous": false,
+   "agreed_issues": [
+    "fragmented-episode",
+    "span-incomplete"
+   ],
+   "votes": {
+    "claude_A": {
+     "verdict": "flag",
+     "issues": [
+      "fragmented-episode",
+      "span-incomplete"
+     ],
+     "note": "Fragment with dangling 'it', but 'correctly export the root_agent' is searchable and app/__init__.py is the right target; second read (app/agent_engine_app.py) is not captured in expected_spans."
+    },
+    "claude_B": {
+     "verdict": "flag",
+     "issues": [
+      "span-incomplete",
+      "fragmented-episode"
+     ],
+     "note": "app/__init__.py does contain the root_agent/app export answer, but app/agent_engine_app.py was also read for the same question and is absent from expected spans; context fragment lacks the antecedent "
+    },
+    "gemini-3.1-pro": {
+     "verdict": "invalid",
+     "issues": [
+      "fragmented-episode",
+      "query-not-faithful"
+     ],
+     "note": "Query is a mid-sentence fragment (' to see if it needs...') lacking context on what 'it' is."
+    }
+   }
+  }
+ ]
+}
