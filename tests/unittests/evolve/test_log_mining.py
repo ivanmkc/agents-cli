@@ -230,3 +230,74 @@ def test_shell_read_of_own_write_is_verification():
         + _ev("Bash", {"command": "cat app/agent.py"}, 2.0)
     )
     assert segment_episodes(events, min_steps=1) == []
+
+
+def _failing_ev(tool, tool_input, ts):
+    """Tool call whose result carries an error signature."""
+    pair = _ev(tool, tool_input, ts)
+    pair[1]["tool_output"] = (
+        "Traceback (most recent call last):\n  ...\nConnectionError: port 18085 refused"
+    )
+    return pair
+
+
+def test_episode_after_failing_result_is_failure_triggered():
+    events = (
+        _failing_ev("Bash", {"command": "agents-cli run 'hi'"}, 1.0)
+        + _ev("Grep", {"pattern": "port"}, 2.0)
+        + _ev("Read", {"file_path": "src/_local_server.py"}, 3.0)
+    )
+    eps = segment_episodes(events, min_steps=2)
+    assert len(eps) == 1
+    assert eps[0]["motivation"] == "failure-triggered"
+
+
+def test_mid_stream_episode_ending_in_write_is_pre_write_verification():
+    # Deep in the stream (past the orientation window), search -> write
+    # is API/pre-write verification.
+    prefix = []
+    for i in range(6):
+        prefix += _ev("Write", {"file_path": f"app/f{i}.py", "content": "x"},
+                      float(i + 1))
+    events = (
+        prefix
+        + _ev("Read", {"file_path": "app/other.py"}, 10.0)
+        + _ev("Grep", {"pattern": "root_agent"}, 11.0)
+        + _ev("Write", {"file_path": "app/new.py", "content": "x"}, 12.0)
+    )
+    eps = segment_episodes(events, min_steps=2)
+    assert len(eps) == 1
+    assert eps[0]["motivation"] == "pre-write-verification"
+
+
+def test_early_stream_episode_is_orientation_even_before_a_write():
+    # The first searches after scaffolding are orientation sweeps, even
+    # though the agent writes right afterwards.
+    events = (
+        _ev("Read", {"file_path": "README.md"}, 1.0)
+        + _ev("Glob", {"pattern": "**/*.py"}, 2.0)
+        + _ev("Write", {"file_path": "app/agent.py", "content": "x"}, 3.0)
+    )
+    eps = segment_episodes(events, min_steps=2)
+    assert eps[0]["motivation"] == "orientation"
+
+
+def test_unprompted_search_at_stream_end_is_orientation():
+    events = (
+        _ev("Read", {"file_path": "README.md"}, 1.0)
+        + _ev("Grep", {"pattern": "install"}, 2.0)
+    )
+    eps = segment_episodes(events, min_steps=2)
+    assert len(eps) == 1
+    assert eps[0]["motivation"] == "orientation"
+
+
+def test_failure_trigger_outranks_pre_write_ending():
+    events = (
+        _failing_ev("Bash", {"command": "uv run pytest"}, 1.0)
+        + _ev("Read", {"file_path": "tests/conftest.py"}, 2.0)
+        + _ev("Grep", {"pattern": "fixture"}, 3.0)
+        + _ev("Edit", {"file_path": "tests/conftest.py"}, 4.0)
+    )
+    eps = segment_episodes(events, min_steps=2)
+    assert eps[0]["motivation"] == "failure-triggered"

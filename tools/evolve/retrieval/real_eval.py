@@ -32,18 +32,26 @@ from pathlib import Path
 try:
     from evolve.retrieval.schema import (
         FAMILY_DEPENDENCY_SYMBOL,
+        FAMILY_TOOL_INTERNALS,
         FAMILY_WORKSPACE_FILE,
     )
 except ImportError:  # invoked standalone (python -m from tools/)
-    from .schema import FAMILY_DEPENDENCY_SYMBOL, FAMILY_WORKSPACE_FILE
+    from .schema import (
+        FAMILY_DEPENDENCY_SYMBOL,
+        FAMILY_TOOL_INTERNALS,
+        FAMILY_WORKSPACE_FILE,
+    )
 
 # Corpus names this ADK-specific miner emits; the schema itself is
 # framework-agnostic — other miners declare their own corpora.
 SDK_CORPUS_NAME = "adk-sdk"
 PROJECT_CORPUS_NAME = "agent-project"
+TOOL_SRC_CORPUS_NAME = "agents-cli-src"
 
 # Substrings of a call argument that mark it as an SDK lookup.
 _SDK_PATH_MARKERS = ("site-packages/google/adk", "site-packages\\google\\adk")
+# The CLI tool's own installed source — debugging the tool, not the SDK.
+_CLI_SRC_MARKERS = ("google/agents/cli", "google\\agents\\cli")
 
 # Words that look like identifiers but never name an SDK symbol.
 _STOPWORDS = {
@@ -192,27 +200,69 @@ def build_cases(
     episodes: list[dict],
     sdk_root: Path | str | None,
     project_root: Path | str | None,
+    cli_src_root: Path | str | None = None,
 ) -> list[dict]:
     """Replayable benchmark cases from mined episodes.
 
-    An episode that touched ``site-packages/google/adk`` becomes an
-    ``sdk-symbol`` case (if any hunted symbol AST-locates in
-    ``sdk_root``); otherwise its project-file reads become one
-    ``project-file`` case (if any read file exists in
-    ``project_root``). Unreplayable episodes are dropped.
+    Routing, checked in order per episode:
+
+    * touched the CLI tool's own installed source (``google/agents/cli``)
+      -> ``tool-internals`` (symbols AST-located in ``cli_src_root``);
+    * touched ``site-packages`` (the installed SDK)
+      -> ``dependency-symbol`` (symbols located in ``sdk_root``);
+    * otherwise its project-file reads -> one ``workspace-file`` case.
+
+    Unreplayable episodes (symbols/files not locatable in the given
+    corpus, or no root supplied for their corpus) are dropped. Each case
+    carries the episode's miner-derived ``motivation`` when present.
     """
     sdk_root = Path(sdk_root) if sdk_root else None
     project_root = Path(project_root) if project_root else None
+    cli_src_root = Path(cli_src_root) if cli_src_root else None
     sdk_span_cache: dict[str, dict | None] = {}
+    cli_span_cache: dict[str, dict | None] = {}
     cases: list[dict] = []
+
+    def _with_motivation(case: dict, episode: dict) -> dict:
+        motivation = episode.get("motivation")
+        if motivation:
+            case["motivation"] = motivation
+        return case
 
     for episode in episodes:
         calls = episode.get("calls") or []
-        is_sdk = any(
+        is_cli_src = any(
+            any(m in arg for m in _CLI_SRC_MARKERS) for _, arg in calls
+        )
+        is_sdk = not is_cli_src and any(
             any(m in arg for m in _SDK_PATH_MARKERS)
             or "site-packages" in arg
             for _, arg in calls
         )
+        if is_cli_src:
+            if cli_src_root is None:
+                continue  # no corpus for tool internals -> unreplayable
+            spans = []
+            located_symbols = []
+            for symbol in extract_symbols(episode):
+                if symbol not in cli_span_cache:
+                    cli_span_cache[symbol] = locate_definition(
+                        cli_src_root, symbol
+                    )
+                span = cli_span_cache[symbol]
+                if span:
+                    spans.append(span)
+                    located_symbols.append(symbol)
+            if spans:
+                cases.append(_with_motivation({
+                    "family": FAMILY_TOOL_INTERNALS,
+                    "corpus": TOOL_SRC_CORPUS_NAME,
+                    "query": _query(episode, located_symbols),
+                    "symbols": located_symbols,
+                    "expected_spans": spans,
+                    "observed": _observed(episode),
+                }, episode))
+            continue
         if is_sdk and sdk_root is not None:
             spans = []
             located_symbols = []
@@ -224,14 +274,14 @@ def build_cases(
                     spans.append(span)
                     located_symbols.append(symbol)
             if spans:
-                cases.append({
+                cases.append(_with_motivation({
                     "family": FAMILY_DEPENDENCY_SYMBOL,
                     "corpus": SDK_CORPUS_NAME,
                     "query": _query(episode, located_symbols),
                     "symbols": located_symbols,
                     "expected_spans": spans,
                     "observed": _observed(episode),
-                })
+                }, episode))
             continue
 
         if project_root is not None:
@@ -245,13 +295,13 @@ def build_cases(
                     if span:
                         spans.append(span)
             if spans:
-                cases.append({
+                cases.append(_with_motivation({
                     "family": FAMILY_WORKSPACE_FILE,
                     "corpus": PROJECT_CORPUS_NAME,
                     "query": _query(episode, []),
                     "expected_spans": spans,
                     "observed": _observed(episode),
-                })
+                }, episode))
     return cases
 
 
@@ -265,6 +315,7 @@ def main() -> None:
                         help="JSONL of mined episodes (from log_mining)")
     parser.add_argument("--sdk-root", type=Path, default=None)
     parser.add_argument("--project-root", type=Path, default=None)
+    parser.add_argument("--cli-src-root", type=Path, default=None)
     parser.add_argument("--out", type=Path, required=True)
     args = parser.parse_args()
 
@@ -273,7 +324,8 @@ def main() -> None:
         for line in args.episodes.read_text().splitlines()
         if line.strip()
     ]
-    cases = build_cases(episodes, args.sdk_root, args.project_root)
+    cases = build_cases(episodes, args.sdk_root, args.project_root,
+                        cli_src_root=args.cli_src_root)
     manifest = {
         "source_episodes": len(episodes),
         "tasks": cases,

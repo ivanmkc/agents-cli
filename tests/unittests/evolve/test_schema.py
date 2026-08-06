@@ -126,3 +126,17 @@ def test_corpus_decl_role_is_enum_not_string():
          "pin": {"kind": "command", "command": "make corpus", "tool_version": ""}}
     )
     assert decl.role is CorpusRole.WORKSPACE
+
+
+def test_task_motivation_roundtrips():
+    data = _manifest_dict()
+    data["tasks"][0]["motivation"] = "failure-triggered"
+    manifest = RealEvalManifest.from_dict(data)
+    assert manifest.tasks[0].motivation == "failure-triggered"
+    assert json.loads(manifest.to_json())["tasks"][0]["motivation"] == "failure-triggered"
+
+
+def test_task_motivation_optional():
+    manifest = RealEvalManifest.from_dict(_manifest_dict())
+    assert manifest.tasks[0].motivation is None
+    assert "motivation" not in json.loads(manifest.to_json())["tasks"][0]

@@ -155,3 +155,52 @@ def test_build_cases_skips_unreplayable(sdk_corpus):
     )
     cases = build_cases([probe, ghost], sdk_root=sdk_corpus, project_root=None)
     assert cases == []
+
+
+def test_build_cases_tool_internals(tmp_path):
+    # Agent grepping the CLI tool's OWN installed source (not the ADK) —
+    # e.g. debugging port selection in google/agents/cli/run/.
+    cli = tmp_path / "cli_src"
+    (cli / "run").mkdir(parents=True)
+    (cli / "run" / "_local_server.py").write_text(
+        "LOCAL_SERVER_PORT = 18080\n"
+        "\n"
+        "\n"
+        "def pick_port():\n"
+        "    return LOCAL_SERVER_PORT\n"
+    )
+    ep = _episode(
+        [
+            ("Bash",
+             'grep -rn "LOCAL_SERVER_PORT" /x/site-packages/google/agents/cli/run/'),
+            ("Bash",
+             'grep -n "port" /x/site-packages/google/agents/cli/run/_local_server.py'),
+        ],
+        context="Where does the CLI pick its dev-server port?",
+    )
+    cases = build_cases([ep], sdk_root=None, project_root=None, cli_src_root=cli)
+    assert len(cases) == 1
+    case = cases[0]
+    assert case["family"] == "tool-internals"
+    assert case["corpus"] == "agents-cli-src"
+    assert case["expected_spans"][0]["file"] == "run/_local_server.py"
+
+
+def test_cli_paths_not_misrouted_to_sdk_family(sdk_corpus, tmp_path):
+    # Without a cli_src_root the episode must NOT become a dependency-symbol
+    # row against the ADK corpus (the LlmAgent-in-adk trap) — it is dropped.
+    ep = _episode(
+        [("Bash", 'grep -rn "LOCAL_SERVER_PORT" /x/site-packages/google/agents/cli/run/')],
+    )
+    assert build_cases([ep], sdk_root=sdk_corpus, project_root=None) == []
+
+
+def test_cases_carry_motivation(sdk_corpus):
+    ep = _episode(
+        [("run_shell_command",
+          'grep -n "class LlmAgent" .venv/lib/site-packages/google/adk/agents/llm_agent.py')],
+        context="Find how LlmAgent is constructed",
+        motivation="failure-triggered",
+    )
+    cases = build_cases([ep], sdk_root=sdk_corpus, project_root=None)
+    assert cases[0]["motivation"] == "failure-triggered"

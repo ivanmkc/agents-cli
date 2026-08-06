@@ -166,6 +166,26 @@ comparison must mine BOTH runs fresh with the fixed miner.
 Still pending (optional): rebuild eval set from v2 episodes + re-validate
 (validator inputs/scripts preserved under `validation/`).
 
+### TODO 2c: ~~Deep-dive findings implemented~~ DONE (2026-08-06)
+
+From the v3 single-row deep dive (agent grepping agents-cli's own source
+to debug port selection — mislabeled "SDK hunt", stale query, invisible
+to the eval set):
+- **Motivation tagging** (miner, structural): every episode now carries
+  `motivation` — `failure-triggered` (preceding tool result matches a
+  failure signature), `pre-write-verification` (mid-stream search ending
+  in a write), `orientation` (early-stream sweep, first 5 tool calls, or
+  unterminated). Derived from events, never narration.
+- **`tool-internals` family** + `agents-cli-src` corpus: real_eval now
+  routes `google/agents/cli` hunts to the CLI-source corpus (checked
+  BEFORE the site-packages SDK rule), with the corpus snapshotted at
+  google-agents-cli==1.3.1 in `real_data/corpus/` (260 files).
+- Schema: optional `motivation` field on tasks; `FAMILY_TOOL_INTERNALS`.
+- Verified on real data: v3 partial mines 378 episodes
+  (107 orientation / 188 pre-write / 83 failure-triggered), builds 224
+  cases incl. real tool-internals rows (e.g. `popen_resolved_detached`
+  -> `_runner.py:234-271`). Baseline: 209 eps (69/101/39).
+
 ### TODO 3: Mine new transcripts and compare retrieval behavior
 
 Once the v1.3.1 run completes:

@@ -67,6 +67,23 @@ _READONLY_PATTERNS = [
     re.compile(r"^man\s"),
 ]
 
+# Structural failure signatures in a tool result. Motivation is derived
+# from what actually happened around the search (the preceding result,
+# the ending action), NOT from the agent's narration — validation showed
+# agents go silent exactly when debugging (stale/empty messages).
+_FAILURE_SIGNATURE = re.compile(
+    r"traceback|exception|error|failed|failure|command not found"
+    r"|no such file|exit code [1-9]|refused|denied|timeout",
+    re.IGNORECASE,
+)
+MOTIVATION_FAILURE = "failure-triggered"
+MOTIVATION_PRE_WRITE = "pre-write-verification"
+MOTIVATION_ORIENTATION = "orientation"
+# Episodes starting within the first N non-neutral tool calls of a
+# stream are orientation sweeps (the post-scaffold "explore the project
+# structure" phase), regardless of what follows them.
+_ORIENTATION_WINDOW = 5
+
 
 def _ts(value) -> float:
     """Timestamp as epoch seconds; handles floats and ISO-8601 strings."""
@@ -212,15 +229,22 @@ def segment_episodes(events: list[dict], min_steps: int = 1) -> list[dict]:
     last_message = ""
     pending_chunks: list[str] = []
     written: set[str] = set()
+    last_result_failed = False
+    tool_call_index = 0
 
     # Pair tool_results back onto their tool_use by call id.
     outputs: dict[str, int] = {}
     result_ts: dict[str, float] = {}
+    result_failed: dict[str, bool] = {}
     for ev in events:
         if ev.get("type") == "tool_result":
             cid = ev.get("tool_call_id")
             if cid:
-                outputs[cid] = _size(ev.get("tool_output"))
+                output = ev.get("tool_output")
+                outputs[cid] = _size(output)
+                result_failed[cid] = bool(
+                    _FAILURE_SIGNATURE.search(str(output or "")[:4000])
+                )
                 ts = _ts(ev.get("timestamp"))
                 if ts:
                     result_ts[cid] = ts
@@ -229,6 +253,13 @@ def segment_episodes(events: list[dict], min_steps: int = 1) -> list[dict]:
         nonlocal current
         if current and current["steps"] >= min_steps:
             current["ended_by"] = ended_by
+            if current.pop("_failure_triggered"):
+                current["motivation"] = MOTIVATION_FAILURE
+            elif (current.pop("_start_index") >= _ORIENTATION_WINDOW
+                  and ended_by is not None):
+                current["motivation"] = MOTIVATION_PRE_WRITE
+            else:
+                current["motivation"] = MOTIVATION_ORIENTATION
             current["tokens"] = max(1, current.pop("_chars") // 4)
             current["wall_seconds"] = round(
                 max(0.0, current.pop("_t_last") - current.pop("_t_first")), 3
@@ -254,8 +285,12 @@ def segment_episodes(events: list[dict], min_steps: int = 1) -> list[dict]:
             last_message = "".join(pending_chunks)
             pending_chunks.clear()
         if kind == "action":
+            tool_call_index += 1
             written.update(_input_paths(tool_input))
             close(ended_by=tool)
+            last_result_failed = result_failed.get(
+                str(ev.get("tool_call_id") or ""), False
+            )
             continue
         # retrieval
         if _is_verification_read(tool, tool_input, written):
@@ -272,7 +307,11 @@ def segment_episodes(events: list[dict], min_steps: int = 1) -> list[dict]:
                 "_chars": 0,
                 "_t_first": ts,
                 "_t_last": end_ts,
+                "_failure_triggered": last_result_failed,
+                "_start_index": tool_call_index,
             }
+        last_result_failed = result_failed.get(cid, False)
+        tool_call_index += 1
         current["calls"].append((tool, _input_summary(tool, tool_input)))
         current["steps"] += 1
         current["_chars"] += _size(tool_input) + out_chars

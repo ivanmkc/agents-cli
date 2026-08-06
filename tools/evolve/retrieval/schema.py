@@ -31,6 +31,7 @@ SCHEMA_VERSION = 1
 # vocabulary is open — non-ADK eval sets may introduce their own.
 FAMILY_DEPENDENCY_SYMBOL = "dependency-symbol"
 FAMILY_WORKSPACE_FILE = "workspace-file"
+FAMILY_TOOL_INTERNALS = "tool-internals"
 
 
 class SchemaError(ValueError):
@@ -178,6 +179,9 @@ class EvalTask:
     pins: dict[str, str]  # expected-span file -> sha256 of its exact bytes
     observed: Observed
     validation: RowValidation | None = None
+    # Why the agent searched (structural, miner-derived): failure-triggered,
+    # pre-write-verification, or orientation. Optional analytics metadata.
+    motivation: str | None = None
 
     @classmethod
     def from_dict(cls, data: dict) -> EvalTask:
@@ -191,6 +195,7 @@ class EvalTask:
             pins=dict(data.get("pins", {}).get("files", {})),
             observed=Observed(**data["observed"]),
             validation=RowValidation.from_dict(validation) if validation else None,
+            motivation=data.get("motivation"),
         )
 
     def to_dict(self) -> dict:
@@ -205,6 +210,8 @@ class EvalTask:
         }
         if self.validation is not None:
             out["validation"] = self.validation.to_dict()
+        if self.motivation is not None:
+            out["motivation"] = self.motivation
         return out
 
     def to_evaluator_dict(self) -> dict:
