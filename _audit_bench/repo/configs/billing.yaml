@@ -1,6 +1,0 @@
-# Runtime configuration for the billing package
-billing:
-  billing_retry_limit: 204
-  billing_timeout_seconds: 23
-  billing_max_connections: 116
-  billing_cache_ttl: 124

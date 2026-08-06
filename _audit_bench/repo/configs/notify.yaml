@@ -1,6 +1,0 @@
-# Runtime configuration for the notify package
-notify:
-  notify_retry_limit: 181
-  notify_timeout_seconds: 116
-  notify_max_connections: 84
-  notify_cache_ttl: 216
