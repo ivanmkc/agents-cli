@@ -1,0 +1,129 @@
+{
+  "num_cases": 175,
+  "observed_agent": {
+    "overall": {
+      "num_cases": 175,
+      "steps_median": 3,
+      "steps_mean": 3.4,
+      "tokens_median": 878,
+      "tokens_mean": 1519.829,
+      "wall_seconds_median": 3.789,
+      "wall_seconds_mean": 4.675,
+      "wall_seconds_n": 96
+    },
+    "by_family": {
+      "project-file": {
+        "num_cases": 164,
+        "steps_median": 3.0,
+        "steps_mean": 3.256,
+        "tokens_median": 878.0,
+        "tokens_mean": 1045.506,
+        "wall_seconds_median": 3.837,
+        "wall_seconds_mean": 4.74,
+        "wall_seconds_n": 94
+      },
+      "sdk-symbol": {
+        "num_cases": 11,
+        "steps_median": 3,
+        "steps_mean": 5.545,
+        "tokens_median": 1604,
+        "tokens_mean": 8591.545,
+        "wall_seconds_median": 1.626,
+        "wall_seconds_mean": 1.626,
+        "wall_seconds_n": 2
+      }
+    }
+  },
+  "tools": {
+    "default_grep": {
+      "overall": {
+        "num_cases": 175,
+        "failures": 0,
+        "recall": 0.7158,
+        "precision": 0.1216,
+        "mrr": 0.2213,
+        "steps_median": 1,
+        "tokens_median": 4676,
+        "tokens_mean": 9815.6,
+        "wall_seconds_median": 0.03,
+        "wall_seconds_mean": 0.033
+      },
+      "by_family": {
+        "project-file": {
+          "num_cases": 164,
+          "failures": 0,
+          "recall": 0.7272,
+          "precision": 0.1291,
+          "mrr": 0.225,
+          "steps_median": 1,
+          "tokens_median": 4676.0,
+          "tokens_mean": 4307.238,
+          "wall_seconds_median": 0.03,
+          "wall_seconds_mean": 0.031
+        },
+        "sdk-symbol": {
+          "num_cases": 11,
+          "failures": 0,
+          "recall": 0.5455,
+          "precision": 0.0099,
+          "mrr": 0.1662,
+          "steps_median": 1,
+          "tokens_median": 96872,
+          "tokens_mean": 91940.273,
+          "wall_seconds_median": 0.072,
+          "wall_seconds_mean": 0.073
+        }
+      },
+      "vs_observed": {
+        "steps_reduction_pct": 66.7,
+        "tokens_reduction_pct": -432.6,
+        "wall_seconds_reduction_pct": 99.2
+      }
+    },
+    "search_tool": {
+      "overall": {
+        "num_cases": 175,
+        "failures": 0,
+        "recall": 0.0261,
+        "precision": 0.0595,
+        "mrr": 0.0229,
+        "steps_median": 1,
+        "tokens_median": 29,
+        "tokens_mean": 69.669,
+        "wall_seconds_median": 0.037,
+        "wall_seconds_mean": 0.049
+      },
+      "by_family": {
+        "project-file": {
+          "num_cases": 164,
+          "failures": 0,
+          "recall": 0.0035,
+          "precision": 0.0463,
+          "mrr": 0.0,
+          "steps_median": 1,
+          "tokens_median": 29.0,
+          "tokens_mean": 60.256,
+          "wall_seconds_median": 0.037,
+          "wall_seconds_mean": 0.038
+        },
+        "sdk-symbol": {
+          "num_cases": 11,
+          "failures": 0,
+          "recall": 0.3636,
+          "precision": 0.2568,
+          "mrr": 0.3636,
+          "steps_median": 1,
+          "tokens_median": 101,
+          "tokens_mean": 210,
+          "wall_seconds_median": 0.178,
+          "wall_seconds_mean": 0.216
+        }
+      },
+      "vs_observed": {
+        "steps_reduction_pct": 66.7,
+        "tokens_reduction_pct": 96.7,
+        "wall_seconds_reduction_pct": 99.0
+      }
+    }
+  }
+}

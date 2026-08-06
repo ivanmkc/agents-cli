@@ -26,6 +26,10 @@ the tool inherits the win. No end-user compute required.
 | `retrieval/alpha_evolve_adapter.py` | **Official-contract adapter.** `retrieval_evaluation(program_candidate)` implements the AlphaEvolve client library's evaluation contract ([codelab examples](https://github.com/Google-Cloud-AI/alphaevolve-on-googlecloud)): candidate code in `content.files[0].content`, an `AlphaEvolveProgramEvaluation`-shaped payload back, all metrics maximization-friendly, and **insights** (runtime failures, token bloat, weakest task kind, ranking quality) that steer the next round of mutations. |
 | `retrieval/run_evolution.py` | **The experiment runner.** Mirrors the official codelab wiring: `AlphaEvolveClient` → `AlphaEvolveExperiment` → seed program → `run_controller_loop`. Needs the `alpha_evolve` client library + a Gemini Enterprise app with AlphaEvolve access. |
 | `retrieval/config.yaml` | Alternative run configuration for the open-source OpenEvolve runner (no Gemini Enterprise access required). |
+| `retrieval/log_mining.py` | **Real-workload miner.** Extracts *retrieval episodes* (maximal runs of read/grep/glob/read-only-shell calls, ended by an edit/write/run) from agent-generator benchmark transcripts, with each episode's measured cost: steps, tokens (chars/4), wall seconds. |
+| `retrieval/real_eval.py` | **Real-log eval-set builder.** Turns replayable episodes into `LocalEvaluator`-compatible cases: `sdk-symbol` (AST-located definition spans in the installed SDK the agent was reverse-engineering) and `project-file` (whole-file spans of the scaffold files the agent re-read). |
+| `retrieval/real_replay.py` | **Real-log measurement harness.** Replays a real-log manifest against candidate tools, timing every query, and reports recall/precision/MRR + tokens/steps/wall-seconds vs. the real agent's observed cost. |
+| `retrieval/real_data/` | **The mined eval set** (episodes, 175-case manifest, replay report) with provenance + repro commands. Headline: the mock-monorepo evolution winner scores 1.0 on mock and 0.03 recall on real logs — see `real_data/README.md`. |
 
 ## Fitness function
 
