@@ -320,6 +320,32 @@ def segment_episodes(events: list[dict], min_steps: int = 1) -> list[dict]:
     return episodes
 
 
+_SKILL_TOOLS = {"Skill", "skill", "use_skill"}
+
+
+def skill_injection_tokens(events: list[dict]) -> int:
+    """Tokens of reference material injected by skill activations.
+
+    A skill activation (``Skill`` tool call) delivers its payload as the
+    message(s) that follow it — content the harness pushes into context,
+    which episode mining never counts as retrieval cost. The skills-arm
+    of any comparison must pay this bill explicitly, or skills get their
+    retrieval substitute for free. Chars/4, matching episode tokens.
+    """
+    tokens = 0
+    pending_skill = False
+    for ev in events:
+        etype = ev.get("type")
+        if etype == "tool_use":
+            pending_skill = str(ev.get("tool_name") or "") in _SKILL_TOOLS
+        elif etype == "message" and pending_skill:
+            content = ev.get("content")
+            if isinstance(content, str) and content.strip():
+                tokens += len(content) // 4
+                pending_skill = False
+    return tokens
+
+
 def iter_agent_event_streams(record: dict):
     """Yield (label, events) for every agent_events list in a record."""
     for i, attempt in enumerate(record.get("generation_attempts") or []):

@@ -301,3 +301,27 @@ def test_failure_trigger_outranks_pre_write_ending():
     )
     eps = segment_episodes(events, min_steps=2)
     assert eps[0]["motivation"] == "failure-triggered"
+
+
+def test_skill_injection_tokens_counts_payload_after_skill_call():
+    from evolve.retrieval.log_mining import skill_injection_tokens
+
+    events = (
+        _msg("Let me check the reference.", 1.0)
+        + [{"type": "tool_use", "tool_name": "Skill",
+            "tool_input": {"skill": "google-agents-cli-adk-code"},
+            "timestamp": 2.0, "tool_call_id": "s1"}]
+        + [{"type": "tool_result", "tool_name": "Skill",
+            "tool_output": "Launching skill: google-agents-cli-adk-code",
+            "timestamp": 2.1, "tool_call_id": "s1"}]
+        + _msg("X" * 4000, 2.2)  # the injected reference payload
+        + _ev("Read", {"file_path": "app/agent.py"}, 3.0)
+    )
+    assert skill_injection_tokens(events) == 1000  # 4000 chars / 4
+
+
+def test_skill_injection_tokens_zero_without_skill_calls():
+    from evolve.retrieval.log_mining import skill_injection_tokens
+
+    events = _msg("hello", 1.0) + _ev("Read", {"file_path": "a.py"}, 2.0)
+    assert skill_injection_tokens(events) == 0
