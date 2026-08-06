@@ -60,6 +60,19 @@ def test_baseline_scores_well(bench):
     assert result["avg_tokens_returned"] > 0
 
 
+def test_reports_per_kind_recall(bench):
+    repo, manifest = bench
+    result = LocalEvaluator(repo, manifest).evaluate_program(search_tool.__file__)
+
+    by_kind = result["by_kind"]
+    assert set(by_kind) == {"definition", "usage", "config"}
+    for kind, stats in by_kind.items():
+        assert 0.0 <= stats["recall"] <= 1.0
+        assert stats["num_tasks"] == sum(
+            1 for t in manifest["tasks"] if t["kind"] == kind
+        )
+
+
 def test_bloated_grep_scores_below_baseline(bench, tmp_path):
     repo, manifest = bench
     program = tmp_path / "bloat.py"

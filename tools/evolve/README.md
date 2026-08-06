@@ -22,8 +22,10 @@ the tool inherits the win. No end-user compute required.
 | `retrieval/search_tool.py` | **The target tool.** A self-contained code-search program. The ranking algorithm sits inside `# EVOLVE-BLOCK-START/END` markers; the CLI, chunk schema, and token-budget enforcement are a frozen contract outside the block. This is the file AlphaEvolve mutates. |
 | `retrieval/monorepo.py` | **The environment.** Deterministic mock-monorepo generator: 6 packages × N modules (~270 lines each, with distractor code), service files with cross-package usage sites, YAML configs, and oversized vendored noise. Also emits the benchmark manifest — 100+ retrieval tasks (definition / usage / config lookups) with line-accurate ground-truth spans. The answer key is written **outside** the searchable tree so candidates can't cheat. |
 | `retrieval/evaluator.py` | **The LocalEvaluator.** Runs a candidate program over every task as a sandboxed subprocess (hard timeout; crashes and hangs score zero, never kill the loop) and computes the fitness metrics. |
-| `retrieval/evaluate.py` | **The AlphaEvolve entrypoint.** `evaluate(program_path) -> metrics` with `combined_score` as the fitness signal, plus a `evaluate_stage1` / `evaluate_stage2` cascade for cheap early rejection of broken mutants. |
-| `retrieval/config.yaml` | Run configuration for an AlphaEvolve / OpenEvolve-compatible runner. |
+| `retrieval/evaluate.py` | **The local fitness harness.** `evaluate(program_path) -> metrics` with `combined_score` as the fitness signal, plus a `evaluate_stage1` / `evaluate_stage2` cascade for cheap early rejection of broken mutants. |
+| `retrieval/alpha_evolve_adapter.py` | **Official-contract adapter.** `retrieval_evaluation(program_candidate)` implements the AlphaEvolve client library's evaluation contract ([codelab examples](https://github.com/Google-Cloud-AI/alphaevolve-on-googlecloud)): candidate code in `content.files[0].content`, an `AlphaEvolveProgramEvaluation`-shaped payload back, all metrics maximization-friendly, and **insights** (runtime failures, token bloat, weakest task kind, ranking quality) that steer the next round of mutations. |
+| `retrieval/run_evolution.py` | **The experiment runner.** Mirrors the official codelab wiring: `AlphaEvolveClient` → `AlphaEvolveExperiment` → seed program → `run_controller_loop`. Needs the `alpha_evolve` client library + a Gemini Enterprise app with AlphaEvolve access. |
+| `retrieval/config.yaml` | Alternative run configuration for the open-source OpenEvolve runner (no Gemini Enterprise access required). |
 
 ## Fitness function
 
@@ -55,7 +57,13 @@ PYTHONPATH=tools uv run python tools/evolve/retrieval/monorepo.py /tmp/mock-repo
 uv run python tools/evolve/retrieval/search_tool.py \
     --repo /tmp/mock-repo --query "Where is class AuthMiddleware0 defined?"
 
-# Full evolution run with an OpenEvolve-compatible runner:
+# Full evolution run with the official AlphaEvolve client
+# (requires the alpha_evolve library from
+# github.com/Google-Cloud-AI/alphaevolve-on-googlecloud and a Gemini
+# Enterprise app; set PROJECT_ID, GE_APP_ID, ... in the environment):
+PYTHONPATH=tools python tools/evolve/retrieval/run_evolution.py
+
+# Alternative: open-source OpenEvolve runner, no enterprise access needed:
 PYTHONPATH=tools python -m openevolve.run \
     tools/evolve/retrieval/search_tool.py \
     tools/evolve/retrieval/evaluate.py \
@@ -76,8 +84,9 @@ evaluations, so scores are comparable between generations. Set
 3. **Configure the evaluator** — done: `LocalEvaluator` penalizes
    bloated returns and low-ranked answers; cascade stage 1 rejects
    broken mutants cheaply.
-4. **Run the loop** — point your AlphaEvolve runner at
-   `search_tool.py` + `evaluate.py` with `config.yaml`.
+4. **Run the loop** — `run_evolution.py` with the official AlphaEvolve
+   client, or point OpenEvolve at `search_tool.py` + `evaluate.py` with
+   `config.yaml`.
 5. **Ship** — the winning `search_tool.py` replaces the baseline in a
    PR; every agent using the tool inherits the improvement.
 

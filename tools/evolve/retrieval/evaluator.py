@@ -88,7 +88,17 @@ class LocalEvaluator:
             + _WEIGHT_PRECISION * precision
             + _WEIGHT_MRR * mrr
         )
+        by_kind: dict[str, dict] = {}
+        for task, result in zip(self.tasks, per_task):
+            stats = by_kind.setdefault(
+                task["kind"], {"recall": 0.0, "num_tasks": 0}
+            )
+            stats["recall"] += result["recall"]
+            stats["num_tasks"] += 1
+        for stats in by_kind.values():
+            stats["recall"] = round(stats["recall"] / stats["num_tasks"], 4)
         return {
+            "by_kind": by_kind,
             "combined_score": round(combined, 4),
             "recall": round(recall, 4),
             "precision": round(precision, 4),
