@@ -3,6 +3,9 @@ import json
 from collections import Counter
 from pathlib import Path
 
+# NOTE: This path is session-ephemeral from the original build session.
+# Authoritative copies of the inputs (packets, verdicts) are committed
+# alongside this script under validation/.  Update TMP if re-running.
 TMP = Path('/home/ivanmkc/.claude/jobs/8c477bb8/tmp')
 
 packets = [json.loads(l) for l in (TMP / 'packets.jsonl').read_text().splitlines() if l.strip()]

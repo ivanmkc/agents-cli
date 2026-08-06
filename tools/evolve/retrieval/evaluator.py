@@ -57,6 +57,47 @@ _TOKEN_TARGET = 384
 # itself to count as "the answer" for MRR purposes.
 _MRR_COVERAGE = 0.5
 
+# Directory from which ``import evolve`` succeeds (tools/).
+_EVOLVE_IMPORTABLE_ROOT = Path(__file__).resolve().parents[2]
+
+
+def _safe_subprocess_env() -> dict[str, str]:
+    """Build a minimal, leak-free environment for candidate subprocesses.
+
+    Only PATH, SYSTEMROOT, and LANG are forwarded verbatim. PYTHONPATH
+    is filtered to remove any entry from which the ``evolve`` package is
+    importable (i.e., any directory containing an ``evolve/`` subtree).
+    HOME, VIRTUAL_ENV, and PYTHONHOME are deliberately excluded: they
+    let a candidate locate the committed manifest and inflate its score.
+    """
+    env: dict[str, str] = {}
+    for key in ("PATH", "SYSTEMROOT", "LANG"):
+        val = os.environ.get(key)
+        if val is not None:
+            env[key] = val
+
+    raw_pypath = os.environ.get("PYTHONPATH", "")
+    if raw_pypath:
+        safe_entries: list[str] = []
+        for entry in raw_pypath.split(os.pathsep):
+            if not entry:
+                continue
+            try:
+                resolved = Path(entry).resolve()
+            except (OSError, ValueError):
+                continue
+            # Drop entries from which ``import evolve`` would succeed.
+            if (resolved / "evolve").is_dir():
+                continue
+            # Drop entries that are ancestors of the evolve package.
+            if _EVOLVE_IMPORTABLE_ROOT.is_relative_to(resolved):
+                continue
+            safe_entries.append(entry)
+        if safe_entries:
+            env["PYTHONPATH"] = os.pathsep.join(safe_entries)
+
+    return env
+
 
 def _estimate_tokens(text: str) -> int:
     """Must match the frozen contract in search_tool.estimate_tokens."""
@@ -180,12 +221,7 @@ class LocalEvaluator:
                 # could follow to benchmark metadata. Keep only what
                 # the Python runtime itself requires.
                 cwd=sandbox,
-                env={
-                    k: v
-                    for k, v in os.environ.items()
-                    if k in ("PATH", "PYTHONPATH", "HOME", "VIRTUAL_ENV",
-                             "PYTHONHOME", "SYSTEMROOT", "LANG")
-                },
+                env=_safe_subprocess_env(),
             )
         except (subprocess.TimeoutExpired, OSError):
             return failed

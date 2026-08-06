@@ -55,7 +55,7 @@ CATEGORY_LOG = "log-inspection"
 CATEGORY_WORKSPACE = "workspace"
 CATEGORY_OTHER = "other"
 
-_SKILL_DIR_MARKERS = (".claude/skills", ".gemini/extensions", ".agents/skills")
+_SKILL_DIR_MARKERS = (".claude/skills", ".gemini/extensions", ".agents/skills", ".gemini/antigravity-cli/skills")
 _CLI_SRC_MARKERS = ("google/agents/cli",)
 _ADK_MARKERS = ("google/adk",)
 _LOG_MARKERS = ("agents_log", "agent.latest.log", ".log")

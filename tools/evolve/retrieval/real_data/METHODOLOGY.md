@@ -1,8 +1,11 @@
 # Methodology — Building the Real-Log Retrieval Eval Set
 
-How the 175-case eval set in `real_eval_manifest.json` was constructed
-from real agent transcripts, what its ground truth means, how candidate
-retrieval tools are measured against it, and where its limits are.
+How the eval set in `real_eval_manifest.json` was constructed from real
+agent transcripts, what its ground truth means, how candidate retrieval
+tools are measured against it, and where its limits are. The v1
+provenance manifest contains 175 cases (236 episodes); the current miner
+yields 209 episodes and the validated manifest
+(`real_eval_manifest.validated.json`) contains 63 consensus-valid tasks.
 
 ---
 
@@ -31,7 +34,8 @@ winner scores a perfect 1.0 on mock and 0.03 recall here (§8).
   `2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox`
   — the 18-case comparison suite (CLI-DEV/ENH/EVAL/EXT/FLOW/INIT/PLAT/
   STATE tasks), Claude and Gemini interactive harnesses, BASE and EXP
-  arms → **36 transcript records** (`results_detail/*.json.gz`).
+  arms → **142 transcript files** (71 Claude + 71 Gemini;
+  `results_detail/*.json.gz`). 36 is the count of unique case IDs.
 * **Record shape**: each record contains
   `generation_attempts[i].generation_events.turns[j].agent_events` —
   a flat event stream of `message` / `tool_use` / `tool_result` items
@@ -85,7 +89,10 @@ edit) are not searches and are dropped.
 
 ### 3.5 Yield
 
-**236 episodes** from the 36 records. Distribution: median 3 steps /
+**236 episodes** from the 142 transcript files (v1 provenance; the
+current miner with verification-read and fragment fixes yields 209
+episodes, and the validated manifest contains 63 consensus-valid tasks).
+Distribution: median 3 steps /
 878 tokens, p90 6 steps / 2,660 tokens, max 16 steps / 72,761 tokens.
 Tool mix: `read_file` 185, `Read` 176, `Bash` 163, `run_shell_command`
 123, `list_directory` 101, plus glob/grep variants.
@@ -134,12 +141,12 @@ schema `LocalEvaluator` already scores (`query`, `expected_spans`,
 ### 5.1 Family assignment
 
 * Any call argument touching `site-packages/google/adk` →
-  **sdk-symbol**.
+  **dependency-symbol**.
 * Otherwise, calls referencing files that exist in the project corpus
-  → **project-file**.
+  → **workspace-file**.
 * Neither → dropped (unreplayable).
 
-### 5.2 sdk-symbol ground truth
+### 5.2 dependency-symbol ground truth
 
 1. **Symbol extraction**: identifier-shaped words are collected from
    call arguments and the context message; path tokens are excluded
@@ -156,7 +163,7 @@ schema `LocalEvaluator` already scores (`query`, `expected_spans`,
 3. Episodes whose symbols all fail to locate produce **no case** (e.g.
    hunts for symbols defined in the external `a2a` package).
 
-### 5.3 project-file ground truth
+### 5.3 workspace-file ground truth
 
 Call arguments are normalized (leading `/tmp/agent-workspace/`,
 `agent-project/`, `./` stripped) and kept if the file exists in the
@@ -177,7 +184,7 @@ from it, they are appended; if the context is empty, a synthetic
 Environment probes (`pip show`, `which`), CLI help lookups
 (`agents-cli --help`), web fetches, and cases whose targets are absent
 from the corpora are skipped: **236 episodes → 175 cases**
-(164 project-file, 11 sdk-symbol). The skipped 26% remain in
+(164 workspace-file, 11 dependency-symbol). The skipped 26% remain in
 `episodes.jsonl.gz` for future families (a help-text corpus would make
 CLI-flag lookups replayable).
 
@@ -258,14 +265,14 @@ Snapshot results (also in `replay_report.json`):
 
 | tool | family | recall | precision | MRR | tokens med | wall med |
 | --- | --- | ---: | ---: | ---: | ---: | ---: |
-| default_grep | project-file | 0.73 | 0.13 | 0.23 | 4,676 | 0.03 s |
-| default_grep | sdk-symbol | 0.55 | 0.01 | 0.17 | 96,872 | 0.07 s |
-| search_tool (evolved) | project-file | 0.00 | 0.05 | 0.00 | 29 | 0.04 s |
-| search_tool (evolved) | sdk-symbol | 0.36 | 0.26 | 0.36 | 101 | 0.18 s |
+| default_grep | workspace-file | 0.73 | 0.13 | 0.23 | 4,676 | 0.03 s |
+| default_grep | dependency-symbol | 0.55 | 0.01 | 0.17 | 96,872 | 0.07 s |
+| search_tool (evolved) | workspace-file | 0.00 | 0.05 | 0.00 | 29 | 0.04 s |
+| search_tool (evolved) | dependency-symbol | 0.36 | 0.26 | 0.36 | 101 | 0.18 s |
 
 Mock-vs-real contrast: the evolved tool scores combined 1.00 on the
 mock monorepo it was evolved on (default_grep: 0.44) and collapses on
-real project-file queries — the mock's queries name their targets
+real workspace-file queries — the mock's queries name their targets
 cleanly; real queries are conversational fragments.
 
 ## 9. Known limitations and threats to validity
@@ -281,23 +288,23 @@ cleanly; real queries are conversational fragments.
    (0 chars), so Gemini-side episode token costs are undercounted;
    grep/shell outputs are recorded for both harnesses.
 3. **Verification reads** (~18% of project reads) are inside the
-   project-file family; they are genuine transcript behavior but not
+   workspace-file family; they are genuine transcript behavior but not
    genuine *search* — the consensus pass tags them so they can be
    split into their own family or excluded.
 4. **Single run, two harnesses**: one N=1 run, Claude+Gemini only
    (AGY's baseline is infra-blocked per the book); case-mix follows
    this suite's 18 tasks.
-5. **Family imbalance mirrors reality**: 164 project-file vs 11
-   sdk-symbol, and 125 cases target `app/agent.py` — deliberate
+5. **Family imbalance mirrors reality**: 164 workspace-file vs 11
+   dependency-symbol, and 125 cases target `app/agent.py` — deliberate
    frequency weighting, but per-family metrics should be read
-   separately (overall averages are dominated by project-file).
+   separately (overall averages are dominated by workspace-file).
 6. **`chars/4` token estimate** (book convention) is consistent across
    arms but approximate.
 7. **Corpus drift**: spans are pinned to `google-adk 1.34.1` and an
    agents-cli v0.3.0 scaffold; other versions shift line numbers.
    Rebuild the manifest (commands in `README.md`) rather than reusing
    spans across versions.
-8. **sdk-symbol captures definitions only**; trajectory analysis shows
+8. **dependency-symbol captures definitions only**; trajectory analysis shows
    some hunts also need the call-site span — a planned extension.
 
 ## 10. Reproduction
@@ -308,14 +315,20 @@ PYTHONPATH=tools python3 -m evolve.retrieval.log_mining <run_dir>... \
     --min-steps 2 --out episodes.jsonl
 
 # 2. Build cases against version-pinned corpora
+#    --sdk-root / --project-root / --cli-src-root map to the three corpus
+#    families (dependency-symbol, workspace-file, tool-internals).
 PYTHONPATH=tools python3 -m evolve.retrieval.real_eval episodes.jsonl \
     --sdk-root <site-packages>/google/adk \
     --project-root <scaffolded-project> \
+    --cli-src-root <agents-cli-source-tree> \
     --out real_eval_manifest.json
 
 # 3. Replay + measure candidate tools
+#    --root NAME=PATH (repeatable) supplies corpus roots by name.
 PYTHONPATH=tools python3 -m evolve.retrieval.real_replay real_eval_manifest.json \
-    --sdk-root ... --project-root ... --out replay_report.json
+    --root adk-sdk=<site-packages>/google/adk \
+    --root agent-project=<scaffolded-project> \
+    --out replay_report.json
 ```
 
 Tests: `tests/unittests/evolve/test_log_mining.py`,

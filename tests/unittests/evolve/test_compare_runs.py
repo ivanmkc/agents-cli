@@ -56,3 +56,11 @@ def test_aggregate_groups_by_harness_category_motivation():
     gemini_sdk = table[("gemini", "adk-sdk", "failure-triggered")]
     assert gemini_sdk["episodes"] == 1
     assert gemini_sdk["tokens"] == 900
+
+
+def test_agy_antigravity_skill_path_categorized_as_skill_docs():
+    """C8: AGY reads skills from ``.gemini/antigravity-cli/skills/``."""
+    ep = _ep(
+        ["cat /work/.gemini/antigravity-cli/skills/deploy-guide/reference.md"]
+    )
+    assert categorize_episode(ep) == "skill-docs"

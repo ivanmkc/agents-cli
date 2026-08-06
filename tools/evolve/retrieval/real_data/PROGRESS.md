@@ -27,11 +27,11 @@ evolution loop scores against.
 
 Key files:
 - `tools/evolve/retrieval/log_mining.py` — episode miner
-- `tools/evolve/retrieval/real_eval.py` — case builder (sdk-symbol + project-file)
+- `tools/evolve/retrieval/real_eval.py` — case builder (dependency-symbol + workspace-file)
 - `tools/evolve/retrieval/real_replay.py` — measurement harness
 - `tools/evolve/retrieval/real_data/` — episodes, manifest, replay report
 - `tools/evolve/retrieval/real_data/METHODOLOGY.md` — full methodology (10 sections)
-- `tests/unittests/evolve/test_log_mining.py` + `test_real_eval.py` + `test_real_replay.py` — 50 tests, all passing
+- `tests/unittests/evolve/test_log_mining.py` + `test_real_eval.py` + `test_real_replay.py` — tests (112+ total across the evolve suite), all passing
 
 ### 2. Trajectory analysis (DONE)
 
@@ -67,7 +67,7 @@ against the google-genai SDK (Vertex ADC) → all 12 batches in ~2 min.
 
 **Results** (see `validation/README.md` for full writeup):
 - 175 rows → **63 valid / 41 flag / 71 invalid** (47 unanimous valid)
-- Per family: project-file 60/41/63; sdk-symbol 3/0/8
+- Per family: workspace-file 60/41/63; dependency-symbol 3/0/8
 - Dominant issues: `fragmented-episode` (44), `verification-read` (42),
   `span-wrong` (32) — mostly miner artifacts, fixable in `log_mining.py`
 - **`real_eval_manifest.validated.json`** = the 63 consensus-valid tasks,
@@ -80,7 +80,7 @@ against the google-genai SDK (Vertex ADC) → all 12 batches in ~2 min.
   `google-agents-cli-adk-code` (with `samples.md` and `adk-python.md`)
 - Verified: `agents-cli --version` → `1.3.1`
 
-### 6. Benchmark re-run (RUNNING — v2, launched 2026-08-06 ~10:45 UTC)
+### 6. Benchmark re-run (DONE — v2/v3, launched 2026-08-06 ~10:45 UTC)
 
 **v2 = the new baseline config (user-confirmed 2026-08-06).** Run:
 `skills-v1.3.1-retrieval-eval-v2`, case set `agents-cli-sandbox`
@@ -149,7 +149,7 @@ Committed to `tools/evolve/retrieval/real_data/validation/` +
 
 ### TODO 2b: Fix the miner per validation findings — MINER FIXED, rebuild pending
 
-`log_mining.py` fixes landed (TDD, 6 new tests, 56 total passing):
+`log_mining.py` fixes landed (TDD, 6 new tests):
 - **verification-read**: retrieval calls that only revisit files the agent
   itself wrote earlier in the stream are skipped (tracked via action-tool
   file paths; rel/abs path matching; shell `cat`-of-own-write too)
@@ -340,23 +340,26 @@ dependencies" + "make schema generic such that we can apply to non-adk"):
   (JSON env) > pinned store — zero-config hermetic scoring:
   default_grep 0.383 combined / 0.839 recall; mock-evolved search_tool
   0.181 / **0.033 recall** (overfitting now hermetically reproducible).
-- 76 tests passing (schema, store round-trip/tamper, resolution order).
+- 112+ tests passing (schema, store round-trip/tamper, resolution order, and all prior suites).
 
 ### TODO 5: ~~Fold real-log cases into evolution fitness~~ DONE
 
-`evaluate.py` now has a real-log stage (TDD, 5 new tests, 61 passing):
+`evaluate.py` now has a real-log stage (TDD, 5 new tests):
 - `evaluate_real(program, manifest_path=, corpus_roots=)` — scores a
   candidate against `real_eval_manifest.validated.json` (63 consensus-
-  valid cases) per corpus; corpus roots via args or
-  `EVOLVE_REAL_PROJECT_ROOT` / `EVOLVE_REAL_SDK_ROOT`; unrooted corpora
-  are skipped + counted in `num_skipped`
+  valid cases) per corpus; corpus roots resolved from function args,
+  then `EVOLVE_REAL_ROOTS` (a single JSON env var mapping corpus name
+  to root dir, e.g. `'{"adk-sdk": "/path/to/google/adk"}'`), then the
+  pinned corpus store; unrooted corpora are skipped + counted in
+  `num_skipped`
 - `evaluate()` blends it when `EVOLVE_REAL_WEIGHT` is set:
   `combined = (1-w)*mock + w*real` (`mock_combined_score` + `real`
   sub-dict kept in the result). Default (env unset) = unchanged mock-only.
 
-To use in the next evolution run: set `EVOLVE_REAL_WEIGHT=0.5`,
-`EVOLVE_REAL_PROJECT_ROOT=<scaffolded agent-project>`,
-`EVOLVE_REAL_SDK_ROOT=<venv site-packages with google-adk>`.
+To use in the next evolution run: set `EVOLVE_REAL_WEIGHT=0.5` and
+`EVOLVE_REAL_ROOTS='{"adk-sdk": "<site-packages>/google/adk", "agent-project": "<scaffolded-project>"}'`.
+Alternatively, omit `EVOLVE_REAL_ROOTS` to use the pinned corpus store
+(archives committed under `real_data/corpus/`).
 
 ## Architecture / key paths
 
@@ -379,7 +382,7 @@ agents-cli repo (this worktree)
 │   ├── monorepo.py            # synthetic mock monorepo generator
 │   └── baselines/default_grep.py  # grep-then-read-whole-files baseline
 ├── skills/                    # v1.3.1 skill tree (samples.md, adk-python.md, etc.)
-└── tests/unittests/evolve/    # 50 tests, all passing
+└── tests/unittests/evolve/    # 112+ tests, all passing
 
 agent-generator repo (/home/ivanmkc/agent-generator/)
 ├── definitions/default/
@@ -397,8 +400,10 @@ agent-generator repo (/home/ivanmkc/agent-generator/)
     ├── 2026-08-06_09-19-27_*  # killed v0.3.0 run (3 Claude cases, stale)
     └── 2026-08-06_09-26-01_*  # killed v1.3.1 Claude-only run (2 cases, incomplete)
 
-Temp artifacts (current session only — will be lost when job is deleted)
-└── /home/ivanmkc/.claude/jobs/8c477bb8/tmp/
+Temp artifacts (session-ephemeral — paths below are from the original
+build session and will not exist in other sessions; authoritative copies
+of validation inputs are committed under `real_data/validation/`)
+└── /home/ivanmkc/.claude/jobs/8c477bb8/tmp/  # EPHEMERAL, do not hardcode
     ├── packets.jsonl          # validation packets (episode + row + evidence)
     ├── batches/               # 12 batches of ≤15 for validators
     ├── claude_verdicts.json   # Claude 2-lens results (175/175 rows, DONE)

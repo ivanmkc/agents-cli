@@ -61,3 +61,43 @@ def test_materialize_unknown_corpus_raises(tmp_path):
     (tmp_path / "store" / "index.json").write_text("{}")
     with pytest.raises(KeyError):
         materialize("nope", tmp_path / "store", tmp_path / "cache")
+
+
+def test_snapshot_raises_on_name_collision_different_hash(tmp_path):
+    """Snapshot refuses to overwrite an existing name with different content."""
+    tree_a = _make_tree(tmp_path / "tree_a")
+    store = tmp_path / "store"
+    snapshot(tree_a, "demo", store)
+
+    tree_b = tmp_path / "tree_b"
+    tree_b.mkdir(parents=True)
+    (tree_b / "other.txt").write_text("different content\n")
+
+    with pytest.raises(ValueError, match="already exists.*different"):
+        snapshot(tree_b, "demo", store)
+
+
+def test_snapshot_force_allows_overwrite(tmp_path):
+    """With force=True, snapshot overwrites an existing name."""
+    tree_a = _make_tree(tmp_path / "tree_a")
+    store = tmp_path / "store"
+    entry_a = snapshot(tree_a, "demo", store)
+
+    tree_b = tmp_path / "tree_b"
+    tree_b.mkdir(parents=True)
+    (tree_b / "other.txt").write_text("different content\n")
+
+    entry_b = snapshot(tree_b, "demo", store, force=True)
+    assert entry_b["sha256"] != entry_a["sha256"]
+
+    index = json.loads((store / "index.json").read_text())
+    assert index["demo"]["sha256"] == entry_b["sha256"]
+
+
+def test_snapshot_same_content_same_hash_succeeds(tmp_path):
+    """Re-snapshot with identical content (same hash) succeeds silently."""
+    tree = _make_tree(tmp_path / "tree")
+    store = tmp_path / "store"
+    entry_a = snapshot(tree, "demo", store)
+    entry_b = snapshot(tree, "demo", store)
+    assert entry_a["sha256"] == entry_b["sha256"]

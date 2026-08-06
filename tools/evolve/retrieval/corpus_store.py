@@ -55,8 +55,14 @@ def load_index(store_dir: Path | str) -> dict:
 
 
 def snapshot(root: Path | str, name: str, store_dir: Path | str,
-             provenance: str = "") -> dict:
-    """Pack ``root`` into the store as corpus ``name``; return its entry."""
+             provenance: str = "", force: bool = False) -> dict:
+    """Pack ``root`` into the store as corpus ``name``; return its entry.
+
+    Raises ``ValueError`` if *name* already exists in the index with a
+    different archive hash — this prevents accidental wrong-generation
+    scoring.  Pass ``force=True`` to allow an explicit overwrite.
+    Re-snapshotting identical content (same hash) always succeeds.
+    """
     root, store_dir = Path(root), Path(store_dir)
     store_dir.mkdir(parents=True, exist_ok=True)
 
@@ -80,6 +86,14 @@ def snapshot(root: Path | str, name: str, store_dir: Path | str,
     payload = gz_buf.getvalue()
     digest = _sha256(payload)
 
+    index = load_index(store_dir)
+    if name in index and index[name]["sha256"] != digest and not force:
+        raise ValueError(
+            f"corpus {name!r} already exists in the store with a different "
+            f"archive hash (existing={index[name]['sha256'][:12]}..., "
+            f"new={digest[:12]}...). Use force=True to overwrite."
+        )
+
     archive = f"{name}-{digest[:12]}.tar.gz"
     (store_dir / archive).write_bytes(payload)
     entry = {
@@ -89,7 +103,6 @@ def snapshot(root: Path | str, name: str, store_dir: Path | str,
         "provenance": provenance,
         "files": files,
     }
-    index = load_index(store_dir)
     index[name] = entry
     (store_dir / "index.json").write_text(json.dumps(index, indent=1, sort_keys=True))
     return entry
@@ -114,7 +127,18 @@ def materialize(name: str, store_dir: Path | str, cache_dir: Path | str) -> Path
     with tarfile.open(fileobj=io.BytesIO(gzip.decompress(payload))) as tar:
         if hasattr(tarfile, "data_filter"):
             tar.extraction_filter = tarfile.data_filter
-        tar.extractall(dest)
+            tar.extractall(dest)
+        else:
+            # Python < 3.12: manual path-traversal guard (C17 fix).
+            safe = []
+            for member in tar.getmembers():
+                if ".." in member.name or member.name.startswith("/"):
+                    raise ValueError(
+                        f"corpus {name!r}: refusing to extract unsafe "
+                        f"path {member.name!r}"
+                    )
+                safe.append(member)
+            tar.extractall(dest, members=safe)
     for rel, expected in entry["files"].items():
         actual = _sha256((dest / rel).read_bytes())
         if actual != expected:

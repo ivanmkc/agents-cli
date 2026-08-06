@@ -185,6 +185,45 @@ def test_evaluate_real_resolves_pinned_corpus_from_store(tmp_path):
     assert 0.0 <= result["combined_score"] <= 1.0
 
 
+def test_evaluate_real_raises_on_pin_mismatch(tmp_path):
+    """evaluate_real raises ValueError when file pins don't match disk."""
+    import hashlib
+
+    root = tmp_path / "proj"
+    (root / "app").mkdir(parents=True)
+    content = "\n".join(f"line_{i} = {i}" for i in range(1, 21)) + "\n"
+    (root / "app" / "agent.py").write_text(content)
+
+    # Build a manifest whose pins record a WRONG hash for agent.py
+    wrong_hash = hashlib.sha256(b"wrong content").hexdigest()
+    manifest = tmp_path / "real_manifest.json"
+    manifest.write_text(
+        json.dumps(
+            _real_manifest_dict(
+                [
+                    {
+                        "id": "r0",
+                        "family": "workspace-file",
+                        "corpus": "project",
+                        "query": "check the agent file",
+                        "expected_spans": [
+                            {"file": "app/agent.py", "start_line": 1, "end_line": 20}
+                        ],
+                        "pins": {"files": {"app/agent.py": wrong_hash}},
+                        "observed": {"steps": 2, "tokens": 100, "wall_seconds": 1.0},
+                    }
+                ]
+            )
+        )
+    )
+    with pytest.raises(ValueError, match="pin.*mismatch"):
+        evaluate_mod.evaluate_real(
+            search_tool.__file__,
+            manifest_path=manifest,
+            corpus_roots={"project": root},
+        )
+
+
 def test_evaluate_real_explicit_roots_override_store(tmp_path):
     from evolve.retrieval import corpus_store
 

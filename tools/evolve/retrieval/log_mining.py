@@ -29,6 +29,7 @@ import gzip
 import json
 import re
 import shlex
+from collections import deque
 from pathlib import Path
 
 # Tool-name taxonomy across the three harnesses observed in the runs
@@ -40,7 +41,7 @@ _RETRIEVAL_TOOLS = {
     "read_file", "grep_search", "glob", "list_directory", "search_web",
     "web_fetch", "google_web_search", "read_many_files",
     # AGY
-    "list_dir", "view_file", "codebase_search",
+    "list_dir", "view_file", "codebase_search", "read_url_content",
 }
 _SHELL_TOOLS = {"Bash", "run_shell_command", "run_command", "shell"}
 _ACTION_TOOLS = {
@@ -57,7 +58,7 @@ _READONLY_PROGRAMS = {
     "cat", "head", "tail", "less", "more", "ls", "dir", "tree", "wc",
     "grep", "egrep", "fgrep", "rg", "ag", "find", "fd", "locate",
     "which", "whereis", "type", "file", "stat", "du", "df", "pwd",
-    "printenv", "env", "echo", "sed -n",
+    "printenv", "env", "echo", "sed",
 }
 _READONLY_PATTERNS = [
     re.compile(r"^pip3?\s+(show|list|freeze|index)\b"),
@@ -66,22 +67,52 @@ _READONLY_PATTERNS = [
     re.compile(r"--help\s*$"),
     re.compile(r"^man\s"),
 ]
+# Patterns that override a readonly-program match and force action.
+_ACTION_OVERRIDE_PATTERNS = [
+    re.compile(r"\bsed\s+(?:-[^\s]*i|-i)"),  # sed -i (in-place edit)
+]
+
+# Regex matching stdout redirects to files (> file or >> file),
+# but NOT stderr redirects (2>/dev/null, 2>&1, &>/dev/null).
+# Matches: "> file", ">> file", "1> file", "1>> file"
+# Skips:   "2> file", "2>&1", "&> file", "&>> file"
+_STDOUT_REDIRECT_RE = re.compile(
+    r"(?:^|[^0-9&])(?:1)?>>?\s*(?!/dev/(?:null|stderr))\S"
+)
 
 # Structural failure signatures in a tool result. Motivation is derived
 # from what actually happened around the search (the preceding result,
 # the ending action), NOT from the agent's narration — validation showed
 # agents go silent exactly when debugging (stale/empty messages).
+# Word boundaries (\b) on the ambiguous terms avoid false positives on
+# compound identifiers like "ErrorClass", "error_handler", "error handling"
+# that appear in source code, docs, and API specs. The specific multi-word
+# patterns (traceback, command not found, etc.) are already unambiguous.
+# "Exit Code: [1-9]" covers the Gemini harness format (capital E, colon).
 _FAILURE_SIGNATURE = re.compile(
-    r"traceback|exception|error|failed|failure|command not found"
-    r"|no such file|exit code [1-9]|refused|denied|timeout",
+    r"traceback|exception|\berror\b|\bfailed\b|\bfailure\b|command not found"
+    r"|no such file|exit code[: ] ?[1-9]|refused|denied|timeout",
     re.IGNORECASE,
 )
 MOTIVATION_FAILURE = "failure-triggered"
 MOTIVATION_PRE_WRITE = "pre-write-verification"
 MOTIVATION_ORIENTATION = "orientation"
+
+# How many preceding action results to check when deciding whether a new
+# episode was failure-triggered. Real debugging chains often have
+# failure -> narration -> neutral/skill -> search, pushing the failure
+# result back by 1-2 intervening action events. A lookback of 3 covers
+# 91.2% of debug episodes in the motivation audit corpus (vs 82.4% with
+# lookback=1).
+_FAILURE_LOOKBACK = 3
+
 # Episodes starting within the first N non-neutral tool calls of a
 # stream are orientation sweeps (the post-scaffold "explore the project
 # structure" phase), regardless of what follows them.
+# NOTE: this threshold is uncalibrated. The motivation audit showed that
+# changing it from 3->12 swings orientation's share from 11%->49%.
+# For downstream analysis, prefer the coarser ``motivation_group``
+# ("failure" vs "non-failure") which is stable regardless of window.
 _ORIENTATION_WINDOW = 5
 
 
@@ -112,15 +143,131 @@ def _leading_program(command: str) -> str:
     return ""
 
 
+def _split_shell_stages(command: str) -> list[str]:
+    """Split on |, &&, ; outside of quoted regions.
+
+    A simple char-by-char state machine that tracks single and double
+    quotes (with backslash escaping) so that ``grep -E "a|b" file``
+    does not split on the ``|`` inside the regex pattern.
+    """
+    stages: list[str] = []
+    current: list[str] = []
+    i = 0
+    n = len(command)
+    in_single = False
+    in_double = False
+    while i < n:
+        ch = command[i]
+        # Handle backslash escaping inside double quotes (or unquoted)
+        if ch == "\\" and not in_single and i + 1 < n:
+            current.append(ch)
+            current.append(command[i + 1])
+            i += 2
+            continue
+        if ch == "'" and not in_double:
+            in_single = not in_single
+            current.append(ch)
+            i += 1
+            continue
+        if ch == '"' and not in_single:
+            in_double = not in_double
+            current.append(ch)
+            i += 1
+            continue
+        if in_single or in_double:
+            current.append(ch)
+            i += 1
+            continue
+        # Outside quotes: check for split operators
+        if ch == "|" and i + 1 < n and command[i + 1] == "|":
+            # || (or-list) — treat like &&
+            stages.append("".join(current))
+            current = []
+            i += 2
+            continue
+        if ch == "|":
+            stages.append("".join(current))
+            current = []
+            i += 1
+            continue
+        if ch == "&" and i + 1 < n and command[i + 1] == "&":
+            stages.append("".join(current))
+            current = []
+            i += 2
+            continue
+        if ch == ";":
+            stages.append("".join(current))
+            current = []
+            i += 1
+            continue
+        current.append(ch)
+        i += 1
+    stages.append("".join(current))
+    return stages
+
+
+def _has_stdout_redirect(command: str) -> bool:
+    """True if command contains a stdout redirect (> or >>) to a file.
+
+    Ignores stderr redirects like ``2>/dev/null`` and ``2>&1``.
+    Scans only outside quoted regions to avoid false positives on
+    strings like ``echo "use > for redirect"``.
+    """
+    i = 0
+    n = len(command)
+    in_single = False
+    in_double = False
+    while i < n:
+        ch = command[i]
+        if ch == "\\" and not in_single and i + 1 < n:
+            i += 2
+            continue
+        if ch == "'" and not in_double:
+            in_single = not in_single
+            i += 1
+            continue
+        if ch == '"' and not in_single:
+            in_double = not in_double
+            i += 1
+            continue
+        if in_single or in_double:
+            i += 1
+            continue
+        # Check for redirect operators outside quotes
+        if ch in (">",):
+            # Look back to see if this is stderr (2>) or &>
+            prev = command[i - 1] if i > 0 else ""
+            if prev == "&":
+                # &> or &>> — redirect both streams, counts as write
+                i += 1
+                continue
+            if prev == "2":
+                # 2> or 2>> — stderr only, skip
+                i += 1
+                continue
+            # This is stdout redirect (bare >, 1>, >>, 1>>)
+            return True
+        i += 1
+    return False
+
+
 def _shell_is_readonly(command: str) -> bool:
     command = command.strip()
+    # C3: stdout redirects to files make the command a write.
+    if _has_stdout_redirect(command):
+        return False
     # Pipelines / sequences: every stage must be read-only.
-    stages = re.split(r"\||&&|;", command)
+    # C4: use quote-aware splitting instead of naive re.split.
+    stages = _split_shell_stages(command)
     ok = 0
     for stage in stages:
         stage = stage.strip()
         if not stage:
             continue
+        # C13: check action-override patterns (e.g. sed -i) before
+        # readonly classification.
+        if any(p.search(stage) for p in _ACTION_OVERRIDE_PATTERNS):
+            return False
         prog = _leading_program(stage)
         if prog in _READONLY_PROGRAMS:
             ok += 1
@@ -143,7 +290,10 @@ def classify_tool_call(tool_name: str, tool_input: dict | str | None) -> str:
     if tool_name in _SHELL_TOOLS:
         if isinstance(tool_input, dict):
             command = str(
-                tool_input.get("command") or tool_input.get("cmd") or ""
+                tool_input.get("command")
+                or tool_input.get("cmd")
+                or tool_input.get("CommandLine")
+                or ""
             )
         else:
             command = str(tool_input or "")
@@ -190,7 +340,8 @@ def _is_verification_read(tool_name: str, tool_input, written: set[str]) -> bool
         return False
     if tool_name in _SHELL_TOOLS:
         command = str(
-            tool_input.get("command") or tool_input.get("cmd") or ""
+            tool_input.get("command") or tool_input.get("cmd")
+            or tool_input.get("CommandLine") or ""
             if isinstance(tool_input, dict) else tool_input or ""
         )
         return any(w in command for w in written)
@@ -210,7 +361,7 @@ def _input_summary(tool_name: str, tool_input) -> str:
     return str(tool_input)[:300]
 
 
-def segment_episodes(events: list[dict], min_steps: int = 1) -> list[dict]:
+def segment_episodes(events: list[dict], min_steps: int = 2) -> list[dict]:
     """Split a flat agent_events list into retrieval episodes.
 
     Messages between retrieval calls keep the episode alive (agents
@@ -229,7 +380,10 @@ def segment_episodes(events: list[dict], min_steps: int = 1) -> list[dict]:
     last_message = ""
     pending_chunks: list[str] = []
     written: set[str] = set()
-    last_result_failed = False
+    # Track the last N action results for failure lookback (C4d).
+    # An episode is failure-triggered if ANY of the last _FAILURE_LOOKBACK
+    # action results had a failure signature.
+    recent_failures: deque[bool] = deque(maxlen=_FAILURE_LOOKBACK)
     tool_call_index = 0
 
     # Pair tool_results back onto their tool_use by call id.
@@ -260,6 +414,12 @@ def segment_episodes(events: list[dict], min_steps: int = 1) -> list[dict]:
                 current["motivation"] = MOTIVATION_PRE_WRITE
             else:
                 current["motivation"] = MOTIVATION_ORIENTATION
+            # Coarser grouping that is stable regardless of
+            # _ORIENTATION_WINDOW calibration (see C4b audit note).
+            current["motivation_group"] = (
+                "failure" if current["motivation"] == MOTIVATION_FAILURE
+                else "non-failure"
+            )
             current["tokens"] = max(1, current.pop("_chars") // 4)
             current["wall_seconds"] = round(
                 max(0.0, current.pop("_t_last") - current.pop("_t_first")), 3
@@ -288,8 +448,10 @@ def segment_episodes(events: list[dict], min_steps: int = 1) -> list[dict]:
             tool_call_index += 1
             written.update(_input_paths(tool_input))
             close(ended_by=tool)
-            last_result_failed = result_failed.get(
-                str(ev.get("tool_call_id") or ""), False
+            recent_failures.append(
+                result_failed.get(
+                    str(ev.get("tool_call_id") or ""), False
+                )
             )
             continue
         # retrieval
@@ -307,10 +469,10 @@ def segment_episodes(events: list[dict], min_steps: int = 1) -> list[dict]:
                 "_chars": 0,
                 "_t_first": ts,
                 "_t_last": end_ts,
-                "_failure_triggered": last_result_failed,
+                "_failure_triggered": any(recent_failures),
                 "_start_index": tool_call_index,
             }
-        last_result_failed = result_failed.get(cid, False)
+        recent_failures.append(result_failed.get(cid, False))
         tool_call_index += 1
         current["calls"].append((tool, _input_summary(tool, tool_input)))
         current["steps"] += 1
@@ -320,7 +482,7 @@ def segment_episodes(events: list[dict], min_steps: int = 1) -> list[dict]:
     return episodes
 
 
-_SKILL_TOOLS = {"Skill", "skill", "use_skill"}
+_SKILL_TOOLS = {"Skill", "skill", "use_skill", "activate_skill"}
 
 
 def skill_injection_tokens(events: list[dict]) -> int:

@@ -18,6 +18,7 @@ A two-stage cascade is provided for cheap early rejection:
 
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 import random
@@ -180,6 +181,28 @@ def evaluate_real(
         for name in manifest.corpora:
             if name not in roots and name in index:
                 roots[name] = corpus_store.materialize(name, store_dir, cache)
+    # C11 fix: verify per-row file pins BEFORE scoring so corpus version
+    # mismatches are caught early rather than silently skewing results.
+    for task in manifest.tasks:
+        if task.corpus not in roots or not task.pins:
+            continue
+        corpus_root = roots[task.corpus]
+        for rel_path, expected_hash in task.pins.items():
+            file_path = corpus_root / rel_path
+            if not file_path.exists():
+                raise ValueError(
+                    f"task {task.id}: pin mismatch — file {rel_path!r} "
+                    f"does not exist in corpus {task.corpus!r}"
+                )
+            actual_hash = hashlib.sha256(file_path.read_bytes()).hexdigest()
+            if actual_hash != expected_hash:
+                raise ValueError(
+                    f"task {task.id}: pin mismatch for {rel_path!r} in "
+                    f"corpus {task.corpus!r} "
+                    f"(expected={expected_hash[:12]}..., "
+                    f"actual={actual_hash[:12]}...)"
+                )
+
     per_corpus: dict[str, dict] = {}
     totals = {"combined_score": 0.0, "recall": 0.0, "precision": 0.0, "mrr": 0.0}
     num_tasks = 0

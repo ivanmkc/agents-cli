@@ -28,8 +28,8 @@ Per family:
 
 | Family | valid | flag | invalid | total |
 |---|---|---|---|---|
-| project-file | 60 | 41 | 63 | 164 |
-| sdk-symbol | 3 | 0 | 8 | 11 |
+| workspace-file | 60 | 41 | 63 | 164 |
+| dependency-symbol | 3 | 0 | 8 | 11 |
 
 Agreed issue counts (across all non-valid rows):
 `fragmented-episode` 44, `verification-read` 42, `span-wrong` 32,

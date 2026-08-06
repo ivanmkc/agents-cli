@@ -117,7 +117,7 @@ def test_segment_episodes_survive_messages_break_on_actions():
         + _ev("Write", {"file_path": "c.py"}, 3.0)
         + _ev("Read", {"file_path": "d.py"}, 4.0)
     )
-    eps = segment_episodes(events)
+    eps = segment_episodes(events, min_steps=1)
     assert len(eps) == 2
     assert eps[0]["steps"] == 2
     assert eps[1]["steps"] == 1
@@ -325,3 +325,250 @@ def test_skill_injection_tokens_zero_without_skill_calls():
 
     events = _msg("hello", 1.0) + _ev("Read", {"file_path": "a.py"}, 2.0)
     assert skill_injection_tokens(events) == 0
+
+
+# --- C4c: _FAILURE_SIGNATURE false-positive reduction ---
+
+def test_failure_signature_does_not_match_error_in_compound_identifiers():
+    """Compound identifiers like 'error_code' in source code must not trigger."""
+    events = (
+        _ev("Bash", {"command": "uv run pytest"}, 1.0)
+        + _ev("Read", {"file_path": "app/utils.py"}, 2.0)
+        + _ev("Grep", {"pattern": "handler"}, 3.0)
+        + _ev("Edit", {"file_path": "app/utils.py"}, 4.0)
+    )
+    # Patch the action result to contain compound identifiers with "error"
+    # as a substring — word boundaries must prevent these from matching.
+    events[1]["tool_output"] = (
+        "def handle_request(req):\n"
+        "    error_code = req.get_error_code()\n"
+        "    return ErrorResponse(error_code)\n"
+    )
+    eps = segment_episodes(events, min_steps=2)
+    assert len(eps) == 1
+    # The action (uv run pytest) did not fail — its output only has compound identifiers
+    assert eps[0]["motivation"] != "failure-triggered"
+
+
+def test_failure_signature_does_not_match_error_class():
+    """'ErrorClass' or 'error_handler' must not trigger failure signature."""
+    events = (
+        _ev("Bash", {"command": "uv run pytest"}, 1.0)
+        + _ev("Read", {"file_path": "app/errors.py"}, 2.0)
+        + _ev("Grep", {"pattern": "ErrorClass"}, 3.0)
+        + _ev("Edit", {"file_path": "app/errors.py"}, 4.0)
+    )
+    # The action result just contains class names with "error" as a substring
+    events[1]["tool_output"] = (
+        "class ErrorClass:\n    pass\n\n"
+        "def error_handler():\n    pass\n"
+    )
+    eps = segment_episodes(events, min_steps=2)
+    assert len(eps) == 1
+    assert eps[0]["motivation"] != "failure-triggered"
+
+
+def test_failure_signature_matches_gemini_exit_code_format():
+    """'Exit Code: 1' (Gemini format with capital E and colon) must trigger."""
+    from evolve.retrieval.log_mining import _FAILURE_SIGNATURE
+
+    assert _FAILURE_SIGNATURE.search("Exit Code: 1") is not None
+
+
+def test_failure_signature_still_matches_real_errors():
+    """Standalone 'error' as a whole word still triggers (e.g. 'an error occurred')."""
+    from evolve.retrieval.log_mining import _FAILURE_SIGNATURE
+
+    assert _FAILURE_SIGNATURE.search("an error occurred") is not None
+    assert _FAILURE_SIGNATURE.search("command failed") is not None
+    assert _FAILURE_SIGNATURE.search("Traceback (most recent call last):") is not None
+    assert _FAILURE_SIGNATURE.search("exit code 1") is not None
+    assert _FAILURE_SIGNATURE.search("connection refused") is not None
+
+
+# --- C4d: Lookback depth ---
+
+def test_failure_two_actions_back_still_triggers():
+    """A failure 2 actions back (within lookback=3) triggers failure motivation."""
+    events = (
+        # Action 1: fails
+        _failing_ev("Bash", {"command": "uv run pytest"}, 1.0)
+        # Action 2: a narration + neutral tool (pushes failure back)
+        + _msg("Let me check something first", 2.0)
+        + _ev("Write", {"file_path": "app/note.py", "content": "x"}, 3.0)
+        # Now retrieval episode starts — the failure is 2 actions back
+        + _ev("Grep", {"pattern": "fixture"}, 4.0)
+        + _ev("Read", {"file_path": "tests/conftest.py"}, 5.0)
+        + _ev("Edit", {"file_path": "tests/conftest.py"}, 6.0)
+    )
+    eps = segment_episodes(events, min_steps=2)
+    assert len(eps) == 1
+    assert eps[0]["motivation"] == "failure-triggered"
+
+
+def test_failure_four_actions_back_does_not_trigger():
+    """A failure 4+ actions back (outside lookback=3) does not trigger."""
+    from evolve.retrieval.log_mining import _FAILURE_LOOKBACK
+
+    events = _failing_ev("Bash", {"command": "uv run pytest"}, 1.0)
+    # Add enough non-failing actions to push the failure outside the window
+    for i in range(_FAILURE_LOOKBACK):
+        events += _ev("Write", {"file_path": f"app/f{i}.py", "content": "x"},
+                       float(10 + i))
+    # Now a retrieval episode starts — failure is outside the window
+    events += (
+        _ev("Grep", {"pattern": "fixture"}, 20.0)
+        + _ev("Read", {"file_path": "tests/conftest.py"}, 21.0)
+        + _ev("Edit", {"file_path": "tests/conftest.py"}, 22.0)
+    )
+    eps = segment_episodes(events, min_steps=2)
+    assert len(eps) == 1
+    # Should be pre-write-verification or orientation, NOT failure-triggered
+    assert eps[0]["motivation"] != "failure-triggered"
+
+
+# --- C3: Redirect-write misclassification ---
+
+
+def test_redirect_write_cat_heredoc_is_action():
+    """cat > file << 'EOF' is a file write, not retrieval."""
+    assert classify_tool_call(
+        "Bash", {"command": "cat > /tmp/test.py << 'EOF'\nprint('hi')\nEOF"}
+    ) == "action"
+
+
+def test_redirect_append_is_action():
+    """echo hello >> agent.py is a file append, not retrieval."""
+    assert classify_tool_call(
+        "Bash", {"command": "echo hello >> agent.py"}
+    ) == "action"
+
+
+def test_stderr_redirect_is_still_readonly():
+    """2>/dev/null is stderr redirect, should not trigger action."""
+    assert classify_tool_call(
+        "Bash", {"command": "cat file 2>/dev/null"}
+    ) == "retrieval"
+
+
+def test_stderr_dup_redirect_is_still_readonly():
+    """2>&1 is stderr dup, should not trigger action."""
+    assert classify_tool_call(
+        "Bash", {"command": "grep foo bar 2>&1"}
+    ) == "retrieval"
+
+
+def test_stdout_redirect_in_pipeline_is_action():
+    """Any stage with stdout redirect to file makes the whole command action."""
+    assert classify_tool_call(
+        "Bash", {"command": "ls -la | tee > output.txt"}
+    ) == "action"
+
+
+# --- C4: Quote-blind shell splitting ---
+
+
+def test_quoted_pipe_in_grep_is_readonly():
+    """grep -E 'a|b' file should NOT split on the | inside quotes."""
+    assert classify_tool_call(
+        "Bash", {"command": 'grep -E "a|b" file'}
+    ) == "retrieval"
+
+
+def test_quoted_pipe_in_tree_is_readonly():
+    """tree -I '.venv|__pycache__' should NOT split on the | inside quotes."""
+    assert classify_tool_call(
+        "Bash", {"command": 'tree -I ".venv|__pycache__"'}
+    ) == "retrieval"
+
+
+def test_single_quoted_pipe_is_readonly():
+    """Single-quoted pipes should also be respected."""
+    assert classify_tool_call(
+        "Bash", {"command": "grep -E 'foo|bar|baz' README.md"}
+    ) == "retrieval"
+
+
+def test_real_pipe_still_works():
+    """A real pipe between two readonly programs is still retrieval."""
+    assert classify_tool_call(
+        "Bash", {"command": "find . -name '*.py' | grep test"}
+    ) == "retrieval"
+
+
+# --- C13: sed -n dead entry ---
+
+
+def test_sed_n_readonly():
+    """sed -n (print-only) should be classified as retrieval."""
+    assert classify_tool_call(
+        "Bash", {"command": "sed -n '5,10p' file.py"}
+    ) == "retrieval"
+
+
+def test_sed_plain_readonly():
+    """Plain sed without -i is informational (readonly)."""
+    assert classify_tool_call(
+        "Bash", {"command": "sed 's/old/new/' file.py"}
+    ) == "retrieval"
+
+
+def test_sed_inplace_is_action():
+    """sed -i (in-place edit) is a write action."""
+    assert classify_tool_call(
+        "Bash", {"command": "sed -i 's/old/new/' file.py"}
+    ) == "action"
+
+
+def test_sed_inplace_with_backup_is_action():
+    """sed -i.bak (in-place with backup) is also a write action."""
+    assert classify_tool_call(
+        "Bash", {"command": "sed -i.bak 's/old/new/' file.py"}
+    ) == "action"
+
+
+# --- C14: min_steps default inconsistency ---
+
+
+def test_segment_episodes_default_min_steps_is_two():
+    """Default min_steps should be 2, filtering out single-step episodes."""
+    events = (
+        _ev("Read", {"file_path": "a.py"}, 1.0)
+        + _ev("Edit", {"file_path": "a.py"}, 2.0)
+    )
+    # With default min_steps (should be 2), a single-step episode is dropped.
+    eps = segment_episodes(events)
+    assert len(eps) == 0, (
+        f"Expected 0 episodes with default min_steps=2, got {len(eps)}"
+    )
+
+
+def test_activate_skill_triggers_skill_injection_tokens():
+    """C7: Gemini's ``activate_skill`` tool must be recognized as a skill call."""
+    from evolve.retrieval.log_mining import skill_injection_tokens
+
+    events = (
+        [{"type": "tool_use", "tool_name": "activate_skill",
+          "tool_input": {"skill": "google-agents-cli-adk-code"},
+          "timestamp": 1.0, "tool_call_id": "s1"}]
+        + [{"type": "tool_result", "tool_name": "activate_skill",
+            "tool_output": "Launching skill",
+            "timestamp": 1.1, "tool_call_id": "s1"}]
+        + _msg("Y" * 2000, 1.2)  # injected payload
+    )
+    assert skill_injection_tokens(events) == 500  # 2000 chars / 4
+
+
+def test_read_url_content_classified_as_retrieval():
+    """C16: AGY's ``read_url_content`` tool must be classified as retrieval."""
+    assert classify_tool_call("read_url_content", {"url": "https://example.com"}) == "retrieval"
+
+
+def test_agy_run_command_with_commandline_key():
+    """C15: AGY stores shell commands in ``CommandLine``, not ``command``."""
+    assert classify_tool_call(
+        "run_command", {"CommandLine": "cat /etc/os-release"}
+    ) == "retrieval"
+    assert classify_tool_call(
+        "run_command", {"CommandLine": "pip install foo"}
+    ) == "action"

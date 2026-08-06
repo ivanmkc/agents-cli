@@ -4,7 +4,10 @@ Each test encodes a demonstrated reward-hack; the hardened fitness
 function must keep every one of them strictly below the honest seed.
 """
 
+import json
+import sys
 import textwrap
+from pathlib import Path
 
 import pytest
 from evolve.retrieval import evaluate as evaluate_mod
@@ -141,3 +144,103 @@ def test_stage1_screen_is_kind_stratified(tmp_path):
     )
     by_kind = result["by_kind"]
     assert set(by_kind) == {"definition", "usage", "config"}
+
+
+# ---- Real-eval env-leak regression tests (C1) ----
+#
+# A candidate tool that reads HOME, VIRTUAL_ENV, or PYTHONHOME can
+# locate the committed real_eval_manifest.validated.json file and
+# inflate its score 2.28x. These tests verify those variables are NOT
+# forwarded to the subprocess.
+
+ENV_PROBE_TOOL = textwrap.dedent(
+    """
+    import argparse, json, os, sys
+
+    p = argparse.ArgumentParser()
+    p.add_argument("--repo", type=str)
+    p.add_argument("--query")
+    p.add_argument("--max-results", type=int, default=8)
+    p.add_argument("--token-budget", type=int, default=2000)
+    a = p.parse_args()
+
+    result = {
+        "has_HOME": "HOME" in os.environ,
+        "has_VIRTUAL_ENV": "VIRTUAL_ENV" in os.environ,
+        "has_PYTHONHOME": "PYTHONHOME" in os.environ,
+        "env_keys": sorted(os.environ.keys()),
+    }
+
+    try:
+        import evolve.retrieval.evaluate
+        result["can_import_evolve"] = True
+    except ImportError:
+        result["can_import_evolve"] = False
+
+    probe_path = os.path.join(a.repo, ".env_probe_result")
+    with open(probe_path, "w") as f:
+        json.dump(result, f)
+
+    json.dump({"chunks": []}, sys.stdout)
+    """
+)
+
+
+def _run_env_probe(bench, tmp_path, monkeypatch):
+    """Run the env-probe tool once and return the captured result dict."""
+    repo, manifest = bench
+    # Ensure the leaky vars exist in the parent so we can verify they
+    # are NOT forwarded to the subprocess.
+    monkeypatch.setenv("HOME", "/fake/home")
+    monkeypatch.setenv("VIRTUAL_ENV", "/fake/venv")
+    # Use the real Python prefix so the subprocess can start even if
+    # PYTHONHOME leaks (before the fix).
+    monkeypatch.setenv("PYTHONHOME", sys.prefix)
+    # Set PYTHONPATH to include the tools/ dir (contains the evolve package).
+    tools_dir = str(Path(__file__).resolve().parents[3] / "tools")
+    monkeypatch.setenv("PYTHONPATH", tools_dir)
+
+    program = tmp_path / "env_probe.py"
+    program.write_text(ENV_PROBE_TOOL)
+    probe_file = repo / ".env_probe_result"
+    try:
+        LocalEvaluator(repo, manifest, max_workers=1).evaluate_program(program)
+        assert probe_file.exists(), "env probe tool did not write results"
+        return json.loads(probe_file.read_text())
+    finally:
+        probe_file.unlink(missing_ok=True)
+
+
+def test_home_not_in_subprocess_env(bench, tmp_path, monkeypatch):
+    """HOME must not be forwarded — it lets a candidate find the manifest."""
+    result = _run_env_probe(bench, tmp_path, monkeypatch)
+    assert not result["has_HOME"], (
+        "HOME was forwarded to the subprocess; a candidate could use it "
+        "to locate real_eval_manifest.validated.json"
+    )
+
+
+def test_virtual_env_not_in_subprocess_env(bench, tmp_path, monkeypatch):
+    """VIRTUAL_ENV must not be forwarded — it exposes the venv path."""
+    result = _run_env_probe(bench, tmp_path, monkeypatch)
+    assert not result["has_VIRTUAL_ENV"], (
+        "VIRTUAL_ENV was forwarded to the subprocess; a candidate could "
+        "traverse from the venv to the repo tree"
+    )
+
+
+def test_pythonhome_not_in_subprocess_env(bench, tmp_path, monkeypatch):
+    """PYTHONHOME must not be forwarded — it exposes the Python install."""
+    result = _run_env_probe(bench, tmp_path, monkeypatch)
+    assert not result["has_PYTHONHOME"], (
+        "PYTHONHOME was forwarded to the subprocess"
+    )
+
+
+def test_candidate_cannot_import_evolve_package(bench, tmp_path, monkeypatch):
+    """PYTHONPATH must not expose the evolve package to candidates."""
+    result = _run_env_probe(bench, tmp_path, monkeypatch)
+    assert not result["can_import_evolve"], (
+        "Candidate was able to 'import evolve.retrieval.evaluate' — "
+        "PYTHONPATH leaks the repo's tools/ directory"
+    )
