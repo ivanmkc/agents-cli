@@ -80,19 +80,29 @@ against the google-genai SDK (Vertex ADC) → all 12 batches in ~2 min.
   `google-agents-cli-adk-code` (with `samples.md` and `adk-python.md`)
 - Verified: `agents-cli --version` → `1.3.1`
 
-### 6. Benchmark re-run (RUNNING — launched 2026-08-06 ~09:36 UTC)
+### 6. Benchmark re-run (RUNNING — v2, launched 2026-08-06 ~10:45 UTC)
 
-Launched: `benchmark-runner --case-set agents-cli-sandbox --generator-set
-agents-cli --name "skills-v1.3.1-retrieval-eval" --concurrency 4` —
-71 cases × 2 generators (Interactive_claude_agents-cli +
-Interactive_gemini_agents-cli) = 142 transcripts, matching the mined
-baseline's per-model scale. Expect several hours at concurrency 4.
-Log: `/home/ivanmkc/.claude/jobs/2cfe6680/tmp/benchmark_run.log`;
-results land under `~/.agent_generator/benchmark_runs/2026-08-06_*skills-v1_3_1*`.
+**v2 = the new baseline config (user-confirmed 2026-08-06).** Run:
+`skills-v1.3.1-retrieval-eval-v2`, case set `agents-cli-sandbox`
+(71 cases), generator set `agents-cli` from MAIN's definitions —
+Gemini (gemini-3.5-flash) + Claude (claude-opus-4-7) + Antigravity
+(Gemini 3.1 Pro High) = 213 transcripts, concurrency 4. The model bump
+vs the April mined run (Haiku→Opus, flash-preview→3.5-flash, +AGY) is
+accepted; do NOT restart to chase model parity with April.
+Log: `/home/ivanmkc/.claude/jobs/2cfe6680/tmp/benchmark_run_v2.log`;
+results: `~/.agent_generator/benchmark_runs/2026-08-06_*retrieval-eval-v2*`.
 
-Two earlier partial runs were killed (Claude-only, not comparable):
-- v0.3.0 run (wrong version): `~/.agent_generator/benchmark_runs/2026-08-06_09-19-27_*` — 3 cases done, killed
-- v1.3.1 Claude-only run: `~/.agent_generator/benchmark_runs/2026-08-06_09-26-01_*` — 2 cases done, killed
+**Harness gotcha (cost a run):** the host `benchmark-runner` was a stale
+2026-05-14 uv-tool snapshot whose in-process AdkProjectWrapper crashes
+every conversation against v1.3.1's ADK-2.x scaffolds
+(`google.genai.types has no attribute 'TranslationConfig'`, genai 1.x/2.x
+clash — fixed on main by PR #688, out-of-process wrapper). If
+benchmark-runner ever mass-produces `fail_validation` with
+`failure_actor: infrastructure`, reinstall from main:
+`uv tool install --force "agent-benchmarks @ git+file:///home/ivanmkc/agent-generator@<main-sha>"`.
+
+Killed runs (do not use): `09-19-27` (v0.3.0 CLI), `09-26-01` (Claude-only),
+`09-35-34` (v1 — stale harness, 38 Gemini transcripts all infra-failed).
 
 ## Data scale comparison
 
