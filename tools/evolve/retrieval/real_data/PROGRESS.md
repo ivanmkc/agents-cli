@@ -239,14 +239,21 @@ and override the install step.
 - `agents-cli` binary is on `PATH` via the host's uv tool install
 - Upgrading the host's agents-cli + skills = upgrading what the sandbox sees
 
-### TODO 5: Fold real-log cases into evolution fitness
+### TODO 5: ~~Fold real-log cases into evolution fitness~~ DONE
 
-The headline finding: the mock-evolved search_tool scores 1.0 on mock
-but 0.03 recall on real logs. The next evolution run's fitness function
-should include these real-log cases (or be validated against them) to
-prevent overfitting. Implementation: extend `evaluate.py`'s
-`_ensure_benchmark` to optionally load the real manifest alongside the
-mock one, or add a real-log stage to the cascade.
+`evaluate.py` now has a real-log stage (TDD, 5 new tests, 61 passing):
+- `evaluate_real(program, manifest_path=, corpus_roots=)` — scores a
+  candidate against `real_eval_manifest.validated.json` (63 consensus-
+  valid cases) per corpus; corpus roots via args or
+  `EVOLVE_REAL_PROJECT_ROOT` / `EVOLVE_REAL_SDK_ROOT`; unrooted corpora
+  are skipped + counted in `num_skipped`
+- `evaluate()` blends it when `EVOLVE_REAL_WEIGHT` is set:
+  `combined = (1-w)*mock + w*real` (`mock_combined_score` + `real`
+  sub-dict kept in the result). Default (env unset) = unchanged mock-only.
+
+To use in the next evolution run: set `EVOLVE_REAL_WEIGHT=0.5`,
+`EVOLVE_REAL_PROJECT_ROOT=<scaffolded agent-project>`,
+`EVOLVE_REAL_SDK_ROOT=<venv site-packages with google-adk>`.
 
 ## Architecture / key paths
 

@@ -39,6 +39,19 @@ DEFAULT_SEED = 0
 DEFAULT_SCALE = 3
 _STAGE1_TASKS = 20
 
+# Real-log stage (mined from agent-generator transcripts, consensus-
+# validated — see real_data/validation/). The mock-evolved tool scored
+# 1.0 on mock but 0.03 recall on real logs, so real cases must be able
+# to gate fitness.
+_REAL_MANIFEST_DEFAULT = (
+    Path(__file__).resolve().parent
+    / "real_data" / "real_eval_manifest.validated.json"
+)
+_REAL_ROOT_ENV = {
+    "project": "EVOLVE_REAL_PROJECT_ROOT",
+    "sdk": "EVOLVE_REAL_SDK_ROOT",
+}
+
 
 def _default_workdir(seed: int, scale: int) -> Path:
     override = os.environ.get("EVOLVE_RETRIEVAL_WORKDIR")
@@ -120,14 +133,89 @@ def evaluate_stage2(
     return _run(program_path, workdir, seed, scale, None)
 
 
+def evaluate_real(
+    program_path: str,
+    manifest_path: Path | str | None = None,
+    corpus_roots: dict[str, Path | str] | None = None,
+) -> dict:
+    """Score a candidate against the validated real-log eval cases.
+
+    ``corpus_roots`` maps corpus name (``project`` / ``sdk``) to the
+    directory the tasks' spans refer to; unset corpora fall back to the
+    ``EVOLVE_REAL_PROJECT_ROOT`` / ``EVOLVE_REAL_SDK_ROOT`` env vars.
+    Tasks whose corpus has no root are skipped and counted in
+    ``num_skipped`` — metrics are the task-weighted mean of the rest.
+    """
+    manifest_path = Path(
+        manifest_path
+        or os.environ.get("EVOLVE_REAL_MANIFEST")
+        or _REAL_MANIFEST_DEFAULT
+    )
+    tasks = json.loads(manifest_path.read_text())["tasks"]
+    if corpus_roots is not None:
+        roots = {k: Path(v) for k, v in corpus_roots.items()}
+    else:
+        roots = {
+            corpus: Path(value)
+            for corpus, var in _REAL_ROOT_ENV.items()
+            if (value := os.environ.get(var))
+        }
+    per_corpus: dict[str, dict] = {}
+    totals = {"combined_score": 0.0, "recall": 0.0, "precision": 0.0, "mrr": 0.0}
+    num_tasks = 0
+    for corpus, root in sorted(roots.items()):
+        subset = [t for t in tasks if t.get("corpus") == corpus]
+        if not subset:
+            continue
+        metrics = LocalEvaluator(root, {"tasks": subset}).evaluate_program(
+            program_path
+        )
+        per_corpus[corpus] = metrics
+        n = metrics["num_tasks"]
+        num_tasks += n
+        for key in totals:
+            totals[key] += metrics.get(key, 0.0) * n
+    if num_tasks:
+        for key in totals:
+            totals[key] = round(totals[key] / num_tasks, 4)
+    return {
+        "num_tasks": num_tasks,
+        "num_skipped": len(tasks) - num_tasks,
+        "per_corpus": per_corpus,
+        **totals,
+    }
+
+
 def evaluate(
     program_path: str,
     workdir: Path | str | None = None,
     seed: int = DEFAULT_SEED,
     scale: int = DEFAULT_SCALE,
 ) -> dict:
-    """Main AlphaEvolve fitness function (same as stage 2)."""
-    return evaluate_stage2(program_path, workdir, seed, scale)
+    """Main AlphaEvolve fitness function.
+
+    Stage 2 on the mock monorepo; when ``EVOLVE_REAL_WEIGHT`` is set to
+    a positive float (and real corpus roots are configured), the
+    real-log stage is blended in:
+    ``combined = (1-w)*mock + w*real`` — so candidates can no longer
+    win by overfitting the mock benchmark alone.
+    """
+    result = evaluate_stage2(program_path, workdir, seed, scale)
+    weight = float(os.environ.get("EVOLVE_REAL_WEIGHT") or 0.0)
+    if weight <= 0.0:
+        return result
+    real = evaluate_real(program_path)
+    if not real["num_tasks"]:
+        return result
+    result = dict(result)
+    result["mock_combined_score"] = result["combined_score"]
+    result["real"] = real
+    result["combined_score"] = round(
+        (1.0 - weight) * result["mock_combined_score"]
+        + weight * real["combined_score"],
+        4,
+    )
+    return result
 
 
 def evaluate_default(
