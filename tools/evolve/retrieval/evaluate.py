@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import json
 import os
+import random
 import sys
 import tempfile
 from pathlib import Path
@@ -50,13 +51,21 @@ def _default_workdir(seed: int, scale: int) -> Path:
 
 
 def _ensure_benchmark(workdir: Path, seed: int, scale: int) -> tuple[Path, dict]:
-    """Build the mock monorepo once; reuse it on every later call."""
+    """(Re)build the mock monorepo; keep the answer key OFF disk.
+
+    The tree is regenerated deterministically on every call (cheap, and
+    self-heals stale/partial workdirs). The task manifest only ever
+    lives in this process's memory: the red-team audit demonstrated a
+    candidate scoring a perfect 1.0 by reading a manifest written next
+    to the repo, so no ``*.tasks.json`` may exist anywhere under the
+    workdir during evaluation.
+    """
     workdir.mkdir(parents=True, exist_ok=True)
     repo = workdir / "repo"
-    manifest_path = workdir / "repo.tasks.json"
-    if manifest_path.exists():
-        return repo, json.loads(manifest_path.read_text())
-    return repo, generate_monorepo(repo, seed=seed, scale=scale)
+    manifest = generate_monorepo(repo, seed=seed, scale=scale, write_tasks=False)
+    stale_key = workdir / "repo.tasks.json"
+    stale_key.unlink(missing_ok=True)
+    return repo, manifest
 
 
 def _run(
@@ -69,8 +78,26 @@ def _run(
     workdir = Path(workdir) if workdir else _default_workdir(seed, scale)
     repo, manifest = _ensure_benchmark(workdir, seed, scale)
     if n_tasks is not None:
-        manifest = dict(manifest, tasks=manifest["tasks"][:n_tasks])
+        manifest = dict(manifest, tasks=_stratified(manifest["tasks"], n_tasks))
     return LocalEvaluator(repo, manifest).evaluate_program(program_path)
+
+
+def _stratified(tasks: list[dict], n: int) -> list[dict]:
+    """Deterministic, kind-proportional subset for the stage-1 screen.
+
+    A plain ``[:n]`` slice was all definition tasks from one package —
+    no config/usage/ranking signal, so stage 1 couldn't reject mutants
+    that broke those paths.
+    """
+    rng = random.Random(1234)
+    by_kind: dict[str, list[dict]] = {}
+    for task in tasks:
+        by_kind.setdefault(task["kind"], []).append(task)
+    picked: list[dict] = []
+    for kind in sorted(by_kind):
+        share = max(1, round(n * len(by_kind[kind]) / len(tasks)))
+        picked.extend(rng.sample(by_kind[kind], min(share, len(by_kind[kind]))))
+    return picked[:n]
 
 
 def evaluate_stage1(

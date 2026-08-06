@@ -4,32 +4,58 @@ Runs a candidate search-tool program against every benchmark task in the
 mock monorepo and scores it on the core efficiency metrics from use
 case 3:
 
-* **recall** — did the tool surface the ground-truth spans at all?
-* **precision** — what fraction of the returned tokens were actually
-  relevant? This is the anti-bloat metric: a grep-style tool that
-  returns a 1,000-line file to answer a 15-line question is crushed
-  here.
-* **mrr** — mean reciprocal rank of the first relevant chunk; rewards
-  putting the right answer first so the agent doesn't need extra turns.
-* **token cost** — average tokens returned per call (reported, and
-  folded into precision).
+* **recall** — coverage-weighted: each ground-truth span scores
+  covered_lines / span_lines (union over all verified chunks). A 1-line
+  pointer at a 20-line function earns 0.05, not 1.0.
+* **precision** — fraction of returned tokens that fall inside
+  ground-truth spans. The anti-bloat metric.
+* **mrr** — reciprocal rank of the first chunk that covers >= 50% of
+  some ground-truth span on its own; rewards putting a *usable* answer
+  first.
+* **economy** — absolute token-cost term: min(1, target/returned).
+  Keeps "return everything" strategies from hiding behind high recall.
 
-Candidates run as sandboxed subprocesses with a hard timeout: an
-LLM-mutated program that crashes, hangs, or emits garbage simply scores
-zero on the affected tasks instead of killing the loop.
+``combined_score = 0.35*recall + 0.35*precision + 0.15*mrr + 0.15*economy``
+
+Anti-reward-hacking measures (each defeats an exploit demonstrated by
+the red-team audit):
+
+* Chunk content is verified against the file on disk; mismatching or
+  out-of-tree chunks earn zero relevance but still pay token cost
+  (computed from the on-disk slice, never from self-reported content).
+* Candidates run as subprocesses with an EMPTY working directory and a
+  minimal environment — no cwd/env breadcrumbs pointing at the
+  benchmark workdir.
+* Crashes, hangs, malformed JSON, and non-UTF-8 output score zero on
+  the affected task and never kill the loop.
+
+The benchmark manifest itself is kept off disk by the evaluate.py
+harness (see ``_ensure_benchmark``) so there is no answer key for a
+candidate to find.
 """
 
 from __future__ import annotations
 
 import json
+import os
 import subprocess
 import sys
+import tempfile
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
-_WEIGHT_RECALL = 0.5
-_WEIGHT_PRECISION = 0.3
-_WEIGHT_MRR = 0.2
+_WEIGHT_RECALL = 0.35
+_WEIGHT_PRECISION = 0.35
+_WEIGHT_MRR = 0.15
+_WEIGHT_ECONOMY = 0.15
+
+# A tool that answers a task in ~one or two tight spans lands around
+# this many tokens; anything above it starts losing the economy term.
+_TOKEN_TARGET = 384
+
+# A chunk must cover at least this fraction of a ground-truth span by
+# itself to count as "the answer" for MRR purposes.
+_MRR_COVERAGE = 0.5
 
 
 def _estimate_tokens(text: str) -> int:
@@ -58,14 +84,6 @@ def compute_lift(candidate: dict, default: dict) -> dict:
     }
 
 
-def _overlap_lines(chunk: dict, span: dict) -> int:
-    if chunk["file"] != span["file"]:
-        return 0
-    lo = max(chunk["start_line"], span["start_line"])
-    hi = min(chunk["end_line"], span["end_line"])
-    return max(0, hi - lo + 1)
-
-
 class LocalEvaluator:
     """Scores candidate search tools against the benchmark manifest."""
 
@@ -78,12 +96,13 @@ class LocalEvaluator:
         timeout: float = 20.0,
         max_workers: int = 8,
     ) -> None:
-        self.repo_root = Path(repo_root)
+        self.repo_root = Path(repo_root).resolve()
         self.tasks = manifest["tasks"]
         self.max_results = max_results
         self.token_budget = token_budget
         self.timeout = timeout
         self.max_workers = max_workers
+        self._file_cache: dict[str, list[str] | None] = {}
 
     # ------------------------------------------------------------------
     def evaluate_program(self, program_path: Path | str) -> dict:
@@ -92,22 +111,28 @@ class LocalEvaluator:
         Returns a metrics dict whose ``combined_score`` (0..1, higher is
         better) is the AlphaEvolve fitness signal.
         """
-        program_path = str(program_path)
-        with ThreadPoolExecutor(max_workers=self.max_workers) as pool:
-            per_task = list(
-                pool.map(lambda t: self._run_task(program_path, t), self.tasks)
-            )
+        program_path = str(Path(program_path).resolve())
+        with tempfile.TemporaryDirectory(prefix="evolve-sandbox-") as sandbox:
+            with ThreadPoolExecutor(max_workers=self.max_workers) as pool:
+                per_task = list(
+                    pool.map(
+                        lambda t: self._run_task(program_path, t, sandbox),
+                        self.tasks,
+                    )
+                )
 
         n = len(per_task) or 1
         failures = sum(1 for r in per_task if r["failed"])
         recall = sum(r["recall"] for r in per_task) / n
         precision = sum(r["precision"] for r in per_task) / n
         mrr = sum(r["rr"] for r in per_task) / n
+        economy = sum(r["economy"] for r in per_task) / n
         avg_tokens = sum(r["tokens"] for r in per_task) / n
         combined = (
             _WEIGHT_RECALL * recall
             + _WEIGHT_PRECISION * precision
             + _WEIGHT_MRR * mrr
+            + _WEIGHT_ECONOMY * economy
         )
         by_kind: dict[str, dict] = {}
         for task, result in zip(self.tasks, per_task):
@@ -124,15 +149,18 @@ class LocalEvaluator:
             "recall": round(recall, 4),
             "precision": round(precision, 4),
             "mrr": round(mrr, 4),
+            "economy": round(economy, 4),
             "avg_tokens_returned": round(avg_tokens, 1),
             "failures": failures,
             "num_tasks": len(per_task),
         }
 
     # ------------------------------------------------------------------
-    def _run_task(self, program_path: str, task: dict) -> dict:
-        failed = {"failed": True, "recall": 0.0, "precision": 0.0,
-                  "rr": 0.0, "tokens": 0}
+    def _run_task(self, program_path: str, task: dict, sandbox: str) -> dict:
+        failed = {
+            "failed": True, "recall": 0.0, "precision": 0.0,
+            "rr": 0.0, "economy": 0.0, "tokens": 0,
+        }
         try:
             proc = subprocess.run(
                 [
@@ -145,7 +173,19 @@ class LocalEvaluator:
                 ],
                 capture_output=True,
                 text=True,
+                encoding="utf-8",
+                errors="replace",
                 timeout=self.timeout,
+                # Empty cwd + minimal env: no breadcrumbs a candidate
+                # could follow to benchmark metadata. Keep only what
+                # the Python runtime itself requires.
+                cwd=sandbox,
+                env={
+                    k: v
+                    for k, v in os.environ.items()
+                    if k in ("PATH", "PYTHONPATH", "HOME", "VIRTUAL_ENV",
+                             "PYTHONHOME", "SYSTEMROOT", "LANG")
+                },
             )
         except (subprocess.TimeoutExpired, OSError):
             return failed
@@ -153,43 +193,136 @@ class LocalEvaluator:
             return failed
         try:
             chunks = json.loads(proc.stdout)["chunks"]
-            assert isinstance(chunks, list)
-        except (json.JSONDecodeError, KeyError, TypeError, AssertionError):
+            if not isinstance(chunks, list):
+                return failed
+            return self._score_chunks(chunks, task["expected_spans"])
+        except Exception:
             return failed
-        return self._score_chunks(chunks, task["expected_spans"])
 
-    def _score_chunks(self, chunks: list, spans: list[dict]) -> dict:
-        chunks = [c for c in chunks if isinstance(c, dict)]
-        covered = sum(
-            1 for s in spans if any(_overlap_lines(c, s) for c in chunks)
+    # ------------------------------------------------------------------
+    def _read_lines(self, rel_file: str) -> list[str] | None:
+        """Cached read of a repo file; None if outside the tree/missing."""
+        if rel_file in self._file_cache:
+            return self._file_cache[rel_file]
+        lines: list[str] | None = None
+        try:
+            path = (self.repo_root / rel_file).resolve()
+            if path.is_relative_to(self.repo_root) and path.is_file():
+                lines = path.read_text(
+                    encoding="utf-8", errors="replace"
+                ).splitlines()
+        except OSError:
+            lines = None
+        self._file_cache[rel_file] = lines
+        return lines
+
+    def _verify_chunk(self, chunk: dict) -> dict | None:
+        """Validate a chunk against the repo on disk.
+
+        Returns a normalized chunk with ``tokens`` computed from the
+        actual file slice and ``verified`` reflecting whether the
+        claimed content matches reality. Fabricated content earns no
+        relevance but still pays for the tokens the span would cost.
+        Returns None for chunks that reference nothing real.
+        """
+        try:
+            rel = str(chunk["file"]).replace("\\", "/")
+            start = int(chunk["start_line"])
+            end = int(chunk["end_line"])
+            content = str(chunk.get("content", ""))
+        except (KeyError, TypeError, ValueError):
+            return None
+        if start < 1 or end < start:
+            return None
+        lines = self._read_lines(rel)
+        if lines is None:
+            return None
+        end = min(end, len(lines))
+        if start > len(lines):
+            return None
+        actual = lines[start - 1 : end]
+        claimed = content.splitlines()
+        verified = len(claimed) == len(actual) and all(
+            a.rstrip() == c.rstrip() for a, c in zip(actual, claimed)
         )
-        recall = covered / len(spans)
+        return {
+            "file": rel,
+            "start_line": start,
+            "end_line": end,
+            "tokens": _estimate_tokens("\n".join(actual)),
+            "verified": verified,
+        }
 
+    def _score_chunks(self, raw_chunks: list, spans: list[dict]) -> dict:
+        chunks = []
+        for item in raw_chunks:
+            if isinstance(item, dict):
+                normalized = self._verify_chunk(item)
+                if normalized:
+                    chunks.append(normalized)
+
+        def overlap(chunk: dict, span: dict) -> int:
+            if chunk["file"] != span["file"]:
+                return 0
+            lo = max(chunk["start_line"], span["start_line"])
+            hi = min(chunk["end_line"], span["end_line"])
+            return max(0, hi - lo + 1)
+
+        verified = [c for c in chunks if c["verified"]]
+
+        # Coverage-weighted recall: union of verified-chunk lines per span.
+        recall = 0.0
+        for span in spans:
+            span_lines = span["end_line"] - span["start_line"] + 1
+            covered: set[int] = set()
+            for chunk in verified:
+                if chunk["file"] != span["file"]:
+                    continue
+                lo = max(chunk["start_line"], span["start_line"])
+                hi = min(chunk["end_line"], span["end_line"])
+                covered.update(range(lo, hi + 1))
+            recall += len(covered) / span_lines
+        recall /= len(spans)
+
+        # MRR: first chunk that alone covers >= _MRR_COVERAGE of a span.
         rr = 0.0
         for rank, chunk in enumerate(chunks, start=1):
-            if any(_overlap_lines(chunk, s) for s in spans):
+            if not chunk["verified"]:
+                continue
+            if any(
+                overlap(chunk, s) / (s["end_line"] - s["start_line"] + 1)
+                >= _MRR_COVERAGE
+                for s in spans
+            ):
                 rr = 1.0 / rank
                 break
 
         total_tokens = 0
         relevant_tokens = 0.0
         for chunk in chunks:
-            tokens = _estimate_tokens(str(chunk.get("content", "")))
-            total_tokens += tokens
-            n_lines = max(1, chunk["end_line"] - chunk["start_line"] + 1)
-            hit_lines = set()
+            total_tokens += chunk["tokens"]
+            if not chunk["verified"]:
+                continue  # fabricated content: cost, no credit
+            n_lines = chunk["end_line"] - chunk["start_line"] + 1
+            hit_lines: set[int] = set()
             for span in spans:
+                if chunk["file"] != span["file"]:
+                    continue
                 lo = max(chunk["start_line"], span["start_line"])
                 hi = min(chunk["end_line"], span["end_line"])
-                if chunk["file"] == span["file"] and lo <= hi:
+                if lo <= hi:
                     hit_lines.update(range(lo, hi + 1))
-            relevant_tokens += tokens * (len(hit_lines) / n_lines)
+            relevant_tokens += chunk["tokens"] * (len(hit_lines) / n_lines)
         precision = relevant_tokens / total_tokens if total_tokens else 0.0
+        economy = (
+            min(1.0, _TOKEN_TARGET / total_tokens) if total_tokens else 0.0
+        )
 
         return {
             "failed": False,
             "recall": recall,
             "precision": precision,
             "rr": rr,
+            "economy": economy,
             "tokens": total_tokens,
         }

@@ -141,15 +141,27 @@ def retrieval_evaluation(
             ],
         )
 
-    with tempfile.NamedTemporaryFile(
-        "w", suffix="_search_tool.py", delete=False
-    ) as handle:
-        handle.write(code)
-        program_path = handle.name
+    program_path = None
     try:
+        with tempfile.NamedTemporaryFile(
+            "w", suffix="_search_tool.py", delete=False, encoding="utf-8"
+        ) as handle:
+            handle.write(code)
+            program_path = handle.name
         metrics = evaluate_mod.evaluate(program_path, workdir, seed, scale)
+    except Exception as exc:  # never kill the controller loop
+        return _payload(
+            {PRIMARY_METRIC: SENTINEL_SCORE},
+            [
+                {
+                    "label": "Evaluation error",
+                    "text": f"Evaluating the candidate raised {exc!r}.",
+                }
+            ],
+        )
     finally:
-        Path(program_path).unlink(missing_ok=True)
+        if program_path:
+            Path(program_path).unlink(missing_ok=True)
 
     scores = {
         PRIMARY_METRIC: metrics["combined_score"],

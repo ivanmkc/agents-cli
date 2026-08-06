@@ -175,6 +175,7 @@ def generate_monorepo(
     repo_root: Path | str,
     seed: int = 0,
     scale: int = 3,
+    write_tasks: bool = True,
 ) -> dict:
     """Generate the mock monorepo and its benchmark manifest.
 
@@ -210,7 +211,7 @@ def generate_monorepo(
                     name = f"{pkg}_{verb}_{serial}"
                     start, end = _emit_function(builder, name, pkg)
                 builder.add("", "")
-                span = {"file": str(rel), "start_line": start, "end_line": end}
+                span = {"file": rel.as_posix(), "start_line": start, "end_line": end}
                 symbols[name] = {"definition": span, "usages": []}
                 module_path = f"packages.{pkg}.module_{mod_idx}"
                 importable.append((module_path, name))
@@ -248,7 +249,7 @@ def generate_monorepo(
                 builder.add(f'    request["items"] = {sym}(config, [request])')
             symbols[sym]["usages"].append(
                 {
-                    "file": str(rel),
+                    "file": rel.as_posix(),
                     "start_line": start,
                     "end_line": builder.current_line(),
                 }
@@ -268,7 +269,7 @@ def generate_monorepo(
             line = builder.next_line()
             builder.add(f"  {key}: {rng.randint(1, 300)}")
             config_spans[key] = {
-                "file": str(rel),
+                "file": rel.as_posix(),
                 "start_line": line,
                 "end_line": line,
             }
@@ -317,8 +318,12 @@ def generate_monorepo(
         )
 
     manifest = {"seed": seed, "scale": scale, "tasks": tasks}
-    tasks_path = repo_root.parent / f"{repo_root.name}.tasks.json"
-    tasks_path.write_text(json.dumps(manifest, indent=2) + "\n")
+    if write_tasks:
+        # Answer key for HUMAN inspection only. Evaluation harnesses must
+        # pass write_tasks=False so no key exists anywhere a candidate
+        # subprocess could find it (see the red-team audit).
+        tasks_path = repo_root.parent / f"{repo_root.name}.tasks.json"
+        tasks_path.write_text(json.dumps(manifest, indent=2) + "\n")
     return manifest
 
 
