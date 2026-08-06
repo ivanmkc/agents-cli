@@ -1,6 +1,6 @@
 # Progress — Real-Log Retrieval Eval Set & Skills Impact Measurement
 
-Last updated: 2026-08-06 ~09:55 UTC
+Last updated: 2026-08-06 ~14:30 UTC
 Branch: `alphaevolve-retrieval-real-eval` (pushed to `origin`)
 Worktree: `/home/ivanmkc/agents-cli/.claude/worktrees/alphaevolve-retrieval`
 
@@ -186,7 +186,58 @@ to the eval set):
   cases incl. real tool-internals rows (e.g. `popen_resolved_detached`
   -> `_runner.py:234-271`). Baseline: 209 eps (69/101/39).
 
-### TODO 3: Mine new transcripts and compare retrieval behavior
+### TODO 3: ~~Mine new transcripts and compare retrieval behavior~~ DONE (2026-08-06)
+
+v3 run: 146/213 complete (71 Claude + 71 Gemini + 4 AGY). Claude and
+Gemini both complete; AGY still trickling (statistically negligible per
+the audit — n=4, no April baseline). Comparison mined via:
+```bash
+PYTHONPATH=tools uv run python -m evolve.retrieval.compare_runs \
+  ~/agent-generator/benchmark_runs/2026-04-13_*_agents-cli-sandbox \
+  ~/.agent_generator/benchmark_runs/2026-08-06_*retrieval-eval-v3* \
+  --label-a pre-skills --label-b post-skills \
+  --out real_data/audit/v3_comparison.json
+```
+
+**Key results (Claude — within-harness, directionally trustworthy):**
+
+| Category | April eps | v3 eps | Δ | April tok | v3 tok | Δ |
+|----------|-----------|--------|---|-----------|--------|---|
+| adk-sdk | 2 | 2 | 0% | 738 | 3,352 | +354% |
+| workspace | 82 | 60 | -27% | 123,393 | 67,443 | -45% |
+| log-inspection | 0 | 14 | new | 0 | 15,782 | new |
+| tool-internals | 0 | 10 | new | 0 | 24,712 | new |
+| skill-docs | 0 | 1 | new | 0 | 1,159 | new |
+| Total Claude | 95 | 90 | -5% | 137,218 | 117,128 | -15% |
+| Skill injection | 0 | 252,395 | +∞ | — | — | — |
+
+**Key results (Gemini — episode counts only; token magnitudes unreliable
+per audit Finding C5):**
+
+| Category | April eps | v3 eps | Δ |
+|----------|-----------|--------|---|
+| adk-sdk | 22 | 8 | -64% |
+| skill-docs | 0 | 53 | new |
+| tool-internals | 0 | 10 | new |
+| cli-help | 23 | 49 | +113% |
+| workspace | 66 | 137 | +108% |
+| log-inspection | 1 | 20 | new |
+| Total Gemini | 114 | 286 | +151% |
+
+**Interpretation (with audit caveats, see `audit/2026-08-06-council-audit.md`):**
+- Gemini SDK hunts dropped 64% (22→8), but model confound (flash→3.5-flash),
+  CLI change, and ADK version change all co-vary — cannot isolate skills.
+- Gemini total episodes INCREASED 151% — new categories (skill-docs +53,
+  log-inspection +20, tool-internals +10, workspace +71) outweigh the SDK drop.
+  This suggests the newer model does more file-reading overall but shifts
+  away from SDK reverse-engineering toward skill reading and workspace exploration.
+- Claude retrieval cost dropped 15% in tokens but gained new categories
+  (tool-internals +24.7k, log-inspection +15.8k). Workspace reading dropped 45%.
+- **Skills are clearly being used** (252k Claude injection, 446 Gemini
+  `activate_skill` calls — the latter invisible to the miner, see audit C7).
+- **Net retrieval EXCLUDING skill injection**: Claude 137k→117k (-15%);
+  **INCLUDING skill injection**: 137k→369k (+169%). Skills move cost from
+  agent-initiated search to skill-injected reference material.
 
 Once the v1.3.1 run completes:
 ```bash
@@ -378,6 +429,19 @@ Temp artifacts (current session only — will be lost when job is deleted)
    v0.3.0 (April 2026) while latest is v1.3.1 (August 4, 2026); now upgraded
 6. **Multi-model coverage required**: the termchart book used Claude +
    Gemini + AGY across its analyses; a Claude-only re-run is not comparable
+
+### 7. Council-of-experts pipeline audit (DONE — 2026-08-06)
+
+8-expert audit, 6/8 complete (stats + motivation pending). Full report:
+`real_data/audit/2026-08-06-council-audit.md`. Headline:
+- 5 critical, 10 major, 12 minor findings
+- **Evolution NOT SAFE**: answer-key leak (proven 2.28× exploit), whole-file
+  ground truth on 95.2% of tasks, redirect-write misclassification
+- **Cross-harness comparison INVALID**: Gemini read_file outputs not recorded
+  (~6-7× token undercount), `activate_skill` missing from `_SKILL_TOOLS`
+- **Model confound**: 6 factors changed simultaneously (model, CLI, ADK,
+  Python, scaffold, skills) — causal claims not supportable
+- Fix queue: 3 P1 blockers → 7 P2 → 6 P3
 
 ## Known issues / blockers
 

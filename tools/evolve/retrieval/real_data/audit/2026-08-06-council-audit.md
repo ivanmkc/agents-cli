@@ -1,16 +1,16 @@
 # Council-of-Experts Audit: Real-Log Retrieval Mining Pipeline
 
 **Date:** 2026-08-06
-**Auditors:** 8 independent expert lenses (6 complete, 2 pending)
+**Auditors:** 8 independent expert lenses (7 complete, 1 pending)
 **Pipeline:** `tools/evolve/retrieval/` in `agents-cli` worktree `alphaevolve-retrieval`
-**Scope:** Episode mining, eval schema, corpus integrity, comparison fairness, docs
+**Scope:** Episode mining, eval schema, corpus integrity, comparison fairness, docs, motivation tagging
 
 ## Executive Summary
 
 The pipeline's intellectual framework is sound: the episode-mining concept,
 family taxonomy, content-addressed corpus store, and hermetic eval schema are
 well-designed and internally consistent where they overlap. However, the audit
-surfaced **5 critical, 10 major, and 12 minor** findings across the 6 completed
+surfaced **6 critical, 13 major, and 13 minor** findings across the 7 completed
 lenses that collectively mean:
 
 1. **The eval is not safe for evolution** in its current form — a candidate tool
@@ -45,6 +45,10 @@ same issue, all are credited. Ordered by impact on (a) evolution fitness and
 | C2 | CRITICAL | **Whole-file ground truth**: `_file_span()` always returns start_line=1, end_line=N. 60/63 tasks (95.2%) are whole-file spans. Evolution is trained to drag whole files — the exact behavior the project exists to eliminate. Only 3 dependency-symbol tasks have sub-file spans. | groundtruth | Fitness signal rewards the wrong behavior on 95.2% of tasks. |
 | C3 | MAJOR | **Redirect-write misclassification**: `_shell_is_readonly` does not detect `>` / `>>` redirects. `cat > file`, `echo >> file` classified as retrieval instead of action. 57 commands affected across both runs; each one extends an episode instead of ending it. | segmentation, taxonomy | Inflates episode length and token counts; biases fitness if fitness penalizes long episodes. |
 | C4 | MAJOR | **Quote-blind shell splitting**: `re.split(r"\||&&|;")` splits inside quoted arguments. `grep -E "a|b"` and `tree -I ".venv|__pycache__"` are split into stages and misclassified as action. 78 commands (5.9% of shell commands in April) misclassified as action when they are retrieval. | segmentation, taxonomy | Causes premature episode breaks; fitness sees shorter, more numerous episodes than ground truth. |
+
+| C4b | CRITICAL | **`_ORIENTATION_WINDOW=5` is an arbitrary knob controlling the majority split**: changing from 3→12 swings orientation's share from 11%→49% of v3 episodes. No empirical justification. At window=8, orientation and pre-write are exactly 50/50 — the strategy conclusion ("orientation is irreducible" vs "pre-write should be eliminated with docs") literally flips. | motivation | Strategy decisions built on orientation/pre-write split are unstable. |
+| C4c | MAJOR | **`_FAILURE_SIGNATURE` has 34% false-positive rate on raw tool results**: "error" in source code, documentation, API specs triggers the signature. At episode level, the FP rate is 3-5% (only the preceding action's result matters, and many FPs occur in retrieval results). | motivation | ~4% of failure-triggered episodes are misclassified. |
+| C4d | MAJOR | **Lookback depth of 1 misses 8.8% of debug episodes in v3**: failure→narration→neutral→search chains get missed when the immediately preceding result is clean. v3 rate higher (8.8%) than April (1.2%) because skills inject reference material between failure and search. | motivation | Failure-triggered count is a lower bound; ~9% of real debug episodes classified as pre-write/orientation in v3. |
 
 ### Tier 2 — Comparison Validity
 
@@ -90,10 +94,28 @@ same issue, all are credited. Ordered by impact on (a) evolution fitness and
 | Unit | Status | Notes |
 |------|--------|-------|
 | Statistical methodology | Agent ran, scratch files present | Report not yet received |
-| Motivation-tagging validity | Agent ran, extensive scratch files (1,246 lines) | Report not yet received |
 
-These will be incorporated as an addendum when received. Findings from these units
-may add to Tiers 1-4 above.
+This will be incorporated as an addendum when received.
+
+## Motivation-Tagging Audit Summary (received 2026-08-06)
+
+The motivation auditor hand-judged 72 stratified episodes (24 per tag) and ran
+a full-population scan. Key findings integrated into Tier 1 above (C4b, C4c,
+C4d). Additional findings:
+
+- **Confusion matrix (stratified sample):** 100% precision across all 3 tags in
+  a 72-episode sample. This does not contradict the 3-5% FP rate in the full
+  population scan — the random sample happened to draw only true failures.
+- **"Exit Code: 1" regex gap:** Gemini harness format `Exit Code: 1` (with colon
+  and capitals) does not match `exit code [1-9]` — partially masked because these
+  outputs usually also contain "error" or "failed".
+- **False-negative rate:** low (~2%). Only 13 potential unmatched failure patterns
+  found in 731 matches. Main gaps: "not found" without "no such file" (10 cases),
+  "could not / cannot / unable to" (3 cases).
+- **Recommendation:** collapse orientation and pre-write into a single
+  "non-failure retrieval" category unless `_ORIENTATION_WINDOW` is empirically
+  calibrated. Failure-triggered is reliable enough for both comparison
+  segmentation and fitness selection.
 
 ## Verdict by Use Case
 
@@ -142,6 +164,9 @@ Priority 3 — hardening:
 - [ ] C11: Wire per-row pin verification into `evaluate_real()` at scoring time
 - [ ] C12: Include corpus version in index key (e.g., `adk-sdk@1.34.1`)
 - [ ] C15/C16: Add AGY tool names (`read_url_content`, `CommandLine` key) to taxonomy
+- [ ] C4b: Empirically calibrate `_ORIENTATION_WINDOW` or collapse orientation/pre-write into single "non-failure" tag
+- [ ] C4c: Tighten `_FAILURE_SIGNATURE` to reduce 34% raw FP rate (e.g., require word boundary around "error")
+- [ ] C4d: Extend lookback depth beyond 1 for failure detection (look back 3-5 actions)
 
 ## Cross-Reference: Shared Findings Across Units
 
