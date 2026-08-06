@@ -33,8 +33,29 @@ def test_stage1_is_a_subset_screen(tmp_path):
     assert 0.0 <= stage1["combined_score"] <= 1.0
 
 
+def _real_manifest_dict(tasks, corpora=None):
+    """A minimal v1 real-log manifest around the given tasks."""
+    return {
+        "schema_version": 1,
+        "provenance": {"source_run": "test", "miner": "test"},
+        "corpus_store": "corpus",
+        "corpora": corpora
+        or {
+            "project": {
+                "role": "workspace",
+                "pin": {"kind": "command", "command": "scaffold", "tool_version": "t"},
+            },
+            "sdk": {
+                "role": "dependency",
+                "pin": {"kind": "package", "name": "some-sdk", "version": "1.0"},
+            },
+        },
+        "tasks": tasks,
+    }
+
+
 def _real_fixture(tmp_path):
-    """Tiny project corpus + validated-style real-log manifest."""
+    """Tiny project corpus + v1 manifest with one task per corpus."""
     root = tmp_path / "proj"
     (root / "app").mkdir(parents=True)
     (root / "app" / "agent.py").write_text(
@@ -43,30 +64,32 @@ def _real_fixture(tmp_path):
     manifest = tmp_path / "real_manifest.json"
     manifest.write_text(
         json.dumps(
-            {
-                "tasks": [
+            _real_manifest_dict(
+                [
                     {
-                        "family": "project-file",
-                        "kind": "project-file",
+                        "id": "r0",
+                        "family": "workspace-file",
                         "corpus": "project",
                         "query": "check the agent file line_5 configuration",
                         "expected_spans": [
                             {"file": "app/agent.py", "start_line": 1, "end_line": 20}
                         ],
+                        "pins": {"files": {}},
                         "observed": {"steps": 2, "tokens": 100, "wall_seconds": 1.0},
                     },
                     {
-                        "family": "sdk-symbol",
-                        "kind": "sdk-symbol",
+                        "id": "r1",
+                        "family": "dependency-symbol",
                         "corpus": "sdk",
                         "query": "LlmAgent definition",
                         "expected_spans": [
                             {"file": "google/adk/agents.py", "start_line": 1, "end_line": 5}
                         ],
+                        "pins": {"files": {}},
                         "observed": {"steps": 3, "tokens": 200, "wall_seconds": 2.0},
                     },
                 ]
-            }
+            )
         )
     )
     return root, manifest
@@ -96,15 +119,17 @@ def test_evaluate_real_missing_manifest_raises(tmp_path):
 
 def test_evaluate_real_corpus_roots_from_env(tmp_path, monkeypatch):
     root, manifest = _real_fixture(tmp_path)
-    monkeypatch.setenv("EVOLVE_REAL_PROJECT_ROOT", str(root))
-    result = evaluate_mod.evaluate_real(search_tool.__file__, manifest_path=manifest)
+    monkeypatch.setenv("EVOLVE_REAL_ROOTS", json.dumps({"project": str(root)}))
+    result = evaluate_mod.evaluate_real(
+        search_tool.__file__, manifest_path=manifest, corpus_cache=tmp_path / "cc"
+    )
     assert result["num_tasks"] == 1
 
 
 def test_evaluate_blends_real_score_when_env_configured(tmp_path, monkeypatch):
     root, manifest = _real_fixture(tmp_path)
     monkeypatch.setenv("EVOLVE_REAL_MANIFEST", str(manifest))
-    monkeypatch.setenv("EVOLVE_REAL_PROJECT_ROOT", str(root))
+    monkeypatch.setenv("EVOLVE_REAL_ROOTS", json.dumps({"project": str(root)}))
     monkeypatch.setenv("EVOLVE_REAL_WEIGHT", "0.5")
     blended = evaluate_mod.evaluate(
         search_tool.__file__, workdir=tmp_path / "wd", scale=1
@@ -117,3 +142,84 @@ def test_evaluate_blends_real_score_when_env_configured(tmp_path, monkeypatch):
 def test_evaluate_unchanged_when_real_weight_unset(tmp_path):
     result = evaluate_mod.evaluate(search_tool.__file__, workdir=tmp_path, scale=1)
     assert "real" not in result
+
+
+def test_evaluate_real_resolves_pinned_corpus_from_store(tmp_path):
+    # No corpus_roots arg, no env vars: the manifest's corpus_store +
+    # pinned corpus name must be enough (hermetic evaluation).
+    from evolve.retrieval import corpus_store
+
+    tree = tmp_path / "tree"
+    (tree / "app").mkdir(parents=True)
+    (tree / "app" / "agent.py").write_text(
+        "\n".join(f"line_{i} = {i}" for i in range(1, 21)) + "\n"
+    )
+    corpus_store.snapshot(tree, "project", tmp_path / "corpus")
+    manifest = tmp_path / "real_manifest.json"
+    manifest.write_text(
+        json.dumps(
+            _real_manifest_dict(
+                [
+                    {
+                        "id": "r0",
+                        "family": "workspace-file",
+                        "corpus": "project",
+                        "query": "check the agent file line_5 configuration",
+                        "expected_spans": [
+                            {"file": "app/agent.py", "start_line": 1, "end_line": 20}
+                        ],
+                        "pins": {"files": {}},
+                        "observed": {"steps": 2, "tokens": 100, "wall_seconds": 1.0},
+                    }
+                ]
+            )
+        )
+    )
+    result = evaluate_mod.evaluate_real(
+        search_tool.__file__,
+        manifest_path=manifest,
+        corpus_cache=tmp_path / "cache",
+    )
+    assert result["num_tasks"] == 1
+    assert result["num_skipped"] == 0
+    assert 0.0 <= result["combined_score"] <= 1.0
+
+
+def test_evaluate_real_explicit_roots_override_store(tmp_path):
+    from evolve.retrieval import corpus_store
+
+    tree = tmp_path / "tree"
+    (tree / "app").mkdir(parents=True)
+    (tree / "app" / "agent.py").write_text("x = 1\n")
+    corpus_store.snapshot(tree, "project", tmp_path / "corpus")
+    manifest = tmp_path / "m.json"
+    manifest.write_text(
+        json.dumps(
+            _real_manifest_dict(
+                [
+                    {
+                        "id": "r0",
+                        "family": "workspace-file",
+                        "corpus": "project",
+                        "query": "x",
+                        "expected_spans": [
+                            {"file": "app/agent.py", "start_line": 1, "end_line": 1}
+                        ],
+                        "pins": {"files": {}},
+                        "observed": {"steps": 1, "tokens": 10, "wall_seconds": 0.5},
+                    }
+                ]
+            )
+        )
+    )
+    override = tmp_path / "elsewhere"
+    (override / "app").mkdir(parents=True)
+    (override / "app" / "agent.py").write_text("x = 1\n")
+    result = evaluate_mod.evaluate_real(
+        search_tool.__file__,
+        manifest_path=manifest,
+        corpus_roots={"project": override},
+        corpus_cache=tmp_path / "cache",
+    )
+    assert result["num_tasks"] == 1
+    assert not (tmp_path / "cache").exists()  # store never touched

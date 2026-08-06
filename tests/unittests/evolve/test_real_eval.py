@@ -113,8 +113,8 @@ def test_build_cases_sdk_symbol(sdk_corpus):
     cases = build_cases([ep], sdk_root=sdk_corpus, project_root=None)
     assert len(cases) == 1
     case = cases[0]
-    assert case["family"] == "sdk-symbol"
-    assert case["corpus"] == "sdk"
+    assert case["family"] == "dependency-symbol"
+    assert case["corpus"] == "adk-sdk"
     assert "LlmAgent" in case["query"]
     assert case["expected_spans"][0]["file"] == "agents/llm_agent.py"
     # The observed (real-agent) cost rides along for comparison.
@@ -137,8 +137,8 @@ def test_build_cases_project_file(tmp_path, sdk_corpus):
     cases = build_cases([ep], sdk_root=sdk_corpus, project_root=proj)
     assert len(cases) == 1
     case = cases[0]
-    assert case["family"] == "project-file"
-    assert case["corpus"] == "project"
+    assert case["family"] == "workspace-file"
+    assert case["corpus"] == "agent-project"
     files = {s["file"] for s in case["expected_spans"]}
     assert files == {"app/agent.py", "pyproject.toml"}
 

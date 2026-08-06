@@ -147,8 +147,10 @@ def main() -> None:
 
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("manifest", type=Path)
-    parser.add_argument("--sdk-root", type=Path, default=None)
-    parser.add_argument("--project-root", type=Path, default=None)
+    parser.add_argument(
+        "--root", action="append", default=[], metavar="NAME=PATH",
+        help="corpus root, repeatable — e.g. --root adk-sdk=/path/google/adk",
+    )
     parser.add_argument(
         "--tool", action="append", type=Path, default=None,
         help="candidate tool(s); default: default_grep + search_tool",
@@ -160,14 +162,16 @@ def main() -> None:
     manifest = json.loads(args.manifest.read_text())
     tasks = manifest["tasks"]
 
-    roots = {"sdk": args.sdk_root, "project": args.project_root}
+    roots = {}
+    for spec in args.root:
+        name, _, path = spec.partition("=")
+        if not path:
+            parser.error(f"--root must be NAME=PATH, got {spec!r}")
+        roots[name] = Path(path)
     tasks_by_corpus: dict[str, tuple[Path, list[dict]]] = {}
-    skipped = 0
+    skipped = len([t for t in tasks if t["corpus"] not in roots])
     for corpus, root in roots.items():
         subset = [t for t in tasks if t["corpus"] == corpus]
-        if root is None:
-            skipped += len(subset)
-            continue
         if subset:
             tasks_by_corpus[corpus] = (root, subset)
     if skipped:

@@ -29,6 +29,19 @@ import json
 import re
 from pathlib import Path
 
+try:
+    from evolve.retrieval.schema import (
+        FAMILY_DEPENDENCY_SYMBOL,
+        FAMILY_WORKSPACE_FILE,
+    )
+except ImportError:  # invoked standalone (python -m from tools/)
+    from .schema import FAMILY_DEPENDENCY_SYMBOL, FAMILY_WORKSPACE_FILE
+
+# Corpus names this ADK-specific miner emits; the schema itself is
+# framework-agnostic — other miners declare their own corpora.
+SDK_CORPUS_NAME = "adk-sdk"
+PROJECT_CORPUS_NAME = "agent-project"
+
 # Substrings of a call argument that mark it as an SDK lookup.
 _SDK_PATH_MARKERS = ("site-packages/google/adk", "site-packages\\google\\adk")
 
@@ -212,9 +225,8 @@ def build_cases(
                     located_symbols.append(symbol)
             if spans:
                 cases.append({
-                    "family": "sdk-symbol",
-                    "kind": "sdk-symbol",
-                    "corpus": "sdk",
+                    "family": FAMILY_DEPENDENCY_SYMBOL,
+                    "corpus": SDK_CORPUS_NAME,
                     "query": _query(episode, located_symbols),
                     "symbols": located_symbols,
                     "expected_spans": spans,
@@ -234,9 +246,8 @@ def build_cases(
                         spans.append(span)
             if spans:
                 cases.append({
-                    "family": "project-file",
-                    "kind": "project-file",
-                    "corpus": "project",
+                    "family": FAMILY_WORKSPACE_FILE,
+                    "corpus": PROJECT_CORPUS_NAME,
                     "query": _query(episode, []),
                     "expected_spans": spans,
                     "observed": _observed(episode),

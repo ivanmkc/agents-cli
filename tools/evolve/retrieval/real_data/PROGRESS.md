@@ -249,6 +249,28 @@ and override the install step.
 - `agents-cli` binary is on `PATH` via the host's uv tool install
 - Upgrading the host's agents-cli + skills = upgrading what the sandbox sees
 
+### TODO 5b: ~~Hermetic + generic manifest schema~~ DONE (2026-08-06)
+
+Per user direction ("make it hermetic by pinning each data row to its
+dependencies" + "make schema generic such that we can apply to non-adk"):
+- `schema.py` — v1 manifest schema, framework-agnostic, typed stdlib
+  dataclasses (repo has no pydantic; evolve subtree is dependency-free).
+  Open corpora set w/ machine-readable pins (package/command/repo),
+  open family vocabulary (`dependency-symbol`, `workspace-file`),
+  `kind` derived at the evaluator boundary (never persisted).
+- `corpus_store.py` — content-addressed deterministic archives
+  (committed under `real_data/corpus/`, 2.6 MB), archive + per-file
+  sha256 verified at materialization.
+- Corpora regenerated from pins (google-adk 1.34.1; agents-cli v0.3.0
+  scaffold) and verified 243/243 evidence spans byte-for-byte against
+  `validation/packets.jsonl.gz` before snapshotting.
+- `real_eval_manifest.validated.json` migrated to v1 (63 tasks, per-row
+  file pins). `evaluate_real()` resolves corpora arg > `EVOLVE_REAL_ROOTS`
+  (JSON env) > pinned store — zero-config hermetic scoring:
+  default_grep 0.383 combined / 0.839 recall; mock-evolved search_tool
+  0.181 / **0.033 recall** (overfitting now hermetically reproducible).
+- 76 tests passing (schema, store round-trip/tamper, resolution order).
+
 ### TODO 5: ~~Fold real-log cases into evolution fitness~~ DONE
 
 `evaluate.py` now has a real-log stage (TDD, 5 new tests, 61 passing):

@@ -26,14 +26,16 @@ import tempfile
 from pathlib import Path
 
 try:
-    from evolve.retrieval import baselines
+    from evolve.retrieval import baselines, corpus_store
     from evolve.retrieval.evaluator import LocalEvaluator, compute_lift
     from evolve.retrieval.monorepo import generate_monorepo
+    from evolve.retrieval.schema import RealEvalManifest
 except ImportError:  # invoked standalone by an evolution runner
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
-    from evolve.retrieval import baselines
+    from evolve.retrieval import baselines, corpus_store
     from evolve.retrieval.evaluator import LocalEvaluator, compute_lift
     from evolve.retrieval.monorepo import generate_monorepo
+    from evolve.retrieval.schema import RealEvalManifest
 
 DEFAULT_SEED = 0
 DEFAULT_SCALE = 3
@@ -47,10 +49,9 @@ _REAL_MANIFEST_DEFAULT = (
     Path(__file__).resolve().parent
     / "real_data" / "real_eval_manifest.validated.json"
 )
-_REAL_ROOT_ENV = {
-    "project": "EVOLVE_REAL_PROJECT_ROOT",
-    "sdk": "EVOLVE_REAL_SDK_ROOT",
-}
+# JSON object mapping corpus name -> root dir, e.g.
+# EVOLVE_REAL_ROOTS='{"adk-sdk": "/path/to/site-packages/google/adk"}'
+_REAL_ROOTS_ENV = "EVOLVE_REAL_ROOTS"
 
 
 def _default_workdir(seed: int, scale: int) -> Path:
@@ -137,13 +138,22 @@ def evaluate_real(
     program_path: str,
     manifest_path: Path | str | None = None,
     corpus_roots: dict[str, Path | str] | None = None,
+    corpus_cache: Path | str | None = None,
 ) -> dict:
     """Score a candidate against the validated real-log eval cases.
 
-    ``corpus_roots`` maps corpus name (``project`` / ``sdk``) to the
-    directory the tasks' spans refer to; unset corpora fall back to the
-    ``EVOLVE_REAL_PROJECT_ROOT`` / ``EVOLVE_REAL_SDK_ROOT`` env vars.
-    Tasks whose corpus has no root are skipped and counted in
+    Corpus resolution order, per corpus name declared in the manifest:
+
+    1. explicit ``corpus_roots`` argument,
+    2. the ``EVOLVE_REAL_ROOTS`` env var (JSON: corpus name -> root dir),
+    3. the manifest's pinned corpus store (``corpus_store`` key, a
+       directory relative to the manifest) — content-addressed archives
+       materialized via :mod:`evolve.retrieval.corpus_store`, verified
+       against the pinned sha256s. This is the hermetic default: rows
+       score against the exact trees their ground truth was validated
+       on, regardless of what the host has installed.
+
+    Tasks whose corpus resolves nowhere are skipped and counted in
     ``num_skipped`` — metrics are the task-weighted mean of the rest.
     """
     manifest_path = Path(
@@ -151,20 +161,32 @@ def evaluate_real(
         or os.environ.get("EVOLVE_REAL_MANIFEST")
         or _REAL_MANIFEST_DEFAULT
     )
-    tasks = json.loads(manifest_path.read_text())["tasks"]
+    manifest = RealEvalManifest.from_dict(json.loads(manifest_path.read_text()))
     if corpus_roots is not None:
         roots = {k: Path(v) for k, v in corpus_roots.items()}
     else:
         roots = {
-            corpus: Path(value)
-            for corpus, var in _REAL_ROOT_ENV.items()
-            if (value := os.environ.get(var))
+            name: Path(root)
+            for name, root in json.loads(
+                os.environ.get(_REAL_ROOTS_ENV) or "{}"
+            ).items()
         }
+        store_dir = manifest_path.parent / manifest.corpus_store
+        index = corpus_store.load_index(store_dir)
+        cache = Path(
+            corpus_cache
+            or Path(tempfile.gettempdir()) / "agents-cli-evolve-corpora"
+        )
+        for name in manifest.corpora:
+            if name not in roots and name in index:
+                roots[name] = corpus_store.materialize(name, store_dir, cache)
     per_corpus: dict[str, dict] = {}
     totals = {"combined_score": 0.0, "recall": 0.0, "precision": 0.0, "mrr": 0.0}
     num_tasks = 0
     for corpus, root in sorted(roots.items()):
-        subset = [t for t in tasks if t.get("corpus") == corpus]
+        subset = [
+            t.to_evaluator_dict() for t in manifest.tasks if t.corpus == corpus
+        ]
         if not subset:
             continue
         metrics = LocalEvaluator(root, {"tasks": subset}).evaluate_program(
@@ -180,7 +202,7 @@ def evaluate_real(
             totals[key] = round(totals[key] / num_tasks, 4)
     return {
         "num_tasks": num_tasks,
-        "num_skipped": len(tasks) - num_tasks,
+        "num_skipped": len(manifest.tasks) - num_tasks,
         "per_corpus": per_corpus,
         **totals,
     }

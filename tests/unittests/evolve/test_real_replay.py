@@ -3,7 +3,7 @@
 from evolve.retrieval.real_replay import compare, observed_summary
 
 
-def _task(steps, tokens, wall, family="project-file"):
+def _task(steps, tokens, wall, family="workspace-file"):
     return {
         "family": family,
         "observed": {

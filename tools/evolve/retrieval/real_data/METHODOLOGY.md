@@ -184,7 +184,13 @@ CLI-flag lookups replayable).
 ## 6. Corpora
 
 Ground-truth spans are line-addressed against two version-pinned
-corpora (not committed; regenerable):
+corpora, committed as content-addressed archives in `corpus/`
+(deterministic tar.gz + per-file sha256, verified at materialization —
+see `evolve/retrieval/corpus_store.py`; every task additionally pins the
+sha256 of each expected-span file). Regeneration recipes are encoded as
+machine-readable `pin` entries in the manifest's `corpora` map, and both
+regenerated trees were verified byte-for-byte against the validators'
+`packets.jsonl.gz` span evidence (243/243 spans) before snapshotting:
 
 * **sdk** — the installed `google-adk == 1.34.1` tree at
   `site-packages/google/adk` (542 `.py` files, ~11 MB) — the *same
