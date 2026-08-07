@@ -108,6 +108,7 @@ def test_unknown_pin_kind_raises():
 def test_task_helpers_expose_typed_fields():
     task = EvalTask(
         id="r1",
+        case_id="TEST-001",
         family="workspace-file",
         corpus="agent-project",
         query="look at the agent file",

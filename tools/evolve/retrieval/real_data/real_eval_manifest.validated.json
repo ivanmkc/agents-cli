@@ -1,2052 +1,2241 @@
 {
- "schema_version": 1,
- "provenance": {
-  "source_run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
-  "miner": "evolve.retrieval.log_mining + real_eval (consensus-validated subset)",
-  "validation": "validation/consensus_report.json"
- },
- "corpus_store": "corpus",
- "corpora": {
-  "adk-sdk": {
-   "role": "dependency",
-   "pin": {
-    "kind": "package",
-    "name": "google-adk",
-    "version": "1.34.1",
-    "subpath": "google/adk"
-   }
+  "schema_version": 1,
+  "provenance": {
+    "source_run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+    "miner": "evolve.retrieval.log_mining + real_eval (consensus-validated subset)",
+    "validation": "validation/consensus_report.json"
   },
-  "agent-project": {
-   "role": "workspace",
-   "pin": {
-    "kind": "command",
-    "command": "agents-cli scaffold create agent-project -y -s --agent-guidance-filename CLAUDE.md",
-    "tool_version": "google-agents-cli==0.3.0"
-   }
-  }
- },
- "tasks": [
-  {
-   "id": "r0000",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "Great! Now let me check the current agent.py file and understand the structure:",
-   "expected_spans": [
-    {
-     "file": "app/agent.py",
-     "start_line": 1,
-     "end_line": 79
+  "corpus_store": "corpus",
+  "corpora": {
+    "adk-sdk": {
+      "role": "dependency",
+      "pin": {
+        "kind": "package",
+        "name": "google-adk",
+        "version": "1.34.1",
+        "subpath": "google/adk"
+      }
+    },
+    "agent-project": {
+      "role": "workspace",
+      "pin": {
+        "kind": "command",
+        "command": "agents-cli scaffold create agent-project -y -s --agent-guidance-filename CLAUDE.md",
+        "tool_version": "google-agents-cli==0.3.0"
+      }
     }
-   ],
-   "pins": {
-    "files": {
-     "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
-    }
-   },
-   "observed": {
-    "steps": 4,
-    "tokens": 3348,
-    "wall_seconds": 6.275,
-    "agent": "Interactive_claude_agents-cli",
-    "case": "CLI-DEV-001-EXP"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": true,
-    "issues": []
-   }
   },
-  {
-   "id": "r0001",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "Excellent! Now let me check the project structure:",
-   "expected_spans": [
+  "tasks": [
     {
-     "file": "app/agent.py",
-     "start_line": 1,
-     "end_line": 79
+      "id": "r0000",
+      "case_id": "CLI-DEV-001-EXP",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "Great! Now let me check the current agent.py file and understand the structure:",
+      "task_description": "Full development loop using agents-cli: scaffold, install, implement, lint, and test a data catalog discovery agent.",
+      "retrieval_rationale": "Read the agent template to plan modifications for a data catalog discovery agent.",
+      "expected_spans": [
+        {
+          "file": "app/agent.py",
+          "start_line": 1,
+          "end_line": 79
+        }
+      ],
+      "pins": {
+        "files": {
+          "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
+        }
+      },
+      "observed": {
+        "steps": 4,
+        "tokens": 3348,
+        "wall_seconds": 6.275,
+        "agent": "Interactive_claude_agents-cli",
+        "case": "CLI-DEV-001-EXP"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": true,
+        "issues": []
+      }
     },
     {
-     "file": "tests/integration/test_agent.py",
-     "start_line": 1,
-     "end_line": 57
-    }
-   ],
-   "pins": {
-    "files": {
-     "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75",
-     "tests/integration/test_agent.py": "c186de5621f4e7fe6c073ef7b7d4d846c94ae4098ab0f2637bcf82cdd92fbb19"
-    }
-   },
-   "observed": {
-    "steps": 3,
-    "tokens": 1628,
-    "wall_seconds": 3.866,
-    "agent": "Interactive_claude_agents-cli",
-    "case": "CLI-DEV-001"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": true,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0003",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "Let me check the current agent structure:",
-   "expected_spans": [
-    {
-     "file": "app/agent.py",
-     "start_line": 1,
-     "end_line": 79
+      "id": "r0001",
+      "case_id": "CLI-DEV-001",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "Excellent! Now let me check the project structure:",
+      "task_description": "Full development loop using agents-cli: scaffold, install, implement, lint, and test a data catalog discovery agent.",
+      "retrieval_rationale": "Surveyed the scaffolded project layout before implementing a data catalog discovery agent.",
+      "expected_spans": [
+        {
+          "file": "app/agent.py",
+          "start_line": 1,
+          "end_line": 79
+        },
+        {
+          "file": "tests/integration/test_agent.py",
+          "start_line": 1,
+          "end_line": 57
+        }
+      ],
+      "pins": {
+        "files": {
+          "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75",
+          "tests/integration/test_agent.py": "c186de5621f4e7fe6c073ef7b7d4d846c94ae4098ab0f2637bcf82cdd92fbb19"
+        }
+      },
+      "observed": {
+        "steps": 3,
+        "tokens": 1628,
+        "wall_seconds": 3.866,
+        "agent": "Interactive_claude_agents-cli",
+        "case": "CLI-DEV-001"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": true,
+        "issues": []
+      }
     },
     {
-     "file": "tests/integration/test_agent.py",
-     "start_line": 1,
-     "end_line": 57
+      "id": "r0003",
+      "case_id": "CLI-DEV-002",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "Let me check the current agent structure:",
+      "task_description": "Full development loop with a different domain: scaffold, implement, lint, test, and run.",
+      "retrieval_rationale": "Read workspace files to understand the project before implementing .",
+      "expected_spans": [
+        {
+          "file": "app/agent.py",
+          "start_line": 1,
+          "end_line": 79
+        },
+        {
+          "file": "tests/integration/test_agent.py",
+          "start_line": 1,
+          "end_line": 57
+        },
+        {
+          "file": "pyproject.toml",
+          "start_line": 1,
+          "end_line": 97
+        }
+      ],
+      "pins": {
+        "files": {
+          "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75",
+          "tests/integration/test_agent.py": "c186de5621f4e7fe6c073ef7b7d4d846c94ae4098ab0f2637bcf82cdd92fbb19",
+          "pyproject.toml": "82dc2cc88f7dab518fc404a88bea91c512d3407cbb8c38d551c2642acefff5bb"
+        }
+      },
+      "observed": {
+        "steps": 6,
+        "tokens": 2604,
+        "wall_seconds": 10.072,
+        "agent": "Interactive_claude_agents-cli",
+        "case": "CLI-DEV-002"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": true,
+        "issues": []
+      }
     },
     {
-     "file": "pyproject.toml",
-     "start_line": 1,
-     "end_line": 97
-    }
-   ],
-   "pins": {
-    "files": {
-     "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75",
-     "tests/integration/test_agent.py": "c186de5621f4e7fe6c073ef7b7d4d846c94ae4098ab0f2637bcf82cdd92fbb19",
-     "pyproject.toml": "82dc2cc88f7dab518fc404a88bea91c512d3407cbb8c38d551c2642acefff5bb"
-    }
-   },
-   "observed": {
-    "steps": 6,
-    "tokens": 2604,
-    "wall_seconds": 10.072,
-    "agent": "Interactive_claude_agents-cli",
-    "case": "CLI-DEV-002"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": true,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0005",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "Good! Now let me explore the project structure to see what was generated.",
-   "expected_spans": [
-    {
-     "file": "app/agent.py",
-     "start_line": 1,
-     "end_line": 79
-    }
-   ],
-   "pins": {
-    "files": {
-     "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
-    }
-   },
-   "observed": {
-    "steps": 2,
-    "tokens": 878,
-    "wall_seconds": 0.075,
-    "agent": "Interactive_claude_agents-cli",
-    "case": "CLI-DEV-SERVE-001-EXP"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": true,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0006",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "Let me check the current agent implementation:",
-   "expected_spans": [
-    {
-     "file": "app/agent.py",
-     "start_line": 1,
-     "end_line": 79
-    }
-   ],
-   "pins": {
-    "files": {
-     "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
-    }
-   },
-   "observed": {
-    "steps": 2,
-    "tokens": 878,
-    "wall_seconds": 1.268,
-    "agent": "Interactive_claude_agents-cli",
-    "case": "CLI-DEV-SERVE-001"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": true,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0009",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "Great! Now let me explore the project structure:",
-   "expected_spans": [
-    {
-     "file": "app/agent.py",
-     "start_line": 1,
-     "end_line": 79
-    }
-   ],
-   "pins": {
-    "files": {
-     "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
-    }
-   },
-   "observed": {
-    "steps": 2,
-    "tokens": 984,
-    "wall_seconds": 1.83,
-    "agent": "Interactive_claude_agents-cli",
-    "case": "CLI-ENH-001"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": true,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0014",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "Great! Now let me explore the project structure:",
-   "expected_spans": [
-    {
-     "file": "app/agent.py",
-     "start_line": 1,
-     "end_line": 79
-    }
-   ],
-   "pins": {
-    "files": {
-     "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
-    }
-   },
-   "observed": {
-    "steps": 5,
-    "tokens": 1157,
-    "wall_seconds": 5.496,
-    "agent": "Interactive_claude_agents-cli",
-    "case": "CLI-ENH-002"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": true,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0019",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "Let me read the existing agent.py file to understand the structure:",
-   "expected_spans": [
-    {
-     "file": "app/agent.py",
-     "start_line": 1,
-     "end_line": 79
-    }
-   ],
-   "pins": {
-    "files": {
-     "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
-    }
-   },
-   "observed": {
-    "steps": 2,
-    "tokens": 878,
-    "wall_seconds": 1.825,
-    "agent": "Interactive_claude_agents-cli",
-    "case": "CLI-EVAL-CUSTOM"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": true,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0021",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "Great! Now let me check the project structure:",
-   "expected_spans": [
-    {
-     "file": "app/agent.py",
-     "start_line": 1,
-     "end_line": 79
-    }
-   ],
-   "pins": {
-    "files": {
-     "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
-    }
-   },
-   "observed": {
-    "steps": 2,
-    "tokens": 1105,
-    "wall_seconds": 1.441,
-    "agent": "Interactive_claude_agents-cli",
-    "case": "CLI-EXT-001"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": true,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0023",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "Let me check the project structure:",
-   "expected_spans": [
-    {
-     "file": "app/agent.py",
-     "start_line": 1,
-     "end_line": 79
-    }
-   ],
-   "pins": {
-    "files": {
-     "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
-    }
-   },
-   "observed": {
-    "steps": 2,
-    "tokens": 1038,
-    "wall_seconds": 2.888,
-    "agent": "Interactive_claude_agents-cli",
-    "case": "CLI-FLOW-CB-001-EXP"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": true,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0024",
-   "family": "dependency-symbol",
-   "corpus": "adk-sdk",
-   "query": "Let me find the _SingleBeforeToolCallback definition:",
-   "expected_spans": [
-    {
-     "file": "agents/llm_agent.py",
-     "start_line": 102,
-     "end_line": 105
-    }
-   ],
-   "pins": {
-    "files": {
-     "agents/llm_agent.py": "7d0a8b71724536898ca7f347038dbbc1cf0eeb38d1d6f9e1077b8cfeb9461c0b"
-    }
-   },
-   "observed": {
-    "steps": 2,
-    "tokens": 203,
-    "wall_seconds": 1.522,
-    "agent": "Interactive_claude_agents-cli",
-    "case": "CLI-FLOW-CB-001-EXP"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": true,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0027",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "Great! Now let me explore the project structure:",
-   "expected_spans": [
-    {
-     "file": "app/agent.py",
-     "start_line": 1,
-     "end_line": 79
+      "id": "r0005",
+      "case_id": "CLI-DEV-SERVE-001-EXP",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "Good! Now let me explore the project structure to see what was generated.",
+      "task_description": "Build an ADK agent and start it using agents-cli dev or agents-cli serve for local testing.",
+      "retrieval_rationale": "Surveyed the scaffolded project layout before implementing ADK agent and start it using agents-cli dev or agents-cli serve....",
+      "expected_spans": [
+        {
+          "file": "app/agent.py",
+          "start_line": 1,
+          "end_line": 79
+        }
+      ],
+      "pins": {
+        "files": {
+          "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
+        }
+      },
+      "observed": {
+        "steps": 2,
+        "tokens": 878,
+        "wall_seconds": 0.075,
+        "agent": "Interactive_claude_agents-cli",
+        "case": "CLI-DEV-SERVE-001-EXP"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": true,
+        "issues": []
+      }
     },
     {
-     "file": "tests/integration/test_agent.py",
-     "start_line": 1,
-     "end_line": 57
-    }
-   ],
-   "pins": {
-    "files": {
-     "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75",
-     "tests/integration/test_agent.py": "c186de5621f4e7fe6c073ef7b7d4d846c94ae4098ab0f2637bcf82cdd92fbb19"
-    }
-   },
-   "observed": {
-    "steps": 5,
-    "tokens": 1819,
-    "wall_seconds": 5.158,
-    "agent": "Interactive_claude_agents-cli",
-    "case": "CLI-FLOW-CB-001"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": true,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0028",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "Great! Now let me check the current agent.py structure and then modify it to implement the two-agent system:",
-   "expected_spans": [
-    {
-     "file": "app/agent.py",
-     "start_line": 1,
-     "end_line": 79
-    }
-   ],
-   "pins": {
-    "files": {
-     "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
-    }
-   },
-   "observed": {
-    "steps": 2,
-    "tokens": 871,
-    "wall_seconds": 1.958,
-    "agent": "Interactive_claude_agents-cli",
-    "case": "CLI-FLOW-HO-001-EXP"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": true,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0029",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "Excellent! Now let me examine the project structure and the agent.py file:",
-   "expected_spans": [
-    {
-     "file": "app/agent.py",
-     "start_line": 1,
-     "end_line": 79
-    }
-   ],
-   "pins": {
-    "files": {
-     "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
-    }
-   },
-   "observed": {
-    "steps": 3,
-    "tokens": 3228,
-    "wall_seconds": 4.341,
-    "agent": "Interactive_claude_agents-cli",
-    "case": "CLI-INFO-001"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": true,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0031",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "Great! Now let me check the structure and verify the agent file:",
-   "expected_spans": [
-    {
-     "file": "app/agent.py",
-     "start_line": 1,
-     "end_line": 79
-    }
-   ],
-   "pins": {
-    "files": {
-     "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
-    }
-   },
-   "observed": {
-    "steps": 3,
-    "tokens": 3413,
-    "wall_seconds": 2.782,
-    "agent": "Interactive_claude_agents-cli",
-    "case": "CLI-INIT-A2A-EXP"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": false,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0032",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "Let me verify the directory and structure:",
-   "expected_spans": [
-    {
-     "file": "app/__init__.py",
-     "start_line": 1,
-     "end_line": 17
-    }
-   ],
-   "pins": {
-    "files": {
-     "app/__init__.py": "e4f304a38370662d162492847dfc9e220ec953d3c2cbf885a6a7734e270e9b82"
-    }
-   },
-   "observed": {
-    "steps": 2,
-    "tokens": 363,
-    "wall_seconds": 3.151,
-    "agent": "Interactive_claude_agents-cli",
-    "case": "CLI-INIT-A2A-EXP"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": false,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0033",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "Great! Now let me check the project structure and install dependencies:",
-   "expected_spans": [
-    {
-     "file": "app/agent.py",
-     "start_line": 1,
-     "end_line": 79
-    }
-   ],
-   "pins": {
-    "files": {
-     "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
-    }
-   },
-   "observed": {
-    "steps": 3,
-    "tokens": 1273,
-    "wall_seconds": 4.838,
-    "agent": "Interactive_claude_agents-cli",
-    "case": "CLI-INIT-A2A"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": true,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0034",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "Excellent! Dependencies are installed. Now let me verify the project structure and test the agent:",
-   "expected_spans": [
-    {
-     "file": "pyproject.toml",
-     "start_line": 1,
-     "end_line": 97
+      "id": "r0006",
+      "case_id": "CLI-DEV-SERVE-001",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "Let me check the current agent implementation:",
+      "task_description": "Build an ADK agent and start it using agents-cli dev or agents-cli serve for local testing.",
+      "retrieval_rationale": "Read workspace files to understand the project before implementing ADK agent and start it using agents-cli dev or agents-cli serve....",
+      "expected_spans": [
+        {
+          "file": "app/agent.py",
+          "start_line": 1,
+          "end_line": 79
+        }
+      ],
+      "pins": {
+        "files": {
+          "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
+        }
+      },
+      "observed": {
+        "steps": 2,
+        "tokens": 878,
+        "wall_seconds": 1.268,
+        "agent": "Interactive_claude_agents-cli",
+        "case": "CLI-DEV-SERVE-001"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": true,
+        "issues": []
+      }
     },
     {
-     "file": "tests/integration/test_agent.py",
-     "start_line": 1,
-     "end_line": 57
-    }
-   ],
-   "pins": {
-    "files": {
-     "pyproject.toml": "82dc2cc88f7dab518fc404a88bea91c512d3407cbb8c38d551c2642acefff5bb",
-     "tests/integration/test_agent.py": "c186de5621f4e7fe6c073ef7b7d4d846c94ae4098ab0f2637bcf82cdd92fbb19"
-    }
-   },
-   "observed": {
-    "steps": 3,
-    "tokens": 1485,
-    "wall_seconds": 4.136,
-    "agent": "Interactive_claude_agents-cli",
-    "case": "CLI-INIT-A2A"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": true,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0037",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "Perfect! Now let me check the project structure and examine the existing agent.py file.",
-   "expected_spans": [
-    {
-     "file": "app/agent.py",
-     "start_line": 1,
-     "end_line": 79
+      "id": "r0009",
+      "case_id": "CLI-ENH-001",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "Great! Now let me explore the project structure:",
+      "task_description": "Build an ADK agent and enhance it for Cloud Run deployment using the agents-cli enhance command.",
+      "retrieval_rationale": "Surveyed the scaffolded project layout before implementing ADK agent and enhance it for Cloud Run deployment using the....",
+      "expected_spans": [
+        {
+          "file": "app/agent.py",
+          "start_line": 1,
+          "end_line": 79
+        }
+      ],
+      "pins": {
+        "files": {
+          "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
+        }
+      },
+      "observed": {
+        "steps": 2,
+        "tokens": 984,
+        "wall_seconds": 1.83,
+        "agent": "Interactive_claude_agents-cli",
+        "case": "CLI-ENH-001"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": true,
+        "issues": []
+      }
     },
     {
-     "file": "tests/unit/test_dummy.py",
-     "start_line": 1,
-     "end_line": 23
-    }
-   ],
-   "pins": {
-    "files": {
-     "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75",
-     "tests/unit/test_dummy.py": "4ac4bffa6f7f0950581e030f8bfd4d13d71f100d3fc256154a2734461f1c3008"
-    }
-   },
-   "observed": {
-    "steps": 6,
-    "tokens": 1899,
-    "wall_seconds": 11.204,
-    "agent": "Interactive_claude_agents-cli",
-    "case": "CLI-LINT-TEST-001-EXP"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": false,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0038",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "Great! Now let me navigate to the project and examine its structure:",
-   "expected_spans": [
-    {
-     "file": "app/agent.py",
-     "start_line": 1,
-     "end_line": 79
+      "id": "r0014",
+      "case_id": "CLI-ENH-002",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "Great! Now let me explore the project structure:",
+      "task_description": "Build an ADK agent, then use agents-cli enhance to add deployment configuration.",
+      "retrieval_rationale": "Surveyed the scaffolded project layout before implementing ADK agent, then use agents-cli enhance to add deployment configuration.",
+      "expected_spans": [
+        {
+          "file": "app/agent.py",
+          "start_line": 1,
+          "end_line": 79
+        }
+      ],
+      "pins": {
+        "files": {
+          "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
+        }
+      },
+      "observed": {
+        "steps": 5,
+        "tokens": 1157,
+        "wall_seconds": 5.496,
+        "agent": "Interactive_claude_agents-cli",
+        "case": "CLI-ENH-002"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": true,
+        "issues": []
+      }
     },
     {
-     "file": "tests/integration/test_agent.py",
-     "start_line": 1,
-     "end_line": 57
+      "id": "r0019",
+      "case_id": "CLI-EVAL-CUSTOM",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "Let me read the existing agent.py file to understand the structure:",
+      "task_description": "Build an ADK agent, create a custom evalset with multiple test cases, and run agents-cli eval.",
+      "retrieval_rationale": "Read the agent template to plan modifications for ADK agent, create a custom evalset with multiple test cases, and....",
+      "expected_spans": [
+        {
+          "file": "app/agent.py",
+          "start_line": 1,
+          "end_line": 79
+        }
+      ],
+      "pins": {
+        "files": {
+          "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
+        }
+      },
+      "observed": {
+        "steps": 2,
+        "tokens": 878,
+        "wall_seconds": 1.825,
+        "agent": "Interactive_claude_agents-cli",
+        "case": "CLI-EVAL-CUSTOM"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": true,
+        "issues": []
+      }
     },
     {
-     "file": "pyproject.toml",
-     "start_line": 1,
-     "end_line": 97
-    }
-   ],
-   "pins": {
-    "files": {
-     "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75",
-     "tests/integration/test_agent.py": "c186de5621f4e7fe6c073ef7b7d4d846c94ae4098ab0f2637bcf82cdd92fbb19",
-     "pyproject.toml": "82dc2cc88f7dab518fc404a88bea91c512d3407cbb8c38d551c2642acefff5bb"
-    }
-   },
-   "observed": {
-    "steps": 7,
-    "tokens": 2867,
-    "wall_seconds": 7.7,
-    "agent": "Interactive_claude_agents-cli",
-    "case": "CLI-MULTI-001"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": true,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0040",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "Great! Now let me explore the project structure:",
-   "expected_spans": [
-    {
-     "file": "app/agent.py",
-     "start_line": 1,
-     "end_line": 79
+      "id": "r0021",
+      "case_id": "CLI-EXT-001",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "Great! Now let me check the project structure:",
+      "task_description": "Scaffold an ADK agent and use agents-cli extract to produce a minimal shareable version stripped of GCP dependencies.",
+      "retrieval_rationale": "Surveyed the scaffolded project layout before implementing scaffold an ADK agent and use agents-cli extract to produce a....",
+      "expected_spans": [
+        {
+          "file": "app/agent.py",
+          "start_line": 1,
+          "end_line": 79
+        }
+      ],
+      "pins": {
+        "files": {
+          "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
+        }
+      },
+      "observed": {
+        "steps": 2,
+        "tokens": 1105,
+        "wall_seconds": 1.441,
+        "agent": "Interactive_claude_agents-cli",
+        "case": "CLI-EXT-001"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": true,
+        "issues": []
+      }
     },
     {
-     "file": "pyproject.toml",
-     "start_line": 1,
-     "end_line": 97
-    }
-   ],
-   "pins": {
-    "files": {
-     "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75",
-     "pyproject.toml": "82dc2cc88f7dab518fc404a88bea91c512d3407cbb8c38d551c2642acefff5bb"
-    }
-   },
-   "observed": {
-    "steps": 4,
-    "tokens": 2054,
-    "wall_seconds": 5.421,
-    "agent": "Interactive_claude_agents-cli",
-    "case": "CLI-MULTI-HIER-001"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": true,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0042",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "Great! Now let me explore the project structure:",
-   "expected_spans": [
-    {
-     "file": "app/agent.py",
-     "start_line": 1,
-     "end_line": 79
+      "id": "r0023",
+      "case_id": "CLI-FLOW-CB-001-EXP",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "Let me check the project structure:",
+      "task_description": "Build an ADK agent with before_tool_callback that blocks restricted operations and logs all tool calls.",
+      "retrieval_rationale": "Surveyed the scaffolded project layout before implementing before_tool_callback that blocks restricted operations and logs....",
+      "expected_spans": [
+        {
+          "file": "app/agent.py",
+          "start_line": 1,
+          "end_line": 79
+        }
+      ],
+      "pins": {
+        "files": {
+          "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
+        }
+      },
+      "observed": {
+        "steps": 2,
+        "tokens": 1038,
+        "wall_seconds": 2.888,
+        "agent": "Interactive_claude_agents-cli",
+        "case": "CLI-FLOW-CB-001-EXP"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": true,
+        "issues": []
+      }
     },
     {
-     "file": "pyproject.toml",
-     "start_line": 1,
-     "end_line": 97
-    }
-   ],
-   "pins": {
-    "files": {
-     "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75",
-     "pyproject.toml": "82dc2cc88f7dab518fc404a88bea91c512d3407cbb8c38d551c2642acefff5bb"
-    }
-   },
-   "observed": {
-    "steps": 5,
-    "tokens": 2088,
-    "wall_seconds": 6.41,
-    "agent": "Interactive_claude_agents-cli",
-    "case": "CLI-MULTI-PAR-001"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": true,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0043",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "Great! Dependencies are installed. Now let me examine the current agent structure to understand what's already there.",
-   "expected_spans": [
-    {
-     "file": "app/agent.py",
-     "start_line": 1,
-     "end_line": 79
-    }
-   ],
-   "pins": {
-    "files": {
-     "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
-    }
-   },
-   "observed": {
-    "steps": 4,
-    "tokens": 1014,
-    "wall_seconds": 5.586,
-    "agent": "Interactive_claude_agents-cli",
-    "case": "CLI-MULTI-ROUTER-001-EXP"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": true,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0044",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "Perfect! Now let's explore the project structure and then build our multi-agent system:",
-   "expected_spans": [
-    {
-     "file": "app/agent.py",
-     "start_line": 1,
-     "end_line": 79
+      "id": "r0024",
+      "case_id": "CLI-FLOW-CB-001-EXP",
+      "family": "dependency-symbol",
+      "corpus": "adk-sdk",
+      "query": "Let me find the _SingleBeforeToolCallback definition:",
+      "task_description": "Build an ADK agent with before_tool_callback that blocks restricted operations and logs all tool calls.",
+      "retrieval_rationale": "Looked up the _SingleBeforeToolCallback type signature in the SDK to implement before_tool_callback that blocks restricted operations and logs....",
+      "expected_spans": [
+        {
+          "file": "agents/llm_agent.py",
+          "start_line": 102,
+          "end_line": 105
+        }
+      ],
+      "pins": {
+        "files": {
+          "agents/llm_agent.py": "7d0a8b71724536898ca7f347038dbbc1cf0eeb38d1d6f9e1077b8cfeb9461c0b"
+        }
+      },
+      "observed": {
+        "steps": 2,
+        "tokens": 203,
+        "wall_seconds": 1.522,
+        "agent": "Interactive_claude_agents-cli",
+        "case": "CLI-FLOW-CB-001-EXP"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": true,
+        "issues": []
+      }
     },
     {
-     "file": "pyproject.toml",
-     "start_line": 1,
-     "end_line": 97
+      "id": "r0027",
+      "case_id": "CLI-FLOW-CB-001",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "Great! Now let me explore the project structure:",
+      "task_description": "Build an ADK agent with before_tool_callback that blocks restricted operations and logs all tool calls.",
+      "retrieval_rationale": "Surveyed the scaffolded project layout before implementing before_tool_callback that blocks restricted operations and logs....",
+      "expected_spans": [
+        {
+          "file": "app/agent.py",
+          "start_line": 1,
+          "end_line": 79
+        },
+        {
+          "file": "tests/integration/test_agent.py",
+          "start_line": 1,
+          "end_line": 57
+        }
+      ],
+      "pins": {
+        "files": {
+          "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75",
+          "tests/integration/test_agent.py": "c186de5621f4e7fe6c073ef7b7d4d846c94ae4098ab0f2637bcf82cdd92fbb19"
+        }
+      },
+      "observed": {
+        "steps": 5,
+        "tokens": 1819,
+        "wall_seconds": 5.158,
+        "agent": "Interactive_claude_agents-cli",
+        "case": "CLI-FLOW-CB-001"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": true,
+        "issues": []
+      }
     },
     {
-     "file": "tests/integration/test_agent.py",
-     "start_line": 1,
-     "end_line": 57
-    }
-   ],
-   "pins": {
-    "files": {
-     "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75",
-     "pyproject.toml": "82dc2cc88f7dab518fc404a88bea91c512d3407cbb8c38d551c2642acefff5bb",
-     "tests/integration/test_agent.py": "c186de5621f4e7fe6c073ef7b7d4d846c94ae4098ab0f2637bcf82cdd92fbb19"
-    }
-   },
-   "observed": {
-    "steps": 5,
-    "tokens": 2684,
-    "wall_seconds": 3.836,
-    "agent": "Interactive_claude_agents-cli",
-    "case": "CLI-MULTI-ROUTER-001"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": true,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0045",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "Good! Now let me examine the current agent structure and then modify it to implement the sequential data pipeline:",
-   "expected_spans": [
-    {
-     "file": "app/agent.py",
-     "start_line": 1,
-     "end_line": 79
-    }
-   ],
-   "pins": {
-    "files": {
-     "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
-    }
-   },
-   "observed": {
-    "steps": 5,
-    "tokens": 1572,
-    "wall_seconds": 7.783,
-    "agent": "Interactive_claude_agents-cli",
-    "case": "CLI-MULTI-SEQ-001-EXP"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": true,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0048",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "Now let me check the current project structure and examine the agent file:",
-   "expected_spans": [
-    {
-     "file": "app/agent.py",
-     "start_line": 1,
-     "end_line": 79
-    }
-   ],
-   "pins": {
-    "files": {
-     "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
-    }
-   },
-   "observed": {
-    "steps": 2,
-    "tokens": 878,
-    "wall_seconds": 0.03,
-    "agent": "Interactive_claude_agents-cli",
-    "case": "CLI-PLAT-A2A-001-EXP"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": true,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0052",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "Good! Now let me read the current agent.py file to understand the structure:",
-   "expected_spans": [
-    {
-     "file": "app/agent.py",
-     "start_line": 1,
-     "end_line": 79
-    }
-   ],
-   "pins": {
-    "files": {
-     "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
-    }
-   },
-   "observed": {
-    "steps": 2,
-    "tokens": 884,
-    "wall_seconds": 1.757,
-    "agent": "Interactive_claude_agents-cli",
-    "case": "CLI-PLAT-CODE-001-EXP"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": true,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0056",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "Now let me install dependencies and explore the project structure:",
-   "expected_spans": [
-    {
-     "file": "app/agent.py",
-     "start_line": 1,
-     "end_line": 79
-    }
-   ],
-   "pins": {
-    "files": {
-     "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
-    }
-   },
-   "observed": {
-    "steps": 2,
-    "tokens": 878,
-    "wall_seconds": 10.969,
-    "agent": "Interactive_claude_agents-cli",
-    "case": "CLI-PLAT-PLAN-001-EXP"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": true,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0057",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "Good! Now let me explore the project structure:",
-   "expected_spans": [
-    {
-     "file": "app/agent.py",
-     "start_line": 1,
-     "end_line": 79
+      "id": "r0028",
+      "case_id": "CLI-FLOW-HO-001-EXP",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "Great! Now let me check the current agent.py structure and then modify it to implement the two-agent system:",
+      "task_description": "Build an ADK agent that uses transfer_to_agent to hand off from a general assistant to a billing specialist when billing topics are detected.",
+      "retrieval_rationale": "Read the agent template to plan modifications for uses transfer_to_agent to hand off from a general assistant to a....",
+      "expected_spans": [
+        {
+          "file": "app/agent.py",
+          "start_line": 1,
+          "end_line": 79
+        }
+      ],
+      "pins": {
+        "files": {
+          "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
+        }
+      },
+      "observed": {
+        "steps": 2,
+        "tokens": 871,
+        "wall_seconds": 1.958,
+        "agent": "Interactive_claude_agents-cli",
+        "case": "CLI-FLOW-HO-001-EXP"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": true,
+        "issues": []
+      }
     },
     {
-     "file": "tests/integration/test_agent.py",
-     "start_line": 1,
-     "end_line": 57
-    }
-   ],
-   "pins": {
-    "files": {
-     "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75",
-     "tests/integration/test_agent.py": "c186de5621f4e7fe6c073ef7b7d4d846c94ae4098ab0f2637bcf82cdd92fbb19"
-    }
-   },
-   "observed": {
-    "steps": 6,
-    "tokens": 1831,
-    "wall_seconds": 8.311,
-    "agent": "Interactive_claude_agents-cli",
-    "case": "CLI-PLAT-PLAN-001"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": true,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0058",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "Great! Dependencies are installed. Now let me examine the current agent structure:",
-   "expected_spans": [
-    {
-     "file": "app/agent.py",
-     "start_line": 1,
-     "end_line": 79
-    }
-   ],
-   "pins": {
-    "files": {
-     "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
-    }
-   },
-   "observed": {
-    "steps": 2,
-    "tokens": 923,
-    "wall_seconds": 0.384,
-    "agent": "Interactive_claude_agents-cli",
-    "case": "CLI-RUN-001-EXP"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": true,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0059",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "Perfect! Now let me examine the project structure and the agent template:",
-   "expected_spans": [
-    {
-     "file": "app/agent.py",
-     "start_line": 1,
-     "end_line": 79
-    }
-   ],
-   "pins": {
-    "files": {
-     "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
-    }
-   },
-   "observed": {
-    "steps": 2,
-    "tokens": 878,
-    "wall_seconds": 0.03,
-    "agent": "Interactive_claude_agents-cli",
-    "case": "CLI-RUN-001"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": true,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0062",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "Great! Dependencies are installed. Now let me check the current structure and modify the agent.py file.",
-   "expected_spans": [
-    {
-     "file": "app/agent.py",
-     "start_line": 1,
-     "end_line": 79
-    }
-   ],
-   "pins": {
-    "files": {
-     "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
-    }
-   },
-   "observed": {
-    "steps": 2,
-    "tokens": 878,
-    "wall_seconds": 0.124,
-    "agent": "Interactive_claude_agents-cli",
-    "case": "CLI-SETUP-001-EXP"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": true,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0063",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "Let me check the current directory:",
-   "expected_spans": [
-    {
-     "file": "app/agent.py",
-     "start_line": 1,
-     "end_line": 79
-    }
-   ],
-   "pins": {
-    "files": {
-     "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
-    }
-   },
-   "observed": {
-    "steps": 3,
-    "tokens": 1054,
-    "wall_seconds": 2.851,
-    "agent": "Interactive_claude_agents-cli",
-    "case": "CLI-SETUP-001"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": false,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0065",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "Perfect! Now let me explore the project structure:",
-   "expected_spans": [
-    {
-     "file": "app/agent.py",
-     "start_line": 1,
-     "end_line": 79
+      "id": "r0029",
+      "case_id": "CLI-INFO-001",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "Excellent! Now let me examine the project structure and the agent.py file:",
+      "task_description": "Scaffold an ADK agent and use agents-cli info to inspect the project structure.",
+      "retrieval_rationale": "Surveyed the scaffolded project layout before implementing scaffold an ADK agent and use agents-cli info to inspect the....",
+      "expected_spans": [
+        {
+          "file": "app/agent.py",
+          "start_line": 1,
+          "end_line": 79
+        }
+      ],
+      "pins": {
+        "files": {
+          "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
+        }
+      },
+      "observed": {
+        "steps": 3,
+        "tokens": 3228,
+        "wall_seconds": 4.341,
+        "agent": "Interactive_claude_agents-cli",
+        "case": "CLI-INFO-001"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": true,
+        "issues": []
+      }
     },
     {
-     "file": "tests/integration/test_agent.py",
-     "start_line": 1,
-     "end_line": 57
+      "id": "r0031",
+      "case_id": "CLI-INIT-A2A-EXP",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "Great! Now let me check the structure and verify the agent file:",
+      "task_description": "Scaffold an A2A-compatible ADK agent using the agents-cli with the adk_a2a template.",
+      "retrieval_rationale": "Verified the scaffold was generated correctly before implementing scaffold an A2A-compatible ADK agent using the agents-cli with the....",
+      "expected_spans": [
+        {
+          "file": "app/agent.py",
+          "start_line": 1,
+          "end_line": 79
+        }
+      ],
+      "pins": {
+        "files": {
+          "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
+        }
+      },
+      "observed": {
+        "steps": 3,
+        "tokens": 3413,
+        "wall_seconds": 2.782,
+        "agent": "Interactive_claude_agents-cli",
+        "case": "CLI-INIT-A2A-EXP"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": false,
+        "issues": []
+      }
     },
     {
-     "file": "pyproject.toml",
-     "start_line": 1,
-     "end_line": 97
-    }
-   ],
-   "pins": {
-    "files": {
-     "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75",
-     "tests/integration/test_agent.py": "c186de5621f4e7fe6c073ef7b7d4d846c94ae4098ab0f2637bcf82cdd92fbb19",
-     "pyproject.toml": "82dc2cc88f7dab518fc404a88bea91c512d3407cbb8c38d551c2642acefff5bb"
-    }
-   },
-   "observed": {
-    "steps": 5,
-    "tokens": 2804,
-    "wall_seconds": 6.119,
-    "agent": "Interactive_claude_agents-cli",
-    "case": "CLI-STATE-CART-001"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": true,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0067",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "Now let me install dependencies and examine the project structure:",
-   "expected_spans": [
-    {
-     "file": "app/agent.py",
-     "start_line": 1,
-     "end_line": 79
-    }
-   ],
-   "pins": {
-    "files": {
-     "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
-    }
-   },
-   "observed": {
-    "steps": 2,
-    "tokens": 878,
-    "wall_seconds": 12.995,
-    "agent": "Interactive_claude_agents-cli",
-    "case": "CLI-STATE-ORD-001-EXP"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": true,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0068",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "Great! Now let's examine the project structure and create the order pipeline agent:",
-   "expected_spans": [
-    {
-     "file": "app/agent.py",
-     "start_line": 1,
-     "end_line": 79
-    }
-   ],
-   "pins": {
-    "files": {
-     "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
-    }
-   },
-   "observed": {
-    "steps": 5,
-    "tokens": 1157,
-    "wall_seconds": 4.781,
-    "agent": "Interactive_claude_agents-cli",
-    "case": "CLI-STATE-ORD-001"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": true,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0071",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "Now let me examine the generated project structure and the agent file:",
-   "expected_spans": [
-    {
-     "file": "app/agent.py",
-     "start_line": 1,
-     "end_line": 79
-    }
-   ],
-   "pins": {
-    "files": {
-     "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
-    }
-   },
-   "observed": {
-    "steps": 2,
-    "tokens": 878,
-    "wall_seconds": 0.088,
-    "agent": "Interactive_claude_agents-cli",
-    "case": "CLI-TEST-001-EXP"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": true,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0072",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "Now let me create the test file. First, let me check the tests directory structure:",
-   "expected_spans": [
-    {
-     "file": "tests/unit/test_dummy.py",
-     "start_line": 1,
-     "end_line": 23
-    }
-   ],
-   "pins": {
-    "files": {
-     "tests/unit/test_dummy.py": "4ac4bffa6f7f0950581e030f8bfd4d13d71f100d3fc256154a2734461f1c3008"
-    }
-   },
-   "observed": {
-    "steps": 2,
-    "tokens": 492,
-    "wall_seconds": 1.547,
-    "agent": "Interactive_claude_agents-cli",
-    "case": "CLI-TEST-001-EXP"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": true,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0074",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "Great! Now let me explore the project structure:",
-   "expected_spans": [
-    {
-     "file": "app/agent.py",
-     "start_line": 1,
-     "end_line": 79
+      "id": "r0032",
+      "case_id": "CLI-INIT-A2A-EXP",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "Let me verify the directory and structure:",
+      "task_description": "Scaffold an A2A-compatible ADK agent using the agents-cli with the adk_a2a template.",
+      "retrieval_rationale": "Verified the scaffold was generated correctly before implementing scaffold an A2A-compatible ADK agent using the agents-cli with the....",
+      "expected_spans": [
+        {
+          "file": "app/__init__.py",
+          "start_line": 1,
+          "end_line": 17
+        }
+      ],
+      "pins": {
+        "files": {
+          "app/__init__.py": "e4f304a38370662d162492847dfc9e220ec953d3c2cbf885a6a7734e270e9b82"
+        }
+      },
+      "observed": {
+        "steps": 2,
+        "tokens": 363,
+        "wall_seconds": 3.151,
+        "agent": "Interactive_claude_agents-cli",
+        "case": "CLI-INIT-A2A-EXP"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": false,
+        "issues": []
+      }
     },
     {
-     "file": "tests/unit/test_dummy.py",
-     "start_line": 1,
-     "end_line": 23
+      "id": "r0033",
+      "case_id": "CLI-INIT-A2A",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "Great! Now let me check the project structure and install dependencies:",
+      "task_description": "Scaffold an A2A-compatible ADK agent using the agents-cli with the adk_a2a template.",
+      "retrieval_rationale": "Surveyed the scaffolded project layout before implementing scaffold an A2A-compatible ADK agent using the agents-cli with the....",
+      "expected_spans": [
+        {
+          "file": "app/agent.py",
+          "start_line": 1,
+          "end_line": 79
+        }
+      ],
+      "pins": {
+        "files": {
+          "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
+        }
+      },
+      "observed": {
+        "steps": 3,
+        "tokens": 1273,
+        "wall_seconds": 4.838,
+        "agent": "Interactive_claude_agents-cli",
+        "case": "CLI-INIT-A2A"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": true,
+        "issues": []
+      }
     },
     {
-     "file": "tests/integration/test_agent.py",
-     "start_line": 1,
-     "end_line": 57
-    }
-   ],
-   "pins": {
-    "files": {
-     "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75",
-     "tests/unit/test_dummy.py": "4ac4bffa6f7f0950581e030f8bfd4d13d71f100d3fc256154a2734461f1c3008",
-     "tests/integration/test_agent.py": "c186de5621f4e7fe6c073ef7b7d4d846c94ae4098ab0f2637bcf82cdd92fbb19"
-    }
-   },
-   "observed": {
-    "steps": 4,
-    "tokens": 1989,
-    "wall_seconds": 6.716,
-    "agent": "Interactive_claude_agents-cli",
-    "case": "CLI-TEST-001"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": true,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0077",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "Excellent! Now let me check the project structure and read the agent file.",
-   "expected_spans": [
-    {
-     "file": "app/agent.py",
-     "start_line": 1,
-     "end_line": 79
+      "id": "r0034",
+      "case_id": "CLI-INIT-A2A",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "Excellent! Dependencies are installed. Now let me verify the project structure and test the agent:",
+      "task_description": "Scaffold an A2A-compatible ADK agent using the agents-cli with the adk_a2a template.",
+      "retrieval_rationale": "Surveyed the scaffolded project layout before implementing scaffold an A2A-compatible ADK agent using the agents-cli with the....",
+      "expected_spans": [
+        {
+          "file": "pyproject.toml",
+          "start_line": 1,
+          "end_line": 97
+        },
+        {
+          "file": "tests/integration/test_agent.py",
+          "start_line": 1,
+          "end_line": 57
+        }
+      ],
+      "pins": {
+        "files": {
+          "pyproject.toml": "82dc2cc88f7dab518fc404a88bea91c512d3407cbb8c38d551c2642acefff5bb",
+          "tests/integration/test_agent.py": "c186de5621f4e7fe6c073ef7b7d4d846c94ae4098ab0f2637bcf82cdd92fbb19"
+        }
+      },
+      "observed": {
+        "steps": 3,
+        "tokens": 1485,
+        "wall_seconds": 4.136,
+        "agent": "Interactive_claude_agents-cli",
+        "case": "CLI-INIT-A2A"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": true,
+        "issues": []
+      }
     },
     {
-     "file": "pyproject.toml",
-     "start_line": 1,
-     "end_line": 97
-    }
-   ],
-   "pins": {
-    "files": {
-     "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75",
-     "pyproject.toml": "82dc2cc88f7dab518fc404a88bea91c512d3407cbb8c38d551c2642acefff5bb"
-    }
-   },
-   "observed": {
-    "steps": 3,
-    "tokens": 1969,
-    "wall_seconds": 1.743,
-    "agent": "Interactive_claude_agents-cli",
-    "case": "CLI-TOOL-FX-001"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": false,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0078",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "Great! Now let me explore the project structure:",
-   "expected_spans": [
-    {
-     "file": "app/agent.py",
-     "start_line": 1,
-     "end_line": 79
-    }
-   ],
-   "pins": {
-    "files": {
-     "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
-    }
-   },
-   "observed": {
-    "steps": 4,
-    "tokens": 1092,
-    "wall_seconds": 3.857,
-    "agent": "Interactive_claude_agents-cli",
-    "case": "CLI-TOOL-INV-001"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": false,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0082",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "Now let me install dependencies and examine the project structure:",
-   "expected_spans": [
-    {
-     "file": "app/agent.py",
-     "start_line": 1,
-     "end_line": 79
-    }
-   ],
-   "pins": {
-    "files": {
-     "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
-    }
-   },
-   "observed": {
-    "steps": 3,
-    "tokens": 1056,
-    "wall_seconds": 12.65,
-    "agent": "Interactive_claude_agents-cli",
-    "case": "CLI-TOOL-RCP-001-EXP"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": false,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0085",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "Great! Now let me check the current agent.py file and the project structure:",
-   "expected_spans": [
-    {
-     "file": "app/agent.py",
-     "start_line": 1,
-     "end_line": 79
-    }
-   ],
-   "pins": {
-    "files": {
-     "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
-    }
-   },
-   "observed": {
-    "steps": 2,
-    "tokens": 878,
-    "wall_seconds": 0.117,
-    "agent": "Interactive_claude_agents-cli",
-    "case": "CLI-TOOL-TKT-001-EXP"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": false,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0086",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "Let me examine the main agent.py file and understand the structure.",
-   "expected_spans": [
-    {
-     "file": "app/agent.py",
-     "start_line": 1,
-     "end_line": 79
-    }
-   ],
-   "pins": {
-    "files": {
-     "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
-    }
-   },
-   "observed": {
-    "steps": 2,
-    "tokens": 878,
-    "wall_seconds": 0.067,
-    "agent": "Interactive_claude_agents-cli",
-    "case": "CLI-TOOL-TKT-001"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": false,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0087",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "Good! Now let me check the current agent.py file and the project structure:",
-   "expected_spans": [
-    {
-     "file": "app/agent.py",
-     "start_line": 1,
-     "end_line": 79
-    }
-   ],
-   "pins": {
-    "files": {
-     "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
-    }
-   },
-   "observed": {
-    "steps": 2,
-    "tokens": 878,
-    "wall_seconds": 0.061,
-    "agent": "Interactive_claude_agents-cli",
-    "case": "CLI-TOOL-USR-001-EXP"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": false,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0089",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "Perfect! Now let me explore the generated project structure:",
-   "expected_spans": [
-    {
-     "file": "app/agent.py",
-     "start_line": 1,
-     "end_line": 79
-    }
-   ],
-   "pins": {
-    "files": {
-     "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
-    }
-   },
-   "observed": {
-    "steps": 4,
-    "tokens": 1087,
-    "wall_seconds": 3.486,
-    "agent": "Interactive_claude_agents-cli",
-    "case": "CLI-TOOL-USR-001"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": false,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0090",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "Great! Now let me verify the agent is correct by testing it. First, let me check if there's a test file already:",
-   "expected_spans": [
-    {
-     "file": "tests/integration/test_agent.py",
-     "start_line": 1,
-     "end_line": 57
-    }
-   ],
-   "pins": {
-    "files": {
-     "tests/integration/test_agent.py": "c186de5621f4e7fe6c073ef7b7d4d846c94ae4098ab0f2637bcf82cdd92fbb19"
-    }
-   },
-   "observed": {
-    "steps": 6,
-    "tokens": 1008,
-    "wall_seconds": 7.949,
-    "agent": "Interactive_claude_agents-cli",
-    "case": "CLI-TOOL-USR-001"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": true,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0092",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "Great! Now let me explore the generated project structure:",
-   "expected_spans": [
-    {
-     "file": "app/agent.py",
-     "start_line": 1,
-     "end_line": 79
+      "id": "r0037",
+      "case_id": "CLI-LINT-TEST-001-EXP",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "Perfect! Now let me check the project structure and examine the existing agent.py file.",
+      "task_description": "Build an ADK agent and run both lint and test to ensure code quality.",
+      "retrieval_rationale": "Surveyed the scaffolded project layout before implementing ADK agent and run both lint and test to ensure code quality.",
+      "expected_spans": [
+        {
+          "file": "app/agent.py",
+          "start_line": 1,
+          "end_line": 79
+        },
+        {
+          "file": "tests/unit/test_dummy.py",
+          "start_line": 1,
+          "end_line": 23
+        }
+      ],
+      "pins": {
+        "files": {
+          "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75",
+          "tests/unit/test_dummy.py": "4ac4bffa6f7f0950581e030f8bfd4d13d71f100d3fc256154a2734461f1c3008"
+        }
+      },
+      "observed": {
+        "steps": 6,
+        "tokens": 1899,
+        "wall_seconds": 11.204,
+        "agent": "Interactive_claude_agents-cli",
+        "case": "CLI-LINT-TEST-001-EXP"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": false,
+        "issues": []
+      }
     },
     {
-     "file": "README.md",
-     "start_line": 1,
-     "end_line": 89
-    }
-   ],
-   "pins": {
-    "files": {
-     "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75",
-     "README.md": "f0c5ede004b9cfbae88fb5a9a8e2dde59aba599217fc9b364ebcc5847cc8350e"
-    }
-   },
-   "observed": {
-    "steps": 4,
-    "tokens": 1990,
-    "wall_seconds": 4.878,
-    "agent": "Interactive_claude_agents-cli",
-    "case": "CLI-UPG-001"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": true,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0093",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "Great! Now let me explore the project structure and then implement the customer support agent:",
-   "expected_spans": [
-    {
-     "file": "app/agent.py",
-     "start_line": 1,
-     "end_line": 79
+      "id": "r0038",
+      "case_id": "CLI-MULTI-001",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "Great! Now let me navigate to the project and examine its structure:",
+      "task_description": "Full CLI lifecycle: scaffold, install, implement, lint, test, and run an ADK agent.",
+      "retrieval_rationale": "Inspected existing code to plan changes for full CLI lifecycle: scaffold, install, implement, lint, test, and....",
+      "expected_spans": [
+        {
+          "file": "app/agent.py",
+          "start_line": 1,
+          "end_line": 79
+        },
+        {
+          "file": "tests/integration/test_agent.py",
+          "start_line": 1,
+          "end_line": 57
+        },
+        {
+          "file": "pyproject.toml",
+          "start_line": 1,
+          "end_line": 97
+        }
+      ],
+      "pins": {
+        "files": {
+          "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75",
+          "tests/integration/test_agent.py": "c186de5621f4e7fe6c073ef7b7d4d846c94ae4098ab0f2637bcf82cdd92fbb19",
+          "pyproject.toml": "82dc2cc88f7dab518fc404a88bea91c512d3407cbb8c38d551c2642acefff5bb"
+        }
+      },
+      "observed": {
+        "steps": 7,
+        "tokens": 2867,
+        "wall_seconds": 7.7,
+        "agent": "Interactive_claude_agents-cli",
+        "case": "CLI-MULTI-001"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": true,
+        "issues": []
+      }
     },
     {
-     "file": "pyproject.toml",
-     "start_line": 1,
-     "end_line": 97
-    }
-   ],
-   "pins": {
-    "files": {
-     "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75",
-     "pyproject.toml": "82dc2cc88f7dab518fc404a88bea91c512d3407cbb8c38d551c2642acefff5bb"
-    }
-   },
-   "observed": {
-    "steps": 4,
-    "tokens": 1948,
-    "wall_seconds": 4.594,
-    "agent": "Interactive_claude_agents-cli",
-    "case": "E2E-CS-PROJ-001"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": true,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0100",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "I'll check for any `.env` files or other configuration files that `agents-cli` might have created to understand how to properly configure the model and location.",
-   "expected_spans": [
-    {
-     "file": "deployment_metadata.json",
-     "start_line": 1,
-     "end_line": 4
-    }
-   ],
-   "pins": {
-    "files": {
-     "deployment_metadata.json": "bcc2dd51ec063c00a80a6a765f26eac6c15be329eb84f077333f1d5400347adc"
-    }
-   },
-   "observed": {
-    "steps": 2,
-    "tokens": 81,
-    "wall_seconds": 0.0,
-    "agent": "Interactive_gemini_agents-cli",
-    "case": "CLI-DEV-SERVE-001"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": false,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0110",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "I will check for a configuration file for `agents-cli`.",
-   "expected_spans": [
-    {
-     "file": "pyproject.toml",
-     "start_line": 1,
-     "end_line": 97
-    }
-   ],
-   "pins": {
-    "files": {
-     "pyproject.toml": "82dc2cc88f7dab518fc404a88bea91c512d3407cbb8c38d551c2642acefff5bb"
-    }
-   },
-   "observed": {
-    "steps": 2,
-    "tokens": 69,
-    "wall_seconds": 0.0,
-    "agent": "Interactive_gemini_agents-cli",
-    "case": "CLI-EVAL-CUSTOM-EXP"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": true,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0120",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "I will check the content of the `tests` directory in the `agent-project` to see if there are any existing tests I can use as a reference.",
-   "expected_spans": [
-    {
-     "file": "tests/integration/test_agent.py",
-     "start_line": 1,
-     "end_line": 57
-    }
-   ],
-   "pins": {
-    "files": {
-     "tests/integration/test_agent.py": "c186de5621f4e7fe6c073ef7b7d4d846c94ae4098ab0f2637bcf82cdd92fbb19"
-    }
-   },
-   "observed": {
-    "steps": 3,
-    "tokens": 130,
-    "wall_seconds": 0.0,
-    "agent": "Interactive_gemini_agents-cli",
-    "case": "CLI-FLOW-CB-001"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": true,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0122",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "list the files in the `agent-project` directory to understand the project structure.",
-   "expected_spans": [
-    {
-     "file": "app/agent.py",
-     "start_line": 1,
-     "end_line": 79
-    }
-   ],
-   "pins": {
-    "files": {
-     "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
-    }
-   },
-   "observed": {
-    "steps": 3,
-    "tokens": 34,
-    "wall_seconds": 0.0,
-    "agent": "Interactive_gemini_agents-cli",
-    "case": "CLI-FLOW-HO-001"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": true,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0127",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "I will list the files in the `agent-project` directory.",
-   "expected_spans": [
-    {
-     "file": "app/agent.py",
-     "start_line": 1,
-     "end_line": 79
-    }
-   ],
-   "pins": {
-    "files": {
-     "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
-    }
-   },
-   "observed": {
-    "steps": 2,
-    "tokens": 22,
-    "wall_seconds": 0.0,
-    "agent": "Interactive_gemini_agents-cli",
-    "case": "CLI-INIT-A2A"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": true,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0129",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "I'll check the structure of the `agent-project` directory.",
-   "expected_spans": [
-    {
-     "file": "app/agent.py",
-     "start_line": 1,
-     "end_line": 79
-    }
-   ],
-   "pins": {
-    "files": {
-     "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
-    }
-   },
-   "observed": {
-    "steps": 3,
-    "tokens": 34,
-    "wall_seconds": 0.0,
-    "agent": "Interactive_gemini_agents-cli",
-    "case": "CLI-LINT-001"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": true,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0131",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "I will check the existing tests in `agent-project/tests`.",
-   "expected_spans": [
-    {
-     "file": "tests/unit/test_dummy.py",
-     "start_line": 1,
-     "end_line": 23
-    }
-   ],
-   "pins": {
-    "files": {
-     "tests/unit/test_dummy.py": "4ac4bffa6f7f0950581e030f8bfd4d13d71f100d3fc256154a2734461f1c3008"
-    }
-   },
-   "observed": {
-    "steps": 3,
-    "tokens": 41,
-    "wall_seconds": 0.0,
-    "agent": "Interactive_gemini_agents-cli",
-    "case": "CLI-LINT-TEST-001"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": true,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0141",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "see how they run the agent in tests.",
-   "expected_spans": [
-    {
-     "file": "tests/integration/test_agent.py",
-     "start_line": 1,
-     "end_line": 57
-    }
-   ],
-   "pins": {
-    "files": {
-     "tests/integration/test_agent.py": "c186de5621f4e7fe6c073ef7b7d4d846c94ae4098ab0f2637bcf82cdd92fbb19"
-    }
-   },
-   "observed": {
-    "steps": 5,
-    "tokens": 75,
-    "wall_seconds": 0.0,
-    "agent": "Interactive_gemini_agents-cli",
-    "case": "CLI-MULTI-ROUTER-001"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": false,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0142",
-   "family": "dependency-symbol",
-   "corpus": "adk-sdk",
-   "query": "I will now check if `SequentialAgent` is available in the `google-adk` package.",
-   "expected_spans": [
-    {
-     "file": "agents/sequential_agent.py",
-     "start_line": 48,
-     "end_line": 159
-    }
-   ],
-   "pins": {
-    "files": {
-     "agents/sequential_agent.py": "10fb38007cd8f5ecea23df9311ef1fedbc72b9511ad3040c1b571785a6aad769"
-    }
-   },
-   "observed": {
-    "steps": 3,
-    "tokens": 72761,
-    "wall_seconds": 0.0,
-    "agent": "Interactive_gemini_agents-cli",
-    "case": "CLI-MULTI-SEQ-001-EXP"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": true,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0143",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "the files in the newly created `agent-project` directory to understand its structure.",
-   "expected_spans": [
-    {
-     "file": "app/agent.py",
-     "start_line": 1,
-     "end_line": 79
-    }
-   ],
-   "pins": {
-    "files": {
-     "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
-    }
-   },
-   "observed": {
-    "steps": 2,
-    "tokens": 22,
-    "wall_seconds": 0.0,
-    "agent": "Interactive_gemini_agents-cli",
-    "case": "CLI-MULTI-SEQ-001"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": false,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0145",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "I'll examine the agent's definition and dependencies to prepare for the translation feature implementation.",
-   "expected_spans": [
-    {
-     "file": "app/agent.py",
-     "start_line": 1,
-     "end_line": 79
+      "id": "r0040",
+      "case_id": "CLI-MULTI-HIER-001",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "Great! Now let me explore the project structure:",
+      "task_description": "Build a hierarchical agent where a manager delegates to a researcher sub-agent and a writer sub-agent.",
+      "retrieval_rationale": "Surveyed the scaffolded project layout before implementing hierarchical agent where a manager delegates to a researcher....",
+      "expected_spans": [
+        {
+          "file": "app/agent.py",
+          "start_line": 1,
+          "end_line": 79
+        },
+        {
+          "file": "pyproject.toml",
+          "start_line": 1,
+          "end_line": 97
+        }
+      ],
+      "pins": {
+        "files": {
+          "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75",
+          "pyproject.toml": "82dc2cc88f7dab518fc404a88bea91c512d3407cbb8c38d551c2642acefff5bb"
+        }
+      },
+      "observed": {
+        "steps": 4,
+        "tokens": 2054,
+        "wall_seconds": 5.421,
+        "agent": "Interactive_claude_agents-cli",
+        "case": "CLI-MULTI-HIER-001"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": true,
+        "issues": []
+      }
     },
     {
-     "file": "pyproject.toml",
-     "start_line": 1,
-     "end_line": 97
-    }
-   ],
-   "pins": {
-    "files": {
-     "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75",
-     "pyproject.toml": "82dc2cc88f7dab518fc404a88bea91c512d3407cbb8c38d551c2642acefff5bb"
-    }
-   },
-   "observed": {
-    "steps": 2,
-    "tokens": 22,
-    "wall_seconds": 0.0,
-    "agent": "Interactive_gemini_agents-cli",
-    "case": "CLI-PLAT-A2A-001"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": true,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0149",
-   "family": "dependency-symbol",
-   "corpus": "adk-sdk",
-   "query": "I'll check the imports in `google.adk.agents` to see how `Agent` is defined.",
-   "expected_spans": [
-    {
-     "file": "agents/llm_agent.py",
-     "start_line": 1027,
-     "end_line": 1027
-    }
-   ],
-   "pins": {
-    "files": {
-     "agents/llm_agent.py": "7d0a8b71724536898ca7f347038dbbc1cf0eeb38d1d6f9e1077b8cfeb9461c0b"
-    }
-   },
-   "observed": {
-    "steps": 2,
-    "tokens": 52,
-    "wall_seconds": 0.0,
-    "agent": "Interactive_gemini_agents-cli",
-    "case": "CLI-PLAT-CODE-001"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": true,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0152",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "list the contents of the `agent-project` directory to understand its structure.",
-   "expected_spans": [
-    {
-     "file": "app/agent.py",
-     "start_line": 1,
-     "end_line": 79
-    }
-   ],
-   "pins": {
-    "files": {
-     "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
-    }
-   },
-   "observed": {
-    "steps": 3,
-    "tokens": 34,
-    "wall_seconds": 0.0,
-    "agent": "Interactive_gemini_agents-cli",
-    "case": "CLI-SETUP-001"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": false,
-    "issues": []
-   }
-  },
-  {
-   "id": "r0164",
-   "family": "workspace-file",
-   "corpus": "agent-project",
-   "query": "now explore the directory structure of the newly scaffolded project.",
-   "expected_spans": [
-    {
-     "file": "app/agent.py",
-     "start_line": 1,
-     "end_line": 79
+      "id": "r0042",
+      "case_id": "CLI-MULTI-PAR-001",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "Great! Now let me explore the project structure:",
+      "task_description": "Build an agent that queries weather, news, and stock data in parallel and presents a combined morning briefing.",
+      "retrieval_rationale": "Surveyed the scaffolded project layout before implementing agent that queries weather, news, and stock data in parallel and....",
+      "expected_spans": [
+        {
+          "file": "app/agent.py",
+          "start_line": 1,
+          "end_line": 79
+        },
+        {
+          "file": "pyproject.toml",
+          "start_line": 1,
+          "end_line": 97
+        }
+      ],
+      "pins": {
+        "files": {
+          "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75",
+          "pyproject.toml": "82dc2cc88f7dab518fc404a88bea91c512d3407cbb8c38d551c2642acefff5bb"
+        }
+      },
+      "observed": {
+        "steps": 5,
+        "tokens": 2088,
+        "wall_seconds": 6.41,
+        "agent": "Interactive_claude_agents-cli",
+        "case": "CLI-MULTI-PAR-001"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": true,
+        "issues": []
+      }
     },
     {
-     "file": "pyproject.toml",
-     "start_line": 1,
-     "end_line": 97
+      "id": "r0043",
+      "case_id": "CLI-MULTI-ROUTER-001-EXP",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "Great! Dependencies are installed. Now let me examine the current agent structure to understand what's already there.",
+      "task_description": "Build a triage router agent that dispatches customer requests to specialized sub-agents based on user intent.",
+      "retrieval_rationale": "Read the agent template to plan modifications for triage router agent that dispatches customer requests to....",
+      "expected_spans": [
+        {
+          "file": "app/agent.py",
+          "start_line": 1,
+          "end_line": 79
+        }
+      ],
+      "pins": {
+        "files": {
+          "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
+        }
+      },
+      "observed": {
+        "steps": 4,
+        "tokens": 1014,
+        "wall_seconds": 5.586,
+        "agent": "Interactive_claude_agents-cli",
+        "case": "CLI-MULTI-ROUTER-001-EXP"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": true,
+        "issues": []
+      }
+    },
+    {
+      "id": "r0044",
+      "case_id": "CLI-MULTI-ROUTER-001",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "Perfect! Now let's explore the project structure and then build our multi-agent system:",
+      "task_description": "Build a triage router agent that dispatches customer requests to specialized sub-agents based on user intent.",
+      "retrieval_rationale": "Surveyed the scaffolded project layout before implementing triage router agent that dispatches customer requests to....",
+      "expected_spans": [
+        {
+          "file": "app/agent.py",
+          "start_line": 1,
+          "end_line": 79
+        },
+        {
+          "file": "pyproject.toml",
+          "start_line": 1,
+          "end_line": 97
+        },
+        {
+          "file": "tests/integration/test_agent.py",
+          "start_line": 1,
+          "end_line": 57
+        }
+      ],
+      "pins": {
+        "files": {
+          "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75",
+          "pyproject.toml": "82dc2cc88f7dab518fc404a88bea91c512d3407cbb8c38d551c2642acefff5bb",
+          "tests/integration/test_agent.py": "c186de5621f4e7fe6c073ef7b7d4d846c94ae4098ab0f2637bcf82cdd92fbb19"
+        }
+      },
+      "observed": {
+        "steps": 5,
+        "tokens": 2684,
+        "wall_seconds": 3.836,
+        "agent": "Interactive_claude_agents-cli",
+        "case": "CLI-MULTI-ROUTER-001"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": true,
+        "issues": []
+      }
+    },
+    {
+      "id": "r0045",
+      "case_id": "CLI-MULTI-SEQ-001-EXP",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "Good! Now let me examine the current agent structure and then modify it to implement the sequential data pipeline:",
+      "task_description": "Build a sequential pipeline agent that fetches sales data from a source API, transforms and summarizes it, and stores the result via a report API.",
+      "retrieval_rationale": "Inspected existing code to plan changes for sequential pipeline agent that fetches sales data from a source....",
+      "expected_spans": [
+        {
+          "file": "app/agent.py",
+          "start_line": 1,
+          "end_line": 79
+        }
+      ],
+      "pins": {
+        "files": {
+          "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
+        }
+      },
+      "observed": {
+        "steps": 5,
+        "tokens": 1572,
+        "wall_seconds": 7.783,
+        "agent": "Interactive_claude_agents-cli",
+        "case": "CLI-MULTI-SEQ-001-EXP"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": true,
+        "issues": []
+      }
+    },
+    {
+      "id": "r0048",
+      "case_id": "CLI-PLAT-A2A-001-EXP",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "Now let me check the current project structure and examine the agent file:",
+      "task_description": "Build an ADK agent that exposes an A2A-compatible interface with an agent card for language translation.",
+      "retrieval_rationale": "Surveyed the scaffolded project layout before implementing exposes an A2A-compatible interface with an agent card for....",
+      "expected_spans": [
+        {
+          "file": "app/agent.py",
+          "start_line": 1,
+          "end_line": 79
+        }
+      ],
+      "pins": {
+        "files": {
+          "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
+        }
+      },
+      "observed": {
+        "steps": 2,
+        "tokens": 878,
+        "wall_seconds": 0.03,
+        "agent": "Interactive_claude_agents-cli",
+        "case": "CLI-PLAT-A2A-001-EXP"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": true,
+        "issues": []
+      }
+    },
+    {
+      "id": "r0052",
+      "case_id": "CLI-PLAT-CODE-001-EXP",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "Good! Now let me read the current agent.py file to understand the structure:",
+      "task_description": "Build an ADK agent that uses BuiltInCodeExecutor to dynamically execute Python code for data analysis.",
+      "retrieval_rationale": "Read the agent template to plan modifications for uses BuiltInCodeExecutor to dynamically execute Python code for....",
+      "expected_spans": [
+        {
+          "file": "app/agent.py",
+          "start_line": 1,
+          "end_line": 79
+        }
+      ],
+      "pins": {
+        "files": {
+          "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
+        }
+      },
+      "observed": {
+        "steps": 2,
+        "tokens": 884,
+        "wall_seconds": 1.757,
+        "agent": "Interactive_claude_agents-cli",
+        "case": "CLI-PLAT-CODE-001-EXP"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": true,
+        "issues": []
+      }
+    },
+    {
+      "id": "r0056",
+      "case_id": "CLI-PLAT-PLAN-001-EXP",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "Now let me install dependencies and explore the project structure:",
+      "task_description": "Build an ADK agent that uses BuiltInPlanner to decompose a multi-step travel planning task.",
+      "retrieval_rationale": "Surveyed the scaffolded project layout before implementing uses BuiltInPlanner to decompose a multi-step travel planning task.",
+      "expected_spans": [
+        {
+          "file": "app/agent.py",
+          "start_line": 1,
+          "end_line": 79
+        }
+      ],
+      "pins": {
+        "files": {
+          "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
+        }
+      },
+      "observed": {
+        "steps": 2,
+        "tokens": 878,
+        "wall_seconds": 10.969,
+        "agent": "Interactive_claude_agents-cli",
+        "case": "CLI-PLAT-PLAN-001-EXP"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": true,
+        "issues": []
+      }
+    },
+    {
+      "id": "r0057",
+      "case_id": "CLI-PLAT-PLAN-001",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "Good! Now let me explore the project structure:",
+      "task_description": "Build an ADK agent that uses BuiltInPlanner to decompose a multi-step travel planning task.",
+      "retrieval_rationale": "Surveyed the scaffolded project layout before implementing uses BuiltInPlanner to decompose a multi-step travel planning task.",
+      "expected_spans": [
+        {
+          "file": "app/agent.py",
+          "start_line": 1,
+          "end_line": 79
+        },
+        {
+          "file": "tests/integration/test_agent.py",
+          "start_line": 1,
+          "end_line": 57
+        }
+      ],
+      "pins": {
+        "files": {
+          "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75",
+          "tests/integration/test_agent.py": "c186de5621f4e7fe6c073ef7b7d4d846c94ae4098ab0f2637bcf82cdd92fbb19"
+        }
+      },
+      "observed": {
+        "steps": 6,
+        "tokens": 1831,
+        "wall_seconds": 8.311,
+        "agent": "Interactive_claude_agents-cli",
+        "case": "CLI-PLAT-PLAN-001"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": true,
+        "issues": []
+      }
+    },
+    {
+      "id": "r0058",
+      "case_id": "CLI-RUN-001-EXP",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "Great! Dependencies are installed. Now let me examine the current agent structure:",
+      "task_description": "Build an ADK agent and verify it works by running it with agents-cli run.",
+      "retrieval_rationale": "Inspected existing code to plan changes for ADK agent and verify it works by running it with agents-cli run.",
+      "expected_spans": [
+        {
+          "file": "app/agent.py",
+          "start_line": 1,
+          "end_line": 79
+        }
+      ],
+      "pins": {
+        "files": {
+          "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
+        }
+      },
+      "observed": {
+        "steps": 2,
+        "tokens": 923,
+        "wall_seconds": 0.384,
+        "agent": "Interactive_claude_agents-cli",
+        "case": "CLI-RUN-001-EXP"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": true,
+        "issues": []
+      }
+    },
+    {
+      "id": "r0059",
+      "case_id": "CLI-RUN-001",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "Perfect! Now let me examine the project structure and the agent template:",
+      "task_description": "Build an ADK agent and verify it works by running it with agents-cli run.",
+      "retrieval_rationale": "Surveyed the scaffolded project layout before implementing ADK agent and verify it works by running it with agents-cli run.",
+      "expected_spans": [
+        {
+          "file": "app/agent.py",
+          "start_line": 1,
+          "end_line": 79
+        }
+      ],
+      "pins": {
+        "files": {
+          "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
+        }
+      },
+      "observed": {
+        "steps": 2,
+        "tokens": 878,
+        "wall_seconds": 0.03,
+        "agent": "Interactive_claude_agents-cli",
+        "case": "CLI-RUN-001"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": true,
+        "issues": []
+      }
+    },
+    {
+      "id": "r0062",
+      "case_id": "CLI-SETUP-001-EXP",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "Great! Dependencies are installed. Now let me check the current structure and modify the agent.py file.",
+      "task_description": "Scaffold and build an agent after ensuring the development environment is ready.",
+      "retrieval_rationale": "Read the agent template to plan modifications for scaffold and build an agent after ensuring the development....",
+      "expected_spans": [
+        {
+          "file": "app/agent.py",
+          "start_line": 1,
+          "end_line": 79
+        }
+      ],
+      "pins": {
+        "files": {
+          "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
+        }
+      },
+      "observed": {
+        "steps": 2,
+        "tokens": 878,
+        "wall_seconds": 0.124,
+        "agent": "Interactive_claude_agents-cli",
+        "case": "CLI-SETUP-001-EXP"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": true,
+        "issues": []
+      }
+    },
+    {
+      "id": "r0063",
+      "case_id": "CLI-SETUP-001",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "Let me check the current directory:",
+      "task_description": "Scaffold and build an agent after ensuring the development environment is ready.",
+      "retrieval_rationale": "Read workspace files to understand the project before implementing scaffold and build an agent after ensuring the development....",
+      "expected_spans": [
+        {
+          "file": "app/agent.py",
+          "start_line": 1,
+          "end_line": 79
+        }
+      ],
+      "pins": {
+        "files": {
+          "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
+        }
+      },
+      "observed": {
+        "steps": 3,
+        "tokens": 1054,
+        "wall_seconds": 2.851,
+        "agent": "Interactive_claude_agents-cli",
+        "case": "CLI-SETUP-001"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": false,
+        "issues": []
+      }
+    },
+    {
+      "id": "r0065",
+      "case_id": "CLI-STATE-CART-001",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "Perfect! Now let me explore the project structure:",
+      "task_description": "Build an ADK agent that tracks shopping cart state across turns using ADK state management (output_key, session state).",
+      "retrieval_rationale": "Surveyed the scaffolded project layout before implementing tracks shopping cart state across turns using ADK state management....",
+      "expected_spans": [
+        {
+          "file": "app/agent.py",
+          "start_line": 1,
+          "end_line": 79
+        },
+        {
+          "file": "tests/integration/test_agent.py",
+          "start_line": 1,
+          "end_line": 57
+        },
+        {
+          "file": "pyproject.toml",
+          "start_line": 1,
+          "end_line": 97
+        }
+      ],
+      "pins": {
+        "files": {
+          "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75",
+          "tests/integration/test_agent.py": "c186de5621f4e7fe6c073ef7b7d4d846c94ae4098ab0f2637bcf82cdd92fbb19",
+          "pyproject.toml": "82dc2cc88f7dab518fc404a88bea91c512d3407cbb8c38d551c2642acefff5bb"
+        }
+      },
+      "observed": {
+        "steps": 5,
+        "tokens": 2804,
+        "wall_seconds": 6.119,
+        "agent": "Interactive_claude_agents-cli",
+        "case": "CLI-STATE-CART-001"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": true,
+        "issues": []
+      }
+    },
+    {
+      "id": "r0067",
+      "case_id": "CLI-STATE-ORD-001-EXP",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "Now let me install dependencies and examine the project structure:",
+      "task_description": "Build an ADK agent that validates an order, creates it, and confirms it through chained tool calls.",
+      "retrieval_rationale": "Surveyed the scaffolded project layout before implementing validates an order, creates it, and confirms it through chained....",
+      "expected_spans": [
+        {
+          "file": "app/agent.py",
+          "start_line": 1,
+          "end_line": 79
+        }
+      ],
+      "pins": {
+        "files": {
+          "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
+        }
+      },
+      "observed": {
+        "steps": 2,
+        "tokens": 878,
+        "wall_seconds": 12.995,
+        "agent": "Interactive_claude_agents-cli",
+        "case": "CLI-STATE-ORD-001-EXP"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": true,
+        "issues": []
+      }
+    },
+    {
+      "id": "r0068",
+      "case_id": "CLI-STATE-ORD-001",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "Great! Now let's examine the project structure and create the order pipeline agent:",
+      "task_description": "Build an ADK agent that validates an order, creates it, and confirms it through chained tool calls.",
+      "retrieval_rationale": "Surveyed the scaffolded project layout before implementing validates an order, creates it, and confirms it through chained....",
+      "expected_spans": [
+        {
+          "file": "app/agent.py",
+          "start_line": 1,
+          "end_line": 79
+        }
+      ],
+      "pins": {
+        "files": {
+          "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
+        }
+      },
+      "observed": {
+        "steps": 5,
+        "tokens": 1157,
+        "wall_seconds": 4.781,
+        "agent": "Interactive_claude_agents-cli",
+        "case": "CLI-STATE-ORD-001"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": true,
+        "issues": []
+      }
+    },
+    {
+      "id": "r0071",
+      "case_id": "CLI-TEST-001-EXP",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "Now let me examine the generated project structure and the agent file:",
+      "task_description": "Build an ADK agent, write unit tests for it, and run them with agents-cli test.",
+      "retrieval_rationale": "Surveyed the scaffolded project layout before implementing ADK agent, write unit tests for it, and run them with agents-cli test.",
+      "expected_spans": [
+        {
+          "file": "app/agent.py",
+          "start_line": 1,
+          "end_line": 79
+        }
+      ],
+      "pins": {
+        "files": {
+          "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
+        }
+      },
+      "observed": {
+        "steps": 2,
+        "tokens": 878,
+        "wall_seconds": 0.088,
+        "agent": "Interactive_claude_agents-cli",
+        "case": "CLI-TEST-001-EXP"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": true,
+        "issues": []
+      }
+    },
+    {
+      "id": "r0072",
+      "case_id": "CLI-TEST-001-EXP",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "Now let me create the test file. First, let me check the tests directory structure:",
+      "task_description": "Build an ADK agent, write unit tests for it, and run them with agents-cli test.",
+      "retrieval_rationale": "Surveyed the scaffolded project layout before implementing ADK agent, write unit tests for it, and run them with agents-cli test.",
+      "expected_spans": [
+        {
+          "file": "tests/unit/test_dummy.py",
+          "start_line": 1,
+          "end_line": 23
+        }
+      ],
+      "pins": {
+        "files": {
+          "tests/unit/test_dummy.py": "4ac4bffa6f7f0950581e030f8bfd4d13d71f100d3fc256154a2734461f1c3008"
+        }
+      },
+      "observed": {
+        "steps": 2,
+        "tokens": 492,
+        "wall_seconds": 1.547,
+        "agent": "Interactive_claude_agents-cli",
+        "case": "CLI-TEST-001-EXP"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": true,
+        "issues": []
+      }
+    },
+    {
+      "id": "r0074",
+      "case_id": "CLI-TEST-001",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "Great! Now let me explore the project structure:",
+      "task_description": "Build an ADK agent, write unit tests for it, and run them with agents-cli test.",
+      "retrieval_rationale": "Surveyed the scaffolded project layout before implementing ADK agent, write unit tests for it, and run them with agents-cli test.",
+      "expected_spans": [
+        {
+          "file": "app/agent.py",
+          "start_line": 1,
+          "end_line": 79
+        },
+        {
+          "file": "tests/unit/test_dummy.py",
+          "start_line": 1,
+          "end_line": 23
+        },
+        {
+          "file": "tests/integration/test_agent.py",
+          "start_line": 1,
+          "end_line": 57
+        }
+      ],
+      "pins": {
+        "files": {
+          "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75",
+          "tests/unit/test_dummy.py": "4ac4bffa6f7f0950581e030f8bfd4d13d71f100d3fc256154a2734461f1c3008",
+          "tests/integration/test_agent.py": "c186de5621f4e7fe6c073ef7b7d4d846c94ae4098ab0f2637bcf82cdd92fbb19"
+        }
+      },
+      "observed": {
+        "steps": 4,
+        "tokens": 1989,
+        "wall_seconds": 6.716,
+        "agent": "Interactive_claude_agents-cli",
+        "case": "CLI-TEST-001"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": true,
+        "issues": []
+      }
+    },
+    {
+      "id": "r0077",
+      "case_id": "CLI-TOOL-FX-001",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "Excellent! Now let me check the project structure and read the agent file.",
+      "task_description": "Build an ADK agent that queries a forex rate API to retrieve current exchange rates between currency pairs.",
+      "retrieval_rationale": "Surveyed the scaffolded project layout before implementing queries a forex rate API to retrieve current exchange rates....",
+      "expected_spans": [
+        {
+          "file": "app/agent.py",
+          "start_line": 1,
+          "end_line": 79
+        },
+        {
+          "file": "pyproject.toml",
+          "start_line": 1,
+          "end_line": 97
+        }
+      ],
+      "pins": {
+        "files": {
+          "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75",
+          "pyproject.toml": "82dc2cc88f7dab518fc404a88bea91c512d3407cbb8c38d551c2642acefff5bb"
+        }
+      },
+      "observed": {
+        "steps": 3,
+        "tokens": 1969,
+        "wall_seconds": 1.743,
+        "agent": "Interactive_claude_agents-cli",
+        "case": "CLI-TOOL-FX-001"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": false,
+        "issues": []
+      }
+    },
+    {
+      "id": "r0078",
+      "case_id": "CLI-TOOL-INV-001",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "Great! Now let me explore the project structure:",
+      "task_description": "Build an ADK agent that queries an inventory API to look up product details by SKU.",
+      "retrieval_rationale": "Surveyed the scaffolded project layout before implementing queries an inventory API to look up product details by SKU.",
+      "expected_spans": [
+        {
+          "file": "app/agent.py",
+          "start_line": 1,
+          "end_line": 79
+        }
+      ],
+      "pins": {
+        "files": {
+          "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
+        }
+      },
+      "observed": {
+        "steps": 4,
+        "tokens": 1092,
+        "wall_seconds": 3.857,
+        "agent": "Interactive_claude_agents-cli",
+        "case": "CLI-TOOL-INV-001"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": false,
+        "issues": []
+      }
+    },
+    {
+      "id": "r0082",
+      "case_id": "CLI-TOOL-RCP-001-EXP",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "Now let me install dependencies and examine the project structure:",
+      "task_description": "Build an ADK agent that queries a recipe API to retrieve recipe details and nutritional information.",
+      "retrieval_rationale": "Surveyed the scaffolded project layout before implementing queries a recipe API to retrieve recipe details and nutritional....",
+      "expected_spans": [
+        {
+          "file": "app/agent.py",
+          "start_line": 1,
+          "end_line": 79
+        }
+      ],
+      "pins": {
+        "files": {
+          "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
+        }
+      },
+      "observed": {
+        "steps": 3,
+        "tokens": 1056,
+        "wall_seconds": 12.65,
+        "agent": "Interactive_claude_agents-cli",
+        "case": "CLI-TOOL-RCP-001-EXP"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": false,
+        "issues": []
+      }
+    },
+    {
+      "id": "r0085",
+      "case_id": "CLI-TOOL-TKT-001-EXP",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "Great! Now let me check the current agent.py file and the project structure:",
+      "task_description": "Build an ADK agent that queries a ticket tracking API to retrieve ticket details and comments.",
+      "retrieval_rationale": "Surveyed the scaffolded project layout before implementing queries a ticket tracking API to retrieve ticket details and comments.",
+      "expected_spans": [
+        {
+          "file": "app/agent.py",
+          "start_line": 1,
+          "end_line": 79
+        }
+      ],
+      "pins": {
+        "files": {
+          "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
+        }
+      },
+      "observed": {
+        "steps": 2,
+        "tokens": 878,
+        "wall_seconds": 0.117,
+        "agent": "Interactive_claude_agents-cli",
+        "case": "CLI-TOOL-TKT-001-EXP"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": false,
+        "issues": []
+      }
+    },
+    {
+      "id": "r0086",
+      "case_id": "CLI-TOOL-TKT-001",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "Let me examine the main agent.py file and understand the structure.",
+      "task_description": "Build an ADK agent that queries a ticket tracking API to retrieve ticket details and comments.",
+      "retrieval_rationale": "Inspected existing code to plan changes for queries a ticket tracking API to retrieve ticket details and comments.",
+      "expected_spans": [
+        {
+          "file": "app/agent.py",
+          "start_line": 1,
+          "end_line": 79
+        }
+      ],
+      "pins": {
+        "files": {
+          "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
+        }
+      },
+      "observed": {
+        "steps": 2,
+        "tokens": 878,
+        "wall_seconds": 0.067,
+        "agent": "Interactive_claude_agents-cli",
+        "case": "CLI-TOOL-TKT-001"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": false,
+        "issues": []
+      }
+    },
+    {
+      "id": "r0087",
+      "case_id": "CLI-TOOL-USR-001-EXP",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "Good! Now let me check the current agent.py file and the project structure:",
+      "task_description": "Build an ADK agent that queries a user profile API to retrieve account details and activity data.",
+      "retrieval_rationale": "Surveyed the scaffolded project layout before implementing queries a user profile API to retrieve account details and....",
+      "expected_spans": [
+        {
+          "file": "app/agent.py",
+          "start_line": 1,
+          "end_line": 79
+        }
+      ],
+      "pins": {
+        "files": {
+          "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
+        }
+      },
+      "observed": {
+        "steps": 2,
+        "tokens": 878,
+        "wall_seconds": 0.061,
+        "agent": "Interactive_claude_agents-cli",
+        "case": "CLI-TOOL-USR-001-EXP"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": false,
+        "issues": []
+      }
+    },
+    {
+      "id": "r0089",
+      "case_id": "CLI-TOOL-USR-001",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "Perfect! Now let me explore the generated project structure:",
+      "task_description": "Build an ADK agent that queries a user profile API to retrieve account details and activity data.",
+      "retrieval_rationale": "Surveyed the scaffolded project layout before implementing queries a user profile API to retrieve account details and....",
+      "expected_spans": [
+        {
+          "file": "app/agent.py",
+          "start_line": 1,
+          "end_line": 79
+        }
+      ],
+      "pins": {
+        "files": {
+          "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
+        }
+      },
+      "observed": {
+        "steps": 4,
+        "tokens": 1087,
+        "wall_seconds": 3.486,
+        "agent": "Interactive_claude_agents-cli",
+        "case": "CLI-TOOL-USR-001"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": false,
+        "issues": []
+      }
+    },
+    {
+      "id": "r0090",
+      "case_id": "CLI-TOOL-USR-001",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "Great! Now let me verify the agent is correct by testing it. First, let me check if there's a test file already:",
+      "task_description": "Build an ADK agent that queries a user profile API to retrieve account details and activity data.",
+      "retrieval_rationale": "Read the agent template to plan modifications for queries a user profile API to retrieve account details and....",
+      "expected_spans": [
+        {
+          "file": "tests/integration/test_agent.py",
+          "start_line": 1,
+          "end_line": 57
+        }
+      ],
+      "pins": {
+        "files": {
+          "tests/integration/test_agent.py": "c186de5621f4e7fe6c073ef7b7d4d846c94ae4098ab0f2637bcf82cdd92fbb19"
+        }
+      },
+      "observed": {
+        "steps": 6,
+        "tokens": 1008,
+        "wall_seconds": 7.949,
+        "agent": "Interactive_claude_agents-cli",
+        "case": "CLI-TOOL-USR-001"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": true,
+        "issues": []
+      }
+    },
+    {
+      "id": "r0092",
+      "case_id": "CLI-UPG-001",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "Great! Now let me explore the generated project structure:",
+      "task_description": "Scaffold an ADK agent project and use agents-cli upgrade to migrate it to the latest version template.",
+      "retrieval_rationale": "Surveyed the scaffolded project layout before implementing scaffold an ADK agent project and use agents-cli upgrade to....",
+      "expected_spans": [
+        {
+          "file": "app/agent.py",
+          "start_line": 1,
+          "end_line": 79
+        },
+        {
+          "file": "README.md",
+          "start_line": 1,
+          "end_line": 89
+        }
+      ],
+      "pins": {
+        "files": {
+          "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75",
+          "README.md": "f0c5ede004b9cfbae88fb5a9a8e2dde59aba599217fc9b364ebcc5847cc8350e"
+        }
+      },
+      "observed": {
+        "steps": 4,
+        "tokens": 1990,
+        "wall_seconds": 4.878,
+        "agent": "Interactive_claude_agents-cli",
+        "case": "CLI-UPG-001"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": true,
+        "issues": []
+      }
+    },
+    {
+      "id": "r0093",
+      "case_id": "E2E-CS-PROJ-001",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "Great! Now let me explore the project structure and then implement the customer support agent:",
+      "task_description": "Generate an ADK agent project that acts as a friendly customer support assistant capable of checking order status, resetting passwords, answering FAQ questions, and escalating to human support.",
+      "retrieval_rationale": "Surveyed the scaffolded project layout before implementing generate an ADK agent project that acts as a friendly customer....",
+      "expected_spans": [
+        {
+          "file": "app/agent.py",
+          "start_line": 1,
+          "end_line": 79
+        },
+        {
+          "file": "pyproject.toml",
+          "start_line": 1,
+          "end_line": 97
+        }
+      ],
+      "pins": {
+        "files": {
+          "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75",
+          "pyproject.toml": "82dc2cc88f7dab518fc404a88bea91c512d3407cbb8c38d551c2642acefff5bb"
+        }
+      },
+      "observed": {
+        "steps": 4,
+        "tokens": 1948,
+        "wall_seconds": 4.594,
+        "agent": "Interactive_claude_agents-cli",
+        "case": "E2E-CS-PROJ-001"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": true,
+        "issues": []
+      }
+    },
+    {
+      "id": "r0100",
+      "case_id": "CLI-DEV-SERVE-001",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "I'll check for any `.env` files or other configuration files that `agents-cli` might have created to understand how to properly configure the model and location.",
+      "task_description": "Build an ADK agent and start it using agents-cli dev or agents-cli serve for local testing.",
+      "retrieval_rationale": "Checked configuration settings relevant to ADK agent and start it using agents-cli dev or agents-cli serve....",
+      "expected_spans": [
+        {
+          "file": "deployment_metadata.json",
+          "start_line": 1,
+          "end_line": 4
+        }
+      ],
+      "pins": {
+        "files": {
+          "deployment_metadata.json": "bcc2dd51ec063c00a80a6a765f26eac6c15be329eb84f077333f1d5400347adc"
+        }
+      },
+      "observed": {
+        "steps": 2,
+        "tokens": 81,
+        "wall_seconds": 0.0,
+        "agent": "Interactive_gemini_agents-cli",
+        "case": "CLI-DEV-SERVE-001"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": false,
+        "issues": []
+      }
+    },
+    {
+      "id": "r0110",
+      "case_id": "CLI-EVAL-CUSTOM-EXP",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "I will check for a configuration file for `agents-cli`.",
+      "task_description": "Build an ADK agent, create a custom evalset with multiple test cases, and run agents-cli eval.",
+      "retrieval_rationale": "Checked configuration settings relevant to ADK agent, create a custom evalset with multiple test cases, and....",
+      "expected_spans": [
+        {
+          "file": "pyproject.toml",
+          "start_line": 1,
+          "end_line": 97
+        }
+      ],
+      "pins": {
+        "files": {
+          "pyproject.toml": "82dc2cc88f7dab518fc404a88bea91c512d3407cbb8c38d551c2642acefff5bb"
+        }
+      },
+      "observed": {
+        "steps": 2,
+        "tokens": 69,
+        "wall_seconds": 0.0,
+        "agent": "Interactive_gemini_agents-cli",
+        "case": "CLI-EVAL-CUSTOM-EXP"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": true,
+        "issues": []
+      }
+    },
+    {
+      "id": "r0120",
+      "case_id": "CLI-FLOW-CB-001",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "I will check the content of the `tests` directory in the `agent-project` to see if there are any existing tests I can use as a reference.",
+      "task_description": "Build an ADK agent with before_tool_callback that blocks restricted operations and logs all tool calls.",
+      "retrieval_rationale": "Inspected existing tests to understand patterns before testing before_tool_callback that blocks restricted operations and logs....",
+      "expected_spans": [
+        {
+          "file": "tests/integration/test_agent.py",
+          "start_line": 1,
+          "end_line": 57
+        }
+      ],
+      "pins": {
+        "files": {
+          "tests/integration/test_agent.py": "c186de5621f4e7fe6c073ef7b7d4d846c94ae4098ab0f2637bcf82cdd92fbb19"
+        }
+      },
+      "observed": {
+        "steps": 3,
+        "tokens": 130,
+        "wall_seconds": 0.0,
+        "agent": "Interactive_gemini_agents-cli",
+        "case": "CLI-FLOW-CB-001"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": true,
+        "issues": []
+      }
+    },
+    {
+      "id": "r0122",
+      "case_id": "CLI-FLOW-HO-001",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "list the files in the `agent-project` directory to understand the project structure.",
+      "task_description": "Build an ADK agent that uses transfer_to_agent to hand off from a general assistant to a billing specialist when billing topics are detected.",
+      "retrieval_rationale": "Surveyed the scaffolded project layout before implementing uses transfer_to_agent to hand off from a general assistant to a....",
+      "expected_spans": [
+        {
+          "file": "app/agent.py",
+          "start_line": 1,
+          "end_line": 79
+        }
+      ],
+      "pins": {
+        "files": {
+          "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
+        }
+      },
+      "observed": {
+        "steps": 3,
+        "tokens": 34,
+        "wall_seconds": 0.0,
+        "agent": "Interactive_gemini_agents-cli",
+        "case": "CLI-FLOW-HO-001"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": true,
+        "issues": []
+      }
+    },
+    {
+      "id": "r0127",
+      "case_id": "CLI-INIT-A2A",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "I will list the files in the `agent-project` directory.",
+      "task_description": "Scaffold an A2A-compatible ADK agent using the agents-cli with the adk_a2a template.",
+      "retrieval_rationale": "Listed project files to understand the workspace for scaffold an A2A-compatible ADK agent using the agents-cli with the....",
+      "expected_spans": [
+        {
+          "file": "app/agent.py",
+          "start_line": 1,
+          "end_line": 79
+        }
+      ],
+      "pins": {
+        "files": {
+          "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
+        }
+      },
+      "observed": {
+        "steps": 2,
+        "tokens": 22,
+        "wall_seconds": 0.0,
+        "agent": "Interactive_gemini_agents-cli",
+        "case": "CLI-INIT-A2A"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": true,
+        "issues": []
+      }
+    },
+    {
+      "id": "r0129",
+      "case_id": "CLI-LINT-001",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "I'll check the structure of the `agent-project` directory.",
+      "task_description": "Build an ADK agent and use agents-cli lint to check code quality.",
+      "retrieval_rationale": "Read workspace files to understand the project before implementing ADK agent and use agents-cli lint to check code quality.",
+      "expected_spans": [
+        {
+          "file": "app/agent.py",
+          "start_line": 1,
+          "end_line": 79
+        }
+      ],
+      "pins": {
+        "files": {
+          "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
+        }
+      },
+      "observed": {
+        "steps": 3,
+        "tokens": 34,
+        "wall_seconds": 0.0,
+        "agent": "Interactive_gemini_agents-cli",
+        "case": "CLI-LINT-001"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": true,
+        "issues": []
+      }
+    },
+    {
+      "id": "r0131",
+      "case_id": "CLI-LINT-TEST-001",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "I will check the existing tests in `agent-project/tests`.",
+      "task_description": "Build an ADK agent and run both lint and test to ensure code quality.",
+      "retrieval_rationale": "Inspected existing tests to understand patterns before testing ADK agent and run both lint and test to ensure code quality.",
+      "expected_spans": [
+        {
+          "file": "tests/unit/test_dummy.py",
+          "start_line": 1,
+          "end_line": 23
+        }
+      ],
+      "pins": {
+        "files": {
+          "tests/unit/test_dummy.py": "4ac4bffa6f7f0950581e030f8bfd4d13d71f100d3fc256154a2734461f1c3008"
+        }
+      },
+      "observed": {
+        "steps": 3,
+        "tokens": 41,
+        "wall_seconds": 0.0,
+        "agent": "Interactive_gemini_agents-cli",
+        "case": "CLI-LINT-TEST-001"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": true,
+        "issues": []
+      }
+    },
+    {
+      "id": "r0141",
+      "case_id": "CLI-MULTI-ROUTER-001",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "see how they run the agent in tests.",
+      "task_description": "Build a triage router agent that dispatches customer requests to specialized sub-agents based on user intent.",
+      "retrieval_rationale": "Read workspace files to understand the project before implementing triage router agent that dispatches customer requests to....",
+      "expected_spans": [
+        {
+          "file": "tests/integration/test_agent.py",
+          "start_line": 1,
+          "end_line": 57
+        }
+      ],
+      "pins": {
+        "files": {
+          "tests/integration/test_agent.py": "c186de5621f4e7fe6c073ef7b7d4d846c94ae4098ab0f2637bcf82cdd92fbb19"
+        }
+      },
+      "observed": {
+        "steps": 5,
+        "tokens": 75,
+        "wall_seconds": 0.0,
+        "agent": "Interactive_gemini_agents-cli",
+        "case": "CLI-MULTI-ROUTER-001"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": false,
+        "issues": []
+      }
+    },
+    {
+      "id": "r0142",
+      "case_id": "CLI-MULTI-SEQ-001-EXP",
+      "family": "dependency-symbol",
+      "corpus": "adk-sdk",
+      "query": "I will now check if `SequentialAgent` is available in the `google-adk` package.",
+      "task_description": "Build a sequential pipeline agent that fetches sales data from a source API, transforms and summarizes it, and stores the result via a report API.",
+      "retrieval_rationale": "Verified SDK class availability before using it for sequential pipeline agent that fetches sales data from a source....",
+      "expected_spans": [
+        {
+          "file": "agents/sequential_agent.py",
+          "start_line": 48,
+          "end_line": 159
+        }
+      ],
+      "pins": {
+        "files": {
+          "agents/sequential_agent.py": "10fb38007cd8f5ecea23df9311ef1fedbc72b9511ad3040c1b571785a6aad769"
+        }
+      },
+      "observed": {
+        "steps": 3,
+        "tokens": 72761,
+        "wall_seconds": 0.0,
+        "agent": "Interactive_gemini_agents-cli",
+        "case": "CLI-MULTI-SEQ-001-EXP"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": true,
+        "issues": []
+      }
+    },
+    {
+      "id": "r0143",
+      "case_id": "CLI-MULTI-SEQ-001",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "the files in the newly created `agent-project` directory to understand its structure.",
+      "task_description": "Build a sequential pipeline agent that fetches sales data from a source API, transforms and summarizes it, and stores the result via a report API.",
+      "retrieval_rationale": "Read workspace files to understand the project before implementing sequential pipeline agent that fetches sales data from a source....",
+      "expected_spans": [
+        {
+          "file": "app/agent.py",
+          "start_line": 1,
+          "end_line": 79
+        }
+      ],
+      "pins": {
+        "files": {
+          "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
+        }
+      },
+      "observed": {
+        "steps": 2,
+        "tokens": 22,
+        "wall_seconds": 0.0,
+        "agent": "Interactive_gemini_agents-cli",
+        "case": "CLI-MULTI-SEQ-001"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": false,
+        "issues": []
+      }
+    },
+    {
+      "id": "r0145",
+      "case_id": "CLI-PLAT-A2A-001",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "I'll examine the agent's definition and dependencies to prepare for the translation feature implementation.",
+      "task_description": "Build an ADK agent that exposes an A2A-compatible interface with an agent card for language translation.",
+      "retrieval_rationale": "Read workspace files to understand the project before implementing exposes an A2A-compatible interface with an agent card for....",
+      "expected_spans": [
+        {
+          "file": "app/agent.py",
+          "start_line": 1,
+          "end_line": 79
+        },
+        {
+          "file": "pyproject.toml",
+          "start_line": 1,
+          "end_line": 97
+        }
+      ],
+      "pins": {
+        "files": {
+          "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75",
+          "pyproject.toml": "82dc2cc88f7dab518fc404a88bea91c512d3407cbb8c38d551c2642acefff5bb"
+        }
+      },
+      "observed": {
+        "steps": 2,
+        "tokens": 22,
+        "wall_seconds": 0.0,
+        "agent": "Interactive_gemini_agents-cli",
+        "case": "CLI-PLAT-A2A-001"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": true,
+        "issues": []
+      }
+    },
+    {
+      "id": "r0149",
+      "case_id": "CLI-PLAT-CODE-001",
+      "family": "dependency-symbol",
+      "corpus": "adk-sdk",
+      "query": "I'll check the imports in `google.adk.agents` to see how `Agent` is defined.",
+      "task_description": "Build an ADK agent that uses BuiltInCodeExecutor to dynamically execute Python code for data analysis.",
+      "retrieval_rationale": "Checked SDK type definitions to use the correct API for uses BuiltInCodeExecutor to dynamically execute Python code for....",
+      "expected_spans": [
+        {
+          "file": "agents/llm_agent.py",
+          "start_line": 1027,
+          "end_line": 1027
+        }
+      ],
+      "pins": {
+        "files": {
+          "agents/llm_agent.py": "7d0a8b71724536898ca7f347038dbbc1cf0eeb38d1d6f9e1077b8cfeb9461c0b"
+        }
+      },
+      "observed": {
+        "steps": 2,
+        "tokens": 52,
+        "wall_seconds": 0.0,
+        "agent": "Interactive_gemini_agents-cli",
+        "case": "CLI-PLAT-CODE-001"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": true,
+        "issues": []
+      }
+    },
+    {
+      "id": "r0152",
+      "case_id": "CLI-SETUP-001",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "list the contents of the `agent-project` directory to understand its structure.",
+      "task_description": "Scaffold and build an agent after ensuring the development environment is ready.",
+      "retrieval_rationale": "Read workspace files to understand the project before implementing scaffold and build an agent after ensuring the development....",
+      "expected_spans": [
+        {
+          "file": "app/agent.py",
+          "start_line": 1,
+          "end_line": 79
+        }
+      ],
+      "pins": {
+        "files": {
+          "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75"
+        }
+      },
+      "observed": {
+        "steps": 3,
+        "tokens": 34,
+        "wall_seconds": 0.0,
+        "agent": "Interactive_gemini_agents-cli",
+        "case": "CLI-SETUP-001"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": false,
+        "issues": []
+      }
+    },
+    {
+      "id": "r0164",
+      "case_id": "CLI-TOOL-NOTIF-001",
+      "family": "workspace-file",
+      "corpus": "agent-project",
+      "query": "now explore the directory structure of the newly scaffolded project.",
+      "task_description": "Build an ADK agent that sends notifications via a notification API and checks delivery status.",
+      "retrieval_rationale": "Surveyed the scaffolded project layout before implementing sends notifications via a notification API and checks delivery status.",
+      "expected_spans": [
+        {
+          "file": "app/agent.py",
+          "start_line": 1,
+          "end_line": 79
+        },
+        {
+          "file": "pyproject.toml",
+          "start_line": 1,
+          "end_line": 97
+        }
+      ],
+      "pins": {
+        "files": {
+          "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75",
+          "pyproject.toml": "82dc2cc88f7dab518fc404a88bea91c512d3407cbb8c38d551c2642acefff5bb"
+        }
+      },
+      "observed": {
+        "steps": 3,
+        "tokens": 33,
+        "wall_seconds": 0.0,
+        "agent": "Interactive_gemini_agents-cli",
+        "case": "CLI-TOOL-NOTIF-001"
+      },
+      "validation": {
+        "consensus": "valid",
+        "unanimous": false,
+        "issues": []
+      }
     }
-   ],
-   "pins": {
-    "files": {
-     "app/agent.py": "a7258348073cb8505c3f174a36e806ff6160ea126c2ebdf09e5046b953094c75",
-     "pyproject.toml": "82dc2cc88f7dab518fc404a88bea91c512d3407cbb8c38d551c2642acefff5bb"
-    }
-   },
-   "observed": {
-    "steps": 3,
-    "tokens": 33,
-    "wall_seconds": 0.0,
-    "agent": "Interactive_gemini_agents-cli",
-    "case": "CLI-TOOL-NOTIF-001"
-   },
-   "validation": {
-    "consensus": "valid",
-    "unanimous": false,
-    "issues": []
-   }
-  }
- ]
+  ]
 }

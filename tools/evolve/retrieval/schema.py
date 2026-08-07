@@ -172,6 +172,7 @@ class EvalTask:
     """One replayable retrieval case pinned to its corpus dependencies."""
 
     id: str
+    case_id: str
     family: str
     corpus: str
     query: str
@@ -182,12 +183,17 @@ class EvalTask:
     # Why the agent searched (structural, miner-derived): failure-triggered,
     # pre-write-verification, or orientation. Optional analytics metadata.
     motivation: str | None = None
+    # Human-readable context: what the benchmark case asked the agent to build,
+    # and why it needed this particular retrieval during that work.
+    task_description: str | None = None
+    retrieval_rationale: str | None = None
 
     @classmethod
     def from_dict(cls, data: dict) -> EvalTask:
         validation = data.get("validation")
         return cls(
             id=data["id"],
+            case_id=data.get("case_id", data.get("observed", {}).get("case", "")),
             family=data["family"],
             corpus=data["corpus"],
             query=data["query"],
@@ -196,11 +202,14 @@ class EvalTask:
             observed=Observed(**data["observed"]),
             validation=RowValidation.from_dict(validation) if validation else None,
             motivation=data.get("motivation"),
+            task_description=data.get("task_description"),
+            retrieval_rationale=data.get("retrieval_rationale"),
         )
 
     def to_dict(self) -> dict:
         out = {
             "id": self.id,
+            "case_id": self.case_id,
             "family": self.family,
             "corpus": self.corpus,
             "query": self.query,
@@ -212,6 +221,10 @@ class EvalTask:
             out["validation"] = self.validation.to_dict()
         if self.motivation is not None:
             out["motivation"] = self.motivation
+        if self.task_description is not None:
+            out["task_description"] = self.task_description
+        if self.retrieval_rationale is not None:
+            out["retrieval_rationale"] = self.retrieval_rationale
         return out
 
     def to_evaluator_dict(self) -> dict:
