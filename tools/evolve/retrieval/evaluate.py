@@ -203,30 +203,69 @@ def evaluate_real(
                     f"actual={actual_hash[:12]}...)"
                 )
 
-    per_corpus: dict[str, dict] = {}
-    totals = {"combined_score": 0.0, "recall": 0.0, "precision": 0.0, "mrr": 0.0}
-    num_tasks = 0
+    _METRIC_KEYS = ("combined_score", "recall", "precision", "mrr")
+    cells: dict[tuple[str, str], dict] = {}
     for corpus, root in sorted(roots.items()):
-        subset = [
-            t.to_evaluator_dict() for t in manifest.tasks if t.corpus == corpus
-        ]
-        if not subset:
-            continue
-        metrics = LocalEvaluator(root, {"tasks": subset}).evaluate_program(
-            program_path
+        families_in_corpus = sorted(
+            {t.family for t in manifest.tasks if t.corpus == corpus}
         )
-        per_corpus[corpus] = metrics
-        n = metrics["num_tasks"]
-        num_tasks += n
-        for key in totals:
-            totals[key] += metrics.get(key, 0.0) * n
-    if num_tasks:
-        for key in totals:
-            totals[key] = round(totals[key] / num_tasks, 4)
+        for family in families_in_corpus:
+            subset = [
+                t.to_evaluator_dict()
+                for t in manifest.tasks
+                if t.corpus == corpus and t.family == family
+            ]
+            if not subset:
+                continue
+            metrics = LocalEvaluator(root, {"tasks": subset}).evaluate_program(
+                program_path
+            )
+            cells[(corpus, family)] = metrics
+
+    per_corpus: dict[str, dict] = {}
+    for corpus in sorted(roots):
+        corpus_cells = [m for (c, _), m in cells.items() if c == corpus]
+        if not corpus_cells:
+            continue
+        n = sum(m["num_tasks"] for m in corpus_cells)
+        if not n:
+            continue
+        agg = {
+            k: round(
+                sum(m.get(k, 0.0) * m["num_tasks"] for m in corpus_cells) / n,
+                4,
+            )
+            for k in _METRIC_KEYS
+        }
+        agg["num_tasks"] = n
+        per_corpus[corpus] = agg
+
+    per_family: dict[str, dict] = {}
+    for family in sorted({f for _, f in cells}):
+        fam_cells = [m for (_, f), m in cells.items() if f == family]
+        n = sum(m["num_tasks"] for m in fam_cells)
+        if not n:
+            continue
+        agg = {
+            k: round(
+                sum(m.get(k, 0.0) * m["num_tasks"] for m in fam_cells) / n, 4
+            )
+            for k in _METRIC_KEYS
+        }
+        agg["num_tasks"] = n
+        per_family[family] = agg
+
+    num_families = len(per_family) or 1
+    num_tasks = sum(fm["num_tasks"] for fm in per_family.values())
+    totals = {
+        k: round(sum(fm[k] for fm in per_family.values()) / num_families, 4)
+        for k in _METRIC_KEYS
+    }
     return {
         "num_tasks": num_tasks,
         "num_skipped": len(manifest.tasks) - num_tasks,
         "per_corpus": per_corpus,
+        "per_family": per_family,
         **totals,
     }
 
