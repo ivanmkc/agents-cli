@@ -117,10 +117,32 @@ def aggregate(episodes: list[dict], num_transcripts: dict[str, int]) -> dict:
     return table
 
 
+def _load_run_metadata(run_dir: Path) -> dict | None:
+    meta_path = run_dir / "run_metadata.json"
+    if not meta_path.exists():
+        return None
+    try:
+        return json.loads(meta_path.read_text())
+    except (OSError, ValueError):
+        return None
+
+
+def _detect_partial(run_dir: Path, metadata: dict | None) -> bool:
+    if metadata is None:
+        return False
+    expected = metadata.get("num_cases") or metadata.get("expected_cases")
+    if expected is None:
+        return False
+    detail_dir = run_dir / "results_detail"
+    actual = len(list(detail_dir.glob("*.json.gz"))) if detail_dir.is_dir() else 0
+    return actual != expected
+
+
 def analyze_run(run_dir: Path | str, min_steps: int = 2) -> dict:
     """Mine one run and aggregate everything the comparison needs."""
     run_dir = Path(run_dir)
     episodes = mine_run_dir(run_dir, min_steps=min_steps)
+    metadata = _load_run_metadata(run_dir)
 
     num_transcripts: Counter = Counter()
     skill_tokens: Counter = Counter()
@@ -132,7 +154,7 @@ def analyze_run(run_dir: Path | str, min_steps: int = 2) -> dict:
         for _, events in iter_agent_event_streams(record):
             skill_tokens[harness] += skill_injection_tokens(events)
 
-    return {
+    result: dict = {
         "run": run_dir.name,
         "num_transcripts": dict(num_transcripts),
         "num_episodes": len(episodes),
@@ -144,6 +166,25 @@ def analyze_run(run_dir: Path | str, min_steps: int = 2) -> dict:
             )
         },
     }
+    if metadata is not None:
+        result["run_metadata"] = metadata
+    if _detect_partial(run_dir, metadata):
+        result["partial"] = True
+    return result
+
+
+def _extract_models(side_a: dict, side_b: dict, label_a: str, label_b: str) -> dict:
+    """Build {label: {harness: model_id}} from run_metadata if present."""
+    out = {}
+    for label, side in [(label_a, side_a), (label_b, side_b)]:
+        meta = side.get("run_metadata") or {}
+        models = meta.get("models") or {}
+        if models:
+            out[label] = models
+        else:
+            harnesses = list(side.get("num_transcripts", {}).keys())
+            out[label] = {h: meta.get("model", "unknown") for h in harnesses}
+    return out
 
 
 def main() -> None:
@@ -158,16 +199,36 @@ def main() -> None:
     parser.add_argument("--out", type=Path, default=None)
     args = parser.parse_args()
 
-    report = {
-        args.label_a: analyze_run(args.run_a, args.min_steps),
-        args.label_b: analyze_run(args.run_b, args.min_steps),
+    side_a = analyze_run(args.run_a, args.min_steps)
+    side_b = analyze_run(args.run_b, args.min_steps)
+    report: dict = {
+        args.label_a: side_a,
+        args.label_b: side_b,
     }
+
+    report["models"] = _extract_models(side_a, side_b, args.label_a, args.label_b)
+    same_model = report["models"].get(args.label_a) == report["models"].get(args.label_b)
+    report["same_model_baseline"] = same_model
+    report["methodology_note"] = (
+        "N=1 per condition; differences are descriptive, not causal"
+    )
+    if not same_model:
+        report["confounds"] = [
+            "model differs between runs",
+            "any behavioral difference may be model-driven, not treatment-driven",
+        ]
+
+    cats_a = {k.split("|")[1] for k in side_a["table"]}
+    cats_b = {k.split("|")[1] for k in side_b["table"]}
+    report["comparable_categories"] = sorted(cats_a & cats_b)
+
     text = json.dumps(report, indent=1)
     if args.out:
         args.out.write_text(text)
         print(f"report -> {args.out}")
-    for label, side in report.items():
-        print(f"\n== {label}: {side['run']} ==")
+    for label, side in [(args.label_a, side_a), (args.label_b, side_b)]:
+        partial = " [PARTIAL]" if side.get("partial") else ""
+        print(f"\n== {label}: {side['run']}{partial} ==")
         print(f"transcripts={side['num_transcripts']} "
               f"episodes={side['num_episodes']} "
               f"skill_injection_tokens={side['skill_injection_tokens']}")

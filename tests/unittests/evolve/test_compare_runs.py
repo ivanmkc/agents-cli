@@ -1,6 +1,15 @@
 """Tests for the run-vs-run retrieval comparison pipeline."""
 
-from evolve.retrieval.compare_runs import aggregate, categorize_episode
+import json
+from pathlib import Path
+
+from evolve.retrieval.compare_runs import (
+    _detect_partial,
+    _extract_models,
+    _load_run_metadata,
+    aggregate,
+    categorize_episode,
+)
 
 
 def _ep(args, generator="Interactive_claude_agents-cli", motivation="orientation",
@@ -64,3 +73,66 @@ def test_agy_antigravity_skill_path_categorized_as_skill_docs():
         ["cat /work/.gemini/antigravity-cli/skills/deploy-guide/reference.md"]
     )
     assert categorize_episode(ep) == "skill-docs"
+
+
+def test_load_run_metadata_present(tmp_path):
+    meta = {"models": {"claude": "opus-4-6"}, "num_cases": 5}
+    (tmp_path / "run_metadata.json").write_text(json.dumps(meta))
+    assert _load_run_metadata(tmp_path) == meta
+
+
+def test_load_run_metadata_absent(tmp_path):
+    assert _load_run_metadata(tmp_path) is None
+
+
+def test_load_run_metadata_corrupt(tmp_path):
+    (tmp_path / "run_metadata.json").write_text("{bad json")
+    assert _load_run_metadata(tmp_path) is None
+
+
+def test_detect_partial_matches(tmp_path):
+    meta = {"num_cases": 3}
+    detail = tmp_path / "results_detail"
+    detail.mkdir()
+    (detail / "case1.json.gz").write_text("")
+    (detail / "case2.json.gz").write_text("")
+    assert _detect_partial(tmp_path, meta) is True
+
+
+def test_detect_partial_complete(tmp_path):
+    meta = {"num_cases": 2}
+    detail = tmp_path / "results_detail"
+    detail.mkdir()
+    (detail / "case1.json.gz").write_text("")
+    (detail / "case2.json.gz").write_text("")
+    assert _detect_partial(tmp_path, meta) is False
+
+
+def test_detect_partial_no_metadata(tmp_path):
+    assert _detect_partial(tmp_path, None) is False
+
+
+def test_detect_partial_no_num_cases(tmp_path):
+    assert _detect_partial(tmp_path, {"models": {}}) is False
+
+
+def test_extract_models_from_metadata():
+    side_a = {
+        "run_metadata": {"models": {"claude": "opus-4-6", "gemini": "flash-3"}},
+        "num_transcripts": {"claude": 5, "gemini": 3},
+    }
+    side_b = {
+        "run_metadata": {"models": {"claude": "opus-4-7", "gemini": "flash-3.5"}},
+        "num_transcripts": {"claude": 5, "gemini": 3},
+    }
+    result = _extract_models(side_a, side_b, "a", "b")
+    assert result["a"] == {"claude": "opus-4-6", "gemini": "flash-3"}
+    assert result["b"] == {"claude": "opus-4-7", "gemini": "flash-3.5"}
+
+
+def test_extract_models_fallback_when_no_metadata():
+    side_a = {"num_transcripts": {"claude": 5}}
+    side_b = {"num_transcripts": {"gemini": 3}}
+    result = _extract_models(side_a, side_b, "a", "b")
+    assert result["a"] == {"claude": "unknown"}
+    assert result["b"] == {"gemini": "unknown"}
