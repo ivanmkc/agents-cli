@@ -38,6 +38,7 @@ from __future__ import annotations
 
 import json
 import os
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -70,11 +71,27 @@ def _safe_subprocess_env() -> dict[str, str]:
     HOME, VIRTUAL_ENV, and PYTHONHOME are deliberately excluded: they
     let a candidate locate the committed manifest and inflate its score.
     """
+    _ALLOWED_PATH_DIRS = {"/usr/bin", "/usr/local/bin", "/bin", "/usr/sbin", "/sbin"}
+
     env: dict[str, str] = {}
-    for key in ("PATH", "SYSTEMROOT", "LANG"):
+    for key in ("SYSTEMROOT", "LANG"):
         val = os.environ.get(key)
         if val is not None:
             env[key] = val
+
+    raw_path = os.environ.get("PATH", "")
+    python_bin_dir = str(Path(sys.executable).resolve().parent)
+    safe_path_entries: list[str] = []
+    for entry in raw_path.split(os.pathsep):
+        if not entry:
+            continue
+        resolved = str(Path(entry).resolve())
+        if "/home/" in resolved or "~" in entry:
+            continue
+        if resolved in _ALLOWED_PATH_DIRS or resolved == python_bin_dir:
+            safe_path_entries.append(entry)
+    if safe_path_entries:
+        env["PATH"] = os.pathsep.join(safe_path_entries)
 
     raw_pypath = os.environ.get("PYTHONPATH", "")
     if raw_pypath:
@@ -203,23 +220,31 @@ class LocalEvaluator:
             "rr": 0.0, "economy": 0.0, "tokens": 0,
         }
         try:
+            cmd = [
+                sys.executable,
+                program_path,
+                "--repo", str(self.repo_root),
+                "--query", task["query"],
+                "--max-results", str(self.max_results),
+                "--token-budget", str(self.token_budget),
+            ]
+            if sys.platform == "linux":
+                unshare = shutil.which("unshare")
+                if unshare is None:
+                    raise RuntimeError(
+                        "PID namespace isolation required for fitness "
+                        "evaluation; install util-linux"
+                    )
+                cmd = [
+                    unshare, "--user", "--pid", "--fork", "--mount-proc",
+                ] + cmd
             proc = subprocess.run(
-                [
-                    sys.executable,
-                    program_path,
-                    "--repo", str(self.repo_root),
-                    "--query", task["query"],
-                    "--max-results", str(self.max_results),
-                    "--token-budget", str(self.token_budget),
-                ],
+                cmd,
                 capture_output=True,
                 text=True,
                 encoding="utf-8",
                 errors="replace",
                 timeout=self.timeout,
-                # Empty cwd + minimal env: no breadcrumbs a candidate
-                # could follow to benchmark metadata. Keep only what
-                # the Python runtime itself requires.
                 cwd=sandbox,
                 env=_safe_subprocess_env(),
             )

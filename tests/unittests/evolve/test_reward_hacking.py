@@ -5,6 +5,7 @@ function must keep every one of them strictly below the honest seed.
 """
 
 import json
+import os
 import sys
 import textwrap
 from pathlib import Path
@@ -12,7 +13,7 @@ from pathlib import Path
 import pytest
 from evolve.retrieval import evaluate as evaluate_mod
 from evolve.retrieval import search_tool
-from evolve.retrieval.evaluator import LocalEvaluator
+from evolve.retrieval.evaluator import LocalEvaluator, _safe_subprocess_env
 from evolve.retrieval.monorepo import generate_monorepo
 
 # Exploit 1 (audit: "degenerate 1-line-chunk tool"): return only the
@@ -244,3 +245,38 @@ def test_candidate_cannot_import_evolve_package(bench, tmp_path, monkeypatch):
         "Candidate was able to 'import evolve.retrieval.evaluate' — "
         "PYTHONPATH leaks the repo's tools/ directory"
     )
+
+
+# ---- PATH stripping regression tests (C2) ----
+
+def test_path_contains_no_home_directory_entries(monkeypatch):
+    """PATH must not contain entries under /home/ — they leak the user's directory."""
+    monkeypatch.setenv(
+        "PATH",
+        os.pathsep.join([
+            "/usr/bin",
+            "/home/user/.local/bin",
+            "/usr/local/bin",
+            "/home/runner/bin",
+            "/bin",
+        ]),
+    )
+    env = _safe_subprocess_env()
+    path_entries = env.get("PATH", "").split(os.pathsep)
+    for entry in path_entries:
+        assert "/home/" not in entry, (
+            f"PATH entry '{entry}' contains /home/ — a candidate could "
+            "discover the parent process's home directory"
+        )
+
+
+def test_path_allows_system_directories(monkeypatch):
+    """Standard system directories must survive filtering."""
+    monkeypatch.setenv(
+        "PATH",
+        os.pathsep.join(["/usr/bin", "/usr/local/bin", "/bin", "/usr/sbin", "/sbin"]),
+    )
+    env = _safe_subprocess_env()
+    path_entries = env.get("PATH", "").split(os.pathsep)
+    assert "/usr/bin" in path_entries
+    assert "/bin" in path_entries
