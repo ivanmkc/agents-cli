@@ -9,6 +9,43 @@ uv tool install google-agents-cli
 
 ---
 
+## Project Structure
+
+This project was scaffolded by `agents-cli`. The structure is **deterministic** — do not
+`ls` or `cat` these files to discover them; the layout below is authoritative.
+
+```
+{{cookiecutter.project_name}}/
+├── {{cookiecutter.agent_directory}}/
+│   ├── __init__.py          # Re-exports `app` from agent.py — DO NOT EDIT
+│   ├── agent.py             # ★ YOUR AGENT — edit instruction, tools, model here
+│   └── app_utils/           # Runtime/A2A wiring (auto-generated, do not edit)
+├── tests/
+│   ├── unit/                # pytest unit tests
+│   ├── integration/         # pytest integration tests
+│   └── eval/                # Eval datasets + config (agents-cli eval)
+│       ├── eval_config.yaml
+│       └── datasets/basic-dataset.json
+├── pyproject.toml           # Dependencies — add yours under [project.dependencies]
+├── agents-cli-manifest.yaml # CLI metadata (do not edit)
+├── Dockerfile               # Container build (auto-generated)
+├── .env                     # Environment: GOOGLE_CLOUD_PROJECT, GOOGLE_CLOUD_LOCATION
+└── {{cookiecutter.agent_guidance_filename}}  # This file
+```
+
+**Key facts (no need to read files to learn these):**
+- `{{cookiecutter.agent_directory}}/__init__.py` contains exactly: `from .agent import app` — one line, never needs reading.
+- `{{cookiecutter.agent_directory}}/agent.py` defines `root_agent` (an `Agent`) and `app` (an `App`). Edit `instruction=`, `tools=`, and `model=` on `root_agent`.
+- `pyproject.toml` has the project name `{{cookiecutter.project_name}}` and dependencies. Add new deps there, then `uv sync`.
+- `agents-cli-manifest.yaml` is read by the CLI — never modify it manually.
+- `.env` has `GOOGLE_CLOUD_PROJECT` and `GOOGLE_CLOUD_LOCATION` — check these if you hit 404/permission errors, but don't re-read the file repeatedly.
+
+**Efficiency rule:** After your initial read of `{{cookiecutter.agent_directory}}/agent.py`, do NOT re-read it
+unless you need to verify a specific edit you just made. The file content is in your context —
+re-reading wastes tokens without providing new information.
+
+---
+
 ## Development Phases
 
 ### Phase 1: Understand Requirements

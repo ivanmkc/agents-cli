@@ -132,9 +132,11 @@ Use `/google-agents-cli-scaffold` for the full workflow — it covers architectu
 
 Implement the agent logic:
 
-1. Write/modify code in the agent directory (check `GEMINI.md` / `CLAUDE.md` for directory name)
+1. Write/modify code in the agent directory (check `GEMINI.md` / `CLAUDE.md` for directory name and the **Project Structure** section for the full file layout — do NOT `ls` or `cat` to rediscover it)
 2. **Quick smoke test**: Use `agents-cli run "your prompt"` to verify the agent works after changes — this is the fastest way to check behavior without leaving the terminal
 3. Iterate on the implementation based on user feedback
+
+> **Token efficiency:** The guidance file (`GEMINI.md` / `CLAUDE.md`) in the project root contains the full project structure. After reading `agent.py` once, its content is in your context — do not re-read it or re-list the directory unless you made an edit and need to verify a specific change. Re-reading unchanged files wastes tokens.
 
 If the user asks for interactive testing, suggest `agents-cli playground` — it opens a web-based playground for manual conversation with the agent.
 
