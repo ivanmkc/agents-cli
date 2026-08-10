@@ -1,0 +1,356 @@
+{
+ "pre-skills": {
+  "run": "2026-04-13_18-02-34_daily-pip-18-agents-cli-sandbox-e2001b6_agents-cli-sandbox",
+  "num_transcripts": {
+   "claude": 71,
+   "gemini": 71
+  },
+  "num_episodes": 209,
+  "skill_injection_tokens": {
+   "claude": 0,
+   "gemini": 0
+  },
+  "table": {
+   "claude|adk-sdk|failure-triggered": {
+    "episodes": 2,
+    "steps": 4,
+    "tokens": 738,
+    "episodes_per_transcript": 0.028
+   },
+   "claude|cli-help|failure-triggered": {
+    "episodes": 3,
+    "steps": 6,
+    "tokens": 4055,
+    "episodes_per_transcript": 0.042
+   },
+   "claude|cli-help|pre-write-verification": {
+    "episodes": 1,
+    "steps": 3,
+    "tokens": 613,
+    "episodes_per_transcript": 0.014
+   },
+   "claude|env-discovery|orientation": {
+    "episodes": 2,
+    "steps": 5,
+    "tokens": 233,
+    "episodes_per_transcript": 0.028
+   },
+   "claude|other|failure-triggered": {
+    "episodes": 1,
+    "steps": 2,
+    "tokens": 5065,
+    "episodes_per_transcript": 0.014
+   },
+   "claude|other|orientation": {
+    "episodes": 2,
+    "steps": 4,
+    "tokens": 210,
+    "episodes_per_transcript": 0.028
+   },
+   "claude|other|pre-write-verification": {
+    "episodes": 2,
+    "steps": 4,
+    "tokens": 2913,
+    "episodes_per_transcript": 0.028
+   },
+   "claude|workspace|failure-triggered": {
+    "episodes": 14,
+    "steps": 36,
+    "tokens": 12937,
+    "episodes_per_transcript": 0.197
+   },
+   "claude|workspace|orientation": {
+    "episodes": 23,
+    "steps": 66,
+    "tokens": 30042,
+    "episodes_per_transcript": 0.324
+   },
+   "claude|workspace|pre-write-verification": {
+    "episodes": 45,
+    "steps": 158,
+    "tokens": 80414,
+    "episodes_per_transcript": 0.634
+   },
+   "gemini|adk-sdk|failure-triggered": {
+    "episodes": 7,
+    "steps": 39,
+    "tokens": 7909,
+    "episodes_per_transcript": 0.099
+   },
+   "gemini|adk-sdk|pre-write-verification": {
+    "episodes": 15,
+    "steps": 82,
+    "tokens": 127657,
+    "episodes_per_transcript": 0.211
+   },
+   "gemini|cli-help|failure-triggered": {
+    "episodes": 2,
+    "steps": 8,
+    "tokens": 1253,
+    "episodes_per_transcript": 0.028
+   },
+   "gemini|cli-help|orientation": {
+    "episodes": 16,
+    "steps": 39,
+    "tokens": 20064,
+    "episodes_per_transcript": 0.225
+   },
+   "gemini|cli-help|pre-write-verification": {
+    "episodes": 5,
+    "steps": 23,
+    "tokens": 3027,
+    "episodes_per_transcript": 0.07
+   },
+   "gemini|env-discovery|pre-write-verification": {
+    "episodes": 1,
+    "steps": 5,
+    "tokens": 82,
+    "episodes_per_transcript": 0.014
+   },
+   "gemini|log-inspection|pre-write-verification": {
+    "episodes": 1,
+    "steps": 6,
+    "tokens": 452,
+    "episodes_per_transcript": 0.014
+   },
+   "gemini|other|orientation": {
+    "episodes": 1,
+    "steps": 4,
+    "tokens": 71,
+    "episodes_per_transcript": 0.014
+   },
+   "gemini|workspace|failure-triggered": {
+    "episodes": 10,
+    "steps": 32,
+    "tokens": 598,
+    "episodes_per_transcript": 0.141
+   },
+   "gemini|workspace|orientation": {
+    "episodes": 25,
+    "steps": 78,
+    "tokens": 890,
+    "episodes_per_transcript": 0.352
+   },
+   "gemini|workspace|pre-write-verification": {
+    "episodes": 31,
+    "steps": 90,
+    "tokens": 2832,
+    "episodes_per_transcript": 0.437
+   }
+  }
+ },
+ "post-skills": {
+  "run": "2026-08-06_12-31-55_skills-v1_3_1-retrieval-eval-v3_agents-cli-sandbox",
+  "num_transcripts": {
+   "antigravity": 4,
+   "claude": 71,
+   "gemini": 71
+  },
+  "num_episodes": 382,
+  "skill_injection_tokens": {
+   "antigravity": 0,
+   "claude": 252395,
+   "gemini": 0
+  },
+  "table": {
+   "antigravity|other|orientation": {
+    "episodes": 1,
+    "steps": 2,
+    "tokens": 98,
+    "episodes_per_transcript": 0.25
+   },
+   "antigravity|workspace|orientation": {
+    "episodes": 2,
+    "steps": 9,
+    "tokens": 469,
+    "episodes_per_transcript": 0.5
+   },
+   "antigravity|workspace|pre-write-verification": {
+    "episodes": 1,
+    "steps": 2,
+    "tokens": 86,
+    "episodes_per_transcript": 0.25
+   },
+   "claude|adk-sdk|failure-triggered": {
+    "episodes": 2,
+    "steps": 7,
+    "tokens": 3352,
+    "episodes_per_transcript": 0.028
+   },
+   "claude|env-discovery|orientation": {
+    "episodes": 1,
+    "steps": 2,
+    "tokens": 77,
+    "episodes_per_transcript": 0.014
+   },
+   "claude|env-discovery|pre-write-verification": {
+    "episodes": 1,
+    "steps": 2,
+    "tokens": 753,
+    "episodes_per_transcript": 0.014
+   },
+   "claude|log-inspection|failure-triggered": {
+    "episodes": 13,
+    "steps": 28,
+    "tokens": 12488,
+    "episodes_per_transcript": 0.183
+   },
+   "claude|log-inspection|pre-write-verification": {
+    "episodes": 1,
+    "steps": 3,
+    "tokens": 3294,
+    "episodes_per_transcript": 0.014
+   },
+   "claude|other|failure-triggered": {
+    "episodes": 1,
+    "steps": 2,
+    "tokens": 108,
+    "episodes_per_transcript": 0.014
+   },
+   "claude|other|pre-write-verification": {
+    "episodes": 2,
+    "steps": 4,
+    "tokens": 850,
+    "episodes_per_transcript": 0.028
+   },
+   "claude|skill-docs|orientation": {
+    "episodes": 1,
+    "steps": 4,
+    "tokens": 1159,
+    "episodes_per_transcript": 0.014
+   },
+   "claude|tool-internals|failure-triggered": {
+    "episodes": 6,
+    "steps": 22,
+    "tokens": 19232,
+    "episodes_per_transcript": 0.085
+   },
+   "claude|tool-internals|pre-write-verification": {
+    "episodes": 4,
+    "steps": 9,
+    "tokens": 5480,
+    "episodes_per_transcript": 0.056
+   },
+   "claude|workspace|failure-triggered": {
+    "episodes": 3,
+    "steps": 6,
+    "tokens": 720,
+    "episodes_per_transcript": 0.042
+   },
+   "claude|workspace|orientation": {
+    "episodes": 25,
+    "steps": 88,
+    "tokens": 33238,
+    "episodes_per_transcript": 0.352
+   },
+   "claude|workspace|pre-write-verification": {
+    "episodes": 32,
+    "steps": 106,
+    "tokens": 33485,
+    "episodes_per_transcript": 0.451
+   },
+   "gemini|adk-sdk|failure-triggered": {
+    "episodes": 3,
+    "steps": 16,
+    "tokens": 819,
+    "episodes_per_transcript": 0.042
+   },
+   "gemini|adk-sdk|pre-write-verification": {
+    "episodes": 5,
+    "steps": 45,
+    "tokens": 1467,
+    "episodes_per_transcript": 0.07
+   },
+   "gemini|cli-help|failure-triggered": {
+    "episodes": 8,
+    "steps": 23,
+    "tokens": 6307,
+    "episodes_per_transcript": 0.113
+   },
+   "gemini|cli-help|orientation": {
+    "episodes": 22,
+    "steps": 61,
+    "tokens": 24966,
+    "episodes_per_transcript": 0.31
+   },
+   "gemini|cli-help|pre-write-verification": {
+    "episodes": 19,
+    "steps": 74,
+    "tokens": 16695,
+    "episodes_per_transcript": 0.268
+   },
+   "gemini|log-inspection|failure-triggered": {
+    "episodes": 19,
+    "steps": 42,
+    "tokens": 1247,
+    "episodes_per_transcript": 0.268
+   },
+   "gemini|log-inspection|pre-write-verification": {
+    "episodes": 1,
+    "steps": 2,
+    "tokens": 695,
+    "episodes_per_transcript": 0.014
+   },
+   "gemini|other|failure-triggered": {
+    "episodes": 3,
+    "steps": 11,
+    "tokens": 704,
+    "episodes_per_transcript": 0.042
+   },
+   "gemini|other|pre-write-verification": {
+    "episodes": 6,
+    "steps": 16,
+    "tokens": 4591,
+    "episodes_per_transcript": 0.085
+   },
+   "gemini|skill-docs|failure-triggered": {
+    "episodes": 3,
+    "steps": 23,
+    "tokens": 5833,
+    "episodes_per_transcript": 0.042
+   },
+   "gemini|skill-docs|orientation": {
+    "episodes": 24,
+    "steps": 144,
+    "tokens": 9309,
+    "episodes_per_transcript": 0.338
+   },
+   "gemini|skill-docs|pre-write-verification": {
+    "episodes": 26,
+    "steps": 129,
+    "tokens": 4470,
+    "episodes_per_transcript": 0.366
+   },
+   "gemini|tool-internals|failure-triggered": {
+    "episodes": 6,
+    "steps": 18,
+    "tokens": 7097,
+    "episodes_per_transcript": 0.085
+   },
+   "gemini|tool-internals|pre-write-verification": {
+    "episodes": 4,
+    "steps": 10,
+    "tokens": 21801,
+    "episodes_per_transcript": 0.056
+   },
+   "gemini|workspace|failure-triggered": {
+    "episodes": 16,
+    "steps": 66,
+    "tokens": 1323,
+    "episodes_per_transcript": 0.225
+   },
+   "gemini|workspace|orientation": {
+    "episodes": 34,
+    "steps": 158,
+    "tokens": 2196,
+    "episodes_per_transcript": 0.479
+   },
+   "gemini|workspace|pre-write-verification": {
+    "episodes": 87,
+    "steps": 334,
+    "tokens": 6147,
+    "episodes_per_transcript": 1.225
+   }
+  }
+ }
+}
